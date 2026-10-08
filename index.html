@@ -760,10 +760,23 @@ body, header, .bg-white, .bg-gray-50, .bg-gray-100 {
     <textarea id="adminDescription" rows="3" placeholder="اكتب وصف تفصيلي للكتاب: المحتوى، المميزات، لمين مناسب..." class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none resize-none"></textarea>
     <p class="text-[11px] text-gray-500 mt-1">هذا الوصف سيظهر في نافذة تفاصيل الكتاب</p>
 </div>
-                <div class="flex justify-end space-x-2 space-x-reverse pt-2">
-                    <button type="button" onclick="resetBookForm()" id="cancelEditBtn" class="hidden bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-xs font-bold">إلغاء التعديل</button>
-                    <button type="submit" class="bg-primary text-white px-5 py-2 rounded-xl text-xs font-bold shadow hover:bg-indigo-700 transition">حفظ الكتاب</button>
-                </div>
+                <div class="flex flex-wrap justify-between gap-2 pt-2">
+    <div class="flex gap-2">
+        <button type="button" onclick="downloadBooksTemplate()" class="bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+            <i class="fa-solid fa-download"></i>
+            <span>قالب Excel</span>
+        </button>
+        <label class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+            <i class="fa-solid fa-upload"></i>
+            <span>استيراد من Excel</span>
+            <input type="file" id="excelImportInput" accept=".xlsx,.xls,.csv" onchange="handleExcelImport(this)" class="hidden">
+        </label>
+    </div>
+    <div class="flex gap-2">
+        <button type="button" onclick="resetBookForm()" id="cancelEditBtn" class="hidden bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-xs font-bold">إلغاء التعديل</button>
+        <button type="submit" class="bg-primary text-white px-5 py-2 rounded-xl text-xs font-bold shadow hover:bg-indigo-700 transition">حفظ الكتاب</button>
+    </div>
+</div>
             </form>
 
             <div class="flex-1 overflow-y-auto">
@@ -1023,6 +1036,7 @@ async function loadOrders() {
             status: o.status,
             paymentConfirmedDate: o.payment_confirmed_date,
             paymentRejectedDate: o.payment_rejected_date,
+                      adminNotes: o.admin_notes || '',
             createdAt: o.created_at,
             date: new Date(o.created_at).toLocaleDateString('ar-EG', { 
                 year: 'numeric', month: 'short', day: 'numeric', 
@@ -3818,6 +3832,24 @@ function renderAdminOrders() {
                         </div>
                     </div>
                 ` : ''}
+
+<!-- 📝 Admin Notes -->
+<div class="bg-yellow-50 border border-yellow-200 rounded-xl p-3">
+    <div class="flex items-center justify-between mb-2">
+        <p class="text-xs font-bold text-yellow-800 flex items-center gap-1.5">
+            <i class="fa-solid fa-note-sticky"></i>
+            ملاحظات داخلية
+        </p>
+        <button onclick="openNotesEditor('${order.orderNumber}', '${(order.adminNotes || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;')}')" 
+                class="text-xs bg-yellow-500 text-white px-2.5 py-1 rounded-lg font-bold hover:bg-yellow-600 transition">
+            <i class="fa-solid fa-pen"></i>
+            ${order.adminNotes ? 'تعديل' : 'إضافة'}
+        </button>
+    </div>
+    <p class="text-xs text-gray-700 ${!order.adminNotes ? 'italic text-gray-400' : ''}">
+        ${order.adminNotes ? escapeHtml(order.adminNotes) : 'لا توجد ملاحظات'}
+    </p>
+</div>
 
                 <!-- 📋 Actions (Print + WhatsApp) -->
 <div class="grid grid-cols-2 gap-2">
@@ -7590,6 +7622,350 @@ function viewReviewImage(url) {
     });
 }
 
+// ============================================
+// 📥 Excel Import/Export for Books
+// ============================================
+
+// تحميل قالب Excel
+function downloadBooksTemplate() {
+    if (typeof XLSX === 'undefined') {
+        showToast("مكتبة Excel لسه بتحمل", "warning");
+        return;
+    }
+
+    const templateData = [
+        ['اسم الكتاب', 'المدرس', 'التصنيف', 'السعر', 'التقييم', 'رابط الصورة', 'الوصف'],
+        ['ملزمة الفيزياء الشاملة', 'أ. محمد أحمد', 'الصف الثالث الثانوي', 150, 4.9, 'https://i.imgur.com/xxxxx.jpg', 'شرح كامل لمنهج الفيزياء'],
+        ['كتاب الكيمياء العضوية', 'د. خالد صقر', 'الصف الثالث الثانوي', 180, 4.8, 'https://i.imgur.com/yyyyy.jpg', 'شرح مبسط للكيمياء العضوية'],
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(templateData);
+    ws['!cols'] = [
+        { wch: 40 }, { wch: 25 }, { wch: 22 }, { wch: 10 }, { wch: 10 }, { wch: 40 }, { wch: 50 }
+    ];
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'الكتب');
+
+    XLSX.writeFile(wb, 'koko-books-template.xlsx');
+    showToast("✅ تم تحميل القالب", "success");
+}
+
+// استيراد من Excel
+async function handleExcelImport(input) {
+    if (!currentUser || currentUser.role !== 'admin') {
+        showToast("هذه الصفحة للمدير فقط", "error");
+        return;
+    }
+
+    if (typeof XLSX === 'undefined') {
+        showToast("مكتبة Excel لسه بتحمل، جرب تاني", "warning");
+        return;
+    }
+
+    const file = input.files?.[0];
+    if (!file) return;
+
+    try {
+        const data = await file.arrayBuffer();
+        const workbook = XLSX.read(data);
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+        // تجاهل السطر الأول (العناوين)
+        const dataRows = rows.slice(1).filter(row => row[0] && row[1]);
+
+        if (dataRows.length === 0) {
+            showToast("الملف فاضي أو بدون بيانات", "warning");
+            input.value = '';
+            return;
+        }
+
+        if (!confirm(`هيتم استيراد ${dataRows.length} كتاب. هل تريد المتابعة؟`)) {
+            input.value = '';
+            return;
+        }
+
+        // تجهيز البيانات
+        const booksToInsert = [];
+        const errors = [];
+
+        dataRows.forEach((row, i) => {
+            const title = String(row[0] || '').trim();
+            const author = String(row[1] || '').trim();
+            const category = String(row[2] || '').trim();
+            const price = parseFloat(row[3]);
+            const rating = parseFloat(row[4]) || 4.9;
+            const image = String(row[5] || '').trim();
+            const description = String(row[6] || '').trim();
+
+            if (!title || !author || !category || isNaN(price) || !image) {
+                errors.push(`سطر ${i + 2}: بيانات ناقصة`);
+                return;
+            }
+
+            // تأكد من التصنيف
+            const validCategories = ['الصف الثالث الثانوي', 'الصف الثاني الثانوي', 'الصف الأول الثانوي', 'باكدجات المواد'];
+            const finalCategory = validCategories.includes(category) ? category : 'الصف الثالث الثانوي';
+
+            booksToInsert.push({
+                title,
+                author,
+                category: finalCategory,
+                price,
+                rating,
+                image,
+                description
+            });
+        });
+
+        if (booksToInsert.length === 0) {
+            showToast("لا توجد بيانات صحيحة للاستيراد", "error");
+            input.value = '';
+            return;
+        }
+
+        showToast(`⏳ جاري رفع ${booksToInsert.length} كتاب...`, "info");
+
+        // رفع لـ Supabase
+        const { error } = await supabaseClient
+            .from('books')
+            .insert(booksToInsert);
+
+        if (error) {
+            console.error('Excel import error:', error);
+            showToast("فشل الاستيراد: " + error.message, "error");
+            input.value = '';
+            return;
+        }
+
+        // نجاح
+        await loadBooks();
+        filteredBooksCache = books.slice();
+        renderCurrentPage();
+        renderAdminTable();
+
+        let successMsg = `✅ تم استيراد ${booksToInsert.length} كتاب بنجاح`;
+        if (errors.length > 0) {
+            successMsg += ` (${errors.length} سطر بها أخطاء)`;
+        }
+        showToast(successMsg, "success");
+
+        if (errors.length > 0) {
+            console.log('Import errors:', errors);
+        }
+
+        input.value = '';
+
+    } catch (err) {
+        console.error('Excel parse error:', err);
+        showToast("خطأ في قراءة الملف: " + err.message, "error");
+        input.value = '';
+    }
+}
+
+// ============================================
+// 💬 WhatsApp Message Templates
+// ============================================
+let selectedOrderForTemplate = null;
+
+function applyTemplateToSelected(templateType) {
+    if (!selectedOrderForTemplate) {
+        // لو مفيش طلب محدد، نطلب من المستخدم يكتب رقم الطلب
+        const orderNum = prompt("اكتب رقم الطلب:");
+        if (!orderNum) return;
+        
+        const order = orders.find(o => o.orderNumber.toUpperCase() === orderNum.trim().toUpperCase());
+        if (!order) {
+            showToast("الطلب غير موجود", "error");
+            return;
+        }
+        selectedOrderForTemplate = order;
+    }
+
+    const order = selectedOrderForTemplate;
+    const storeName = 'Koko Store';
+    const storePhone = '01214823170';
+
+    const templates = {
+        received: `السلام عليكم ${order.fullName} 👋
+
+تم استلام طلبك بنجاح! ✅
+
+📦 رقم الطلب: *${order.orderNumber}*
+💰 الإجمالي: *${(order.totalPrice || 0).toFixed(2)} ج.م*
+💳 طريقة الدفع: ${getPaymentMethodName(order.paymentMethod)}
+
+سيتم تجهيز طلبك خلال 24 ساعة إن شاء الله.
+شكراً لثقتك في *${storeName}* 🙏`,
+
+        shipping: `أهلاً ${order.fullName} 👋
+
+خبر حلو! 🚚
+تم شحن طلبك رقم *${order.orderNumber}*
+
+📍 للعنوان: ${order.governorate} - ${order.center}
+💰 الإجمالي: ${(order.totalPrice || 0).toFixed(2)} ج.م
+
+هيتم التواصل معك من المندوب قبل التوصيل.
+شكراً لصبرك 🙏
+*${storeName}*`,
+
+        delivered: `أهلاً ${order.fullName} 🎉
+
+تم توصيل طلبك رقم *${order.orderNumber}* بنجاح!
+
+نتمنى تكون استلمت كل حاجة بحالة ممتازة 😊
+لو فيه أي مشكلة، كلمنا فوراً.
+
+*${storeName}* — شكراً لثقتك 💙`,
+
+        review: `السلام عليكم ${order.fullName} 👋
+
+نتمنى تكون استلمت طلبك رقم *${order.orderNumber}* وهو عاجبك! 😊
+
+⭐ ممكن تقييمنا؟ رأيك يهمنا جداً وهيساعدنا نحسن خدمتنا.
+ادخل على حسابك في موقعنا وقيم الكتب اللي اشتريتها.
+
+شكراً ليك 🙏
+*${storeName}*`,
+
+        welcome: `أهلاً وسهلاً ${order.fullName} 👋
+
+مرحباً بيك في *${storeName}* — منصة ملازم وكتب الثانوية العامة 🎓
+
+📚 هتلاقي عندنا كل الملازم بأفضل الأسعار
+🚚 توصيل سريع لكل محافظات مصر
+💳 دفع عند الاستلام أو فودافون كاش
+
+لو محتاج أي مساعدة، احنا في خدمتك على الرقم ${storePhone}
+
+نتمنى لك تجربة رائعة 💙`
+    };
+
+    const message = templates[templateType];
+    if (!message) return;
+
+    // فتح واتساب
+    let phone = (order.phone || '').replace(/[^0-9]/g, '');
+    if (phone.startsWith('0')) phone = '20' + phone.substring(1);
+    else if (!phone.startsWith('20')) phone = '20' + phone;
+
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+
+    showToast(`✅ تم فتح واتساب مع قالب "${getTemplateName(templateType)}"`, "success");
+    
+    // تنظيف الاختيار
+    selectedOrderForTemplate = null;
+}
+
+function getTemplateName(type) {
+    const names = {
+        received: 'تأكيد الاستلام',
+        shipping: 'تم الشحن',
+        delivered: 'تم التوصيل',
+        review: 'طلب تقييم',
+        welcome: 'ترحيب'
+    };
+    return names[type] || type;
+}
+
+function getPaymentMethodName(method) {
+    const names = {
+        cod: 'الدفع عند الاستلام',
+        vodafone: 'فودافون كاش',
+        instapay: 'InstaPay'
+    };
+    return names[method] || method;
+}
+
+// ============================================
+// 📝 Order Notes (Admin Only)
+// ============================================
+function openNotesEditor(orderNumber, currentNotes) {
+    if (!currentUser || currentUser.role !== 'admin') return;
+
+    const existing = document.getElementById('notesEditorModal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'notesEditorModal';
+    modal.className = 'fixed inset-0 z-[9998] flex items-center justify-center px-4 bg-black bg-opacity-70';
+    modal.innerHTML = `
+        <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl">
+            <div class="flex items-center justify-between border-b pb-3 mb-4">
+                <h3 class="text-lg font-black text-gray-900 flex items-center gap-2">
+                    <i class="fa-solid fa-note-sticky text-yellow-600"></i>
+                    <span>ملاحظة داخلية — ${orderNumber}</span>
+                </h3>
+                <button onclick="document.getElementById('notesEditorModal').remove()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <textarea id="notesTextarea" rows="5" placeholder="اكتب ملاحظة داخلية (لن يراها العميل)..."
+                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:bg-white focus:border-yellow-500 focus:outline-none resize-none mb-4">${currentNotes || ''}</textarea>
+
+            <div class="flex gap-2">
+                <button onclick="saveOrderNotes('${orderNumber}')" 
+                        class="flex-1 bg-yellow-500 text-white py-2.5 rounded-xl text-sm font-bold hover:bg-yellow-600 transition">
+                    <i class="fa-solid fa-save ml-1"></i>حفظ
+                </button>
+                <button onclick="document.getElementById('notesEditorModal').remove()" 
+                        class="bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-gray-300 transition">
+                    إلغاء
+                </button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    
+    setTimeout(() => {
+        const ta = document.getElementById('notesTextarea');
+        if (ta) {
+            ta.focus();
+            ta.setSelectionRange(ta.value.length, ta.value.length);
+        }
+    }, 100);
+}
+
+async function saveOrderNotes(orderNumber) {
+    if (!currentUser || currentUser.role !== 'admin') return;
+
+    const textarea = document.getElementById('notesTextarea');
+    if (!textarea) return;
+
+    const notes = textarea.value.trim();
+
+    try {
+        const { error } = await supabaseClient
+            .from('orders')
+            .update({ admin_notes: notes })
+            .eq('order_number', orderNumber);
+
+        if (error) {
+            console.error('Save notes error:', error);
+            showToast("فشل الحفظ: " + error.message, "error");
+            return;
+        }
+
+        // إغلاق النافذة
+        const modal = document.getElementById('notesEditorModal');
+        if (modal) modal.remove();
+
+        // إعادة تحميل
+        await loadOrders();
+        renderAdminOrders();
+
+        showToast("✅ تم حفظ الملاحظة", "success");
+
+    } catch (err) {
+        console.error('Save notes exception:', err);
+        showToast("حدث خطأ", "error");
+    }
+}
+
     </script>
 <!-- 🎁 Admin Coupon Modal -->
 <div id="couponAdminModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden px-4 overflow-y-auto py-10">
@@ -7780,6 +8156,31 @@ function viewReviewImage(url) {
             class="absolute left-3 top-2.5 text-gray-400 hover:text-red-500 hidden">
         <i class="fa-solid fa-circle-xmark"></i>
     </button>
+</div>
+
+<!-- 💬 Quick Templates -->
+<div class="bg-green-50 border border-green-200 rounded-xl p-3 flex-shrink-0">
+    <p class="text-xs font-bold text-gray-700 mb-2 flex items-center gap-1.5">
+        <i class="fa-brands fa-whatsapp text-green-600"></i>
+        قوالب رسائل سريعة (اختر طلب من تحت ثم اضغط على قالب)
+    </p>
+    <div class="flex flex-wrap gap-1.5">
+        <button onclick="applyTemplateToSelected('received')" class="bg-white border border-green-300 text-green-700 hover:bg-green-500 hover:text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition">
+            📦 تأكيد الاستلام
+        </button>
+        <button onclick="applyTemplateToSelected('shipping')" class="bg-white border border-blue-300 text-blue-700 hover:bg-blue-500 hover:text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition">
+            🚚 تم الشحن
+        </button>
+        <button onclick="applyTemplateToSelected('delivered')" class="bg-white border border-purple-300 text-purple-700 hover:bg-purple-500 hover:text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition">
+            ✅ تم التوصيل
+        </button>
+        <button onclick="applyTemplateToSelected('review')" class="bg-white border border-amber-300 text-amber-700 hover:bg-amber-500 hover:text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition">
+            ⭐ طلب تقييم
+        </button>
+        <button onclick="applyTemplateToSelected('welcome')" class="bg-white border border-indigo-300 text-indigo-700 hover:bg-indigo-500 hover:text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition">
+            👋 ترحيب
+        </button>
+    </div>
 </div>
 
 <!-- Filter -->
