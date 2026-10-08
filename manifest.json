@@ -11,6 +11,7 @@
     "lang": "ar",
     "dir": "rtl",
     "categories": ["shopping", "education", "books"],
+"gcm_sender_id": "482941778795",
     "icons": [
         {
             "src": "https://placehold.co/192x192/6366F1/FFFFFF?text=K",
