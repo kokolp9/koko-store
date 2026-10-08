@@ -26,9 +26,10 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { cairo: ['Cairo', 'sans-serif'] },
+    darkMode: 'class',
+    theme: {
+        extend: {
+            fontFamily: { cairo: ['Cairo', 'sans-serif'] },
                     colors: {
                         primary: '#6366F1',
                         secondary: '#4F46E5',
@@ -75,6 +76,81 @@
             font-size: 16px !important;
         }
     }
+/* 🌙 Dark Mode Overrides */
+.dark body { background: #0f172a; color: #e2e8f0; }
+.dark .bg-white { background-color: #1e293b !important; }
+.dark .bg-gray-50 { background-color: #0f172a !important; }
+.dark .bg-gray-100 { background-color: #334155 !important; }
+.dark .text-gray-900 { color: #f1f5f9 !important; }
+.dark .text-gray-800 { color: #e2e8f0 !important; }
+.dark .text-gray-700 { color: #cbd5e1 !important; }
+.dark .text-gray-600 { color: #94a3b8 !important; }
+.dark .text-gray-500 { color: #64748b !important; }
+.dark .text-gray-400 { color: #64748b !important; }
+.dark .border-gray-100 { border-color: #334155 !important; }
+.dark .border-gray-200 { border-color: #334155 !important; }
+.dark .border-gray-300 { border-color: #475569 !important; }
+.dark .bg-indigo-50 { background-color: #312e81 !important; }
+.dark .bg-amber-50 { background-color: #78350f !important; }
+.dark .bg-purple-50 { background-color: #4c1d95 !important; }
+.dark .bg-green-50 { background-color: #064e3b !important; }
+.dark .bg-red-50 { background-color: #7f1d1d !important; }
+.dark .bg-blue-50 { background-color: #1e3a8a !important; }
+.dark .bg-pink-50 { background-color: #831843 !important; }
+.dark .bg-orange-50 { background-color: #7c2d12 !important; }
+.dark .bg-gray-900 { background-color: #0a0f1e !important; }
+.dark input, .dark textarea, .dark select {
+    background-color: #334155 !important;
+    color: #e2e8f0 !important;
+    border-color: #475569 !important;
+}
+.dark input::placeholder, .dark textarea::placeholder {
+    color: #64748b !important;
+}
+.dark .shadow-sm, .dark .shadow-md, .dark .shadow-lg, .dark .shadow-2xl {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+.dark .hover\:bg-gray-100:hover { background-color: #334155 !important; }
+.dark .hover\:bg-gray-200:hover { background-color: #475569 !important; }
+.dark .hover\:bg-gray-50:hover { background-color: #334155 !important; }
+
+/* Smooth transition */
+body, header, .bg-white, .bg-gray-50, .bg-gray-100 {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 🎬 Scroll Animations */
+.book-card, .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.book-card.visible, .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 🔍 Smart Search */
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    margin-top: 4px;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    z-index: 100;
+    display: none;
+}
+.search-suggestions.active { display: block; }
+.dark .search-suggestions {
+    background: #1e293b;
+    border-color: #334155;
+}
 </style>
 </head>
 
@@ -105,6 +181,9 @@
             <div class="flex items-center space-x-2 space-x-reverse sm:hidden">
                 <button onclick="openTrackOrderModal()" class="bg-blue-50 text-blue-600 p-2.5 rounded-xl hover:bg-blue-600 hover:text-white transition shadow-sm">
     <i class="fa-solid fa-magnifying-glass-location"></i>
+</button>
+<button onclick="toggleDarkMode()" title="الوضع الليلي" class="bg-gray-100 text-gray-700 p-2.5 rounded-xl hover:bg-gray-800 hover:text-white transition shadow-sm">
+    <i class="fa-solid fa-moon" id="darkModeIconMobile"></i>
 </button>
 <button onclick="openNotificationsModal()" id="bellBtnWrapperMobile" class="relative bg-gray-100 text-gray-700 p-2.5 rounded-xl hover:bg-primary hover:text-white transition shadow-sm hidden">
                     <i class="fa-solid fa-bell"></i>
@@ -137,6 +216,9 @@
             <!-- 🔔 Bell Icon -->
 <button onclick="openTrackOrderModal()" title="تتبع طلبك" class="bg-blue-50 text-blue-600 p-3 rounded-xl hover:bg-blue-600 hover:text-white transition shadow-sm">
     <i class="fa-solid fa-magnifying-glass-location text-lg"></i>
+</button>
+<button onclick="toggleDarkMode()" id="darkModeBtn" title="الوضع الليلي" class="bg-gray-100 text-gray-700 p-3 rounded-xl hover:bg-gray-800 hover:text-white transition shadow-sm">
+    <i class="fa-solid fa-moon text-lg" id="darkModeIcon"></i>
 </button>
             <button onclick="openNotificationsModal()" id="bellBtnWrapper" class="relative bg-gray-100 text-gray-700 p-3 rounded-xl hover:bg-primary hover:text-white transition shadow-sm hidden">
                 <i class="fa-solid fa-bell text-lg"></i>
@@ -6828,6 +6910,156 @@ async function openNotificationsModal() {
     if (modal) modal.classList.remove('hidden');
     renderNotifications();
 }
+  
+// ============================================
+// 🌙 Dark Mode
+// ============================================
+function initDarkMode() {
+    const saved = localStorage.getItem('kokostore_dark_mode');
+    const isDark = saved === 'true';
+    
+    if (isDark) {
+        document.documentElement.classList.add('dark');
+    }
+    updateDarkModeIcon(isDark);
+}
+
+function toggleDarkMode() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('kokostore_dark_mode', String(isDark));
+    updateDarkModeIcon(isDark);
+    showToast(isDark ? '🌙 الوضع الليلي مفعّل' : '☀️ الوضع النهاري مفعّل', 'success');
+}
+
+function updateDarkModeIcon(isDark) {
+    const icon1 = document.getElementById('darkModeIcon');
+    const icon2 = document.getElementById('darkModeIconMobile');
+    
+    [icon1, icon2].forEach(icon => {
+        if (!icon) return;
+        icon.className = isDark ? 'fa-solid fa-sun text-lg' : 'fa-solid fa-moon text-lg';
+        if (icon.id === 'darkModeIconMobile') {
+            icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+    });
+}
+
+// تهيئة الوضع الليلي عند التحميل
+initDarkMode();
+
+// ============================================
+// 🎬 Scroll Animations
+// ============================================
+function initScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.book-card, .animate-on-scroll').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+// استدعي الدالة بعد كل render للكتب
+const originalRenderBooks = window.renderBooks;
+window.renderBooks = function(booksToRender) {
+    originalRenderBooks(booksToRender);
+    setTimeout(initScrollAnimations, 100);
+};
+
+// ============================================
+// 🔍 Smart Search
+// ============================================
+function getSearchSuggestions(query) {
+    if (!query || query.length < 2) return [];
+    
+    const q = query.toLowerCase().trim();
+    const matches = books.filter(b => 
+        b.title.toLowerCase().includes(q) || 
+        b.author.toLowerCase().includes(q) ||
+        b.category.toLowerCase().includes(q)
+    ).slice(0, 6);
+    
+    return matches;
+}
+
+function showSearchSuggestions(inputEl, query) {
+    const wrapper = inputEl.parentElement;
+    let suggestionsEl = wrapper.querySelector('.search-suggestions');
+    
+    if (!suggestionsEl) {
+        suggestionsEl = document.createElement('div');
+        suggestionsEl.className = 'search-suggestions';
+        wrapper.style.position = 'relative';
+        wrapper.appendChild(suggestionsEl);
+    }
+    
+    const matches = getSearchSuggestions(query);
+    
+    if (matches.length === 0) {
+        suggestionsEl.classList.remove('active');
+        return;
+    }
+    
+    suggestionsEl.innerHTML = matches.map(b => `
+        <div onclick="selectSuggestion(${b.id}, '${inputEl.id}')" 
+             class="flex items-center gap-3 p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0 transition">
+            <img src="${b.image}" class="w-10 h-14 object-cover rounded-lg" onerror="this.src='https://placehold.co/40x56/6366F1/FFFFFF?text=B'">
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold text-gray-900 truncate">${b.title}</p>
+                <p class="text-xs text-gray-500">${b.author}</p>
+            </div>
+            <span class="text-sm font-black text-primary">${b.price.toFixed(0)} ج.م</span>
+        </div>
+    `).join('');
+    
+    suggestionsEl.classList.add('active');
+}
+
+function selectSuggestion(bookId, inputId) {
+    const input = document.getElementById(inputId);
+    if (input) {
+        input.value = '';
+        const suggestions = input.parentElement.querySelector('.search-suggestions');
+        if (suggestions) suggestions.classList.remove('active');
+    }
+    
+    // افتح تفاصيل الكتاب
+    openBookDetails(bookId);
+}
+
+// ربط البحث بالاقتراحات
+document.addEventListener('DOMContentLoaded', () => {
+    ['searchInput', 'searchInputMobile'].forEach(id => {
+        const input = document.getElementById(id);
+        if (!input) return;
+        
+        input.addEventListener('input', (e) => {
+            const query = e.target.value;
+            if (query.length >= 2) {
+                showSearchSuggestions(input, query);
+            } else {
+                const sugg = input.parentElement.querySelector('.search-suggestions');
+                if (sugg) sugg.classList.remove('active');
+            }
+            // البحث العادي
+            filterBooks();
+        });
+        
+        // إغلاق عند الضغط خارج
+        document.addEventListener('click', (e) => {
+            if (!input.parentElement.contains(e.target)) {
+                const sugg = input.parentElement.querySelector('.search-suggestions');
+                if (sugg) sugg.classList.remove('active');
+            }
+        });
+    });
+});
 
     </script>
 <!-- 🎁 Admin Coupon Modal -->
