@@ -298,6 +298,10 @@ body, header, .bg-white, .bg-gray-50, .bg-gray-100 {
     <i class="fa-solid fa-images"></i>
     <span class="hidden sm:inline">المعرض</span>
 </button>
+<button onclick="openBroadcastModal()" class="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3.5 py-2 rounded-xl text-sm font-bold transition flex items-center space-x-2 space-x-reverse shadow-sm">
+    <i class="fa-solid fa-tower-broadcast"></i>
+    <span class="hidden sm:inline">إشعار جماعي</span>
+</button>
                 </div>
             </div>
 
@@ -4199,6 +4203,10 @@ function updateMobileMenu() {
     <i class="fa-solid fa-images"></i>
     <span>المعرض</span>
 </button>
+<button onclick="openBroadcastModal(); toggleMobileMenu();" class="bg-red-50 text-red-600 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
+    <i class="fa-solid fa-tower-broadcast"></i>
+    <span>إشعار جماعي</span>
+</button>
 </div>
             `;
             adminArea.classList.remove('hidden');
@@ -7966,6 +7974,587 @@ async function saveOrderNotes(orderNumber) {
     }
 }
 
+// ============================================
+// 📢 Broadcast Notifications (Admin)
+// ============================================
+function openBroadcastModal() {
+    if (!currentUser || currentUser.role !== 'admin') {
+        showToast("هذه الصفحة للمدير فقط", "error");
+        return;
+    }
+
+    const modal = document.getElementById('broadcastModal');
+    if (modal) modal.classList.remove('hidden');
+
+    // نعد العملاء
+    countCustomersForBroadcast();
+
+    // ربط المعاينة
+    const titleInput = document.getElementById('broadcastTitle');
+    const msgInput = document.getElementById('broadcastMessage');
+    const titlePreview = document.getElementById('previewTitle');
+    const msgPreview = document.getElementById('previewMessage');
+
+    if (titleInput) titleInput.oninput = () => titlePreview.textContent = titleInput.value || 'عنوان الإشعار';
+    if (msgInput) msgInput.oninput = () => msgPreview.textContent = msgInput.value || 'نص الإشعار هيظهر هنا...';
+}
+
+function closeBroadcastModal() {
+    const modal = document.getElementById('broadcastModal');
+    if (modal) modal.classList.add('hidden');
+    const form = document.getElementById('broadcastForm');
+    if (form) form.reset();
+}
+
+async function countCustomersForBroadcast() {
+    if (!supabaseClient) return;
+
+    try {
+        const { count, error } = await supabaseClient
+            .from('profiles')
+            .select('*', { count: 'exact', head: true })
+            .eq('role', 'customer');
+
+        const countEl = document.getElementById('broadcastCustomerCount');
+        if (countEl) countEl.textContent = error ? '؟' : (count || 0);
+    } catch (err) {
+        console.error('Count customers error:', err);
+    }
+}
+
+async function handleSendBroadcast(e) {
+    e.preventDefault();
+    if (!currentUser || currentUser.role !== 'admin') return;
+
+    const title = document.getElementById('broadcastTitle').value.trim();
+    const message = document.getElementById('broadcastMessage').value.trim();
+    const type = document.getElementById('broadcastType').value;
+
+    if (!title || !message) {
+        showToast("املا العنوان والنص", "warning");
+        return;
+    }
+
+    if (!confirm(`هل أنت متأكد من إرسال الإشعار لكل العملاء؟`)) return;
+
+    const submitBtn = document.getElementById('broadcastSubmitBtn');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin ml-1"></i> جاري الإرسال...';
+
+    try {
+        // جيب كل العملاء
+        const { data: customers, error: fetchError } = await supabaseClient
+            .from('profiles')
+            .select('id, phone')
+            .eq('role', 'customer');
+
+        if (fetchError) throw fetchError;
+
+        if (!customers || customers.length === 0) {
+            showToast("لا يوجد عملاء مسجلين", "warning");
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            return;
+        }
+
+        // تجهيز الإشعارات
+        const notificationsToInsert = customers.map(c => ({
+            user_id: c.id,
+            user_phone: c.phone,
+            title: title,
+            message: message,
+            type: type,
+            order_number: null,
+            read: false
+        }));
+
+        // رفع دفعة واحدة
+        const { error: insertError } = await supabaseClient
+            .from('notifications')
+            .insert(notificationsToInsert);
+
+        if (insertError) throw insertError;
+
+        showToast(`✅ تم إرسال الإشعار لـ ${customers.length} عميل`, "success");
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        closeBroadcastModal();
+
+        // تنظيف
+        document.getElementById('broadcastTitle').value = '';
+        document.getElementById('broadcastMessage').value = '';
+        document.getElementById('previewTitle').textContent = 'عنوان الإشعار';
+        document.getElementById('previewMessage').textContent = 'نص الإشعار هيظهر هنا...';
+
+    } catch (err) {
+        console.error('Broadcast error:', err);
+        showToast("فشل الإرسال: " + err.message, "error");
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+    }
+}
+
+// ============================================
+// 📊 Detailed Report
+// ============================================
+function generateReport() {
+    if (!currentUser || currentUser.role !== 'admin') {
+        showToast("هذه الصفحة للمدير فقط", "error");
+        return;
+    }
+
+    const period = document.getElementById('statsPeriod')?.value || 'all';
+    const filteredOrders = getOrdersByPeriod(period);
+
+    if (filteredOrders.length === 0) {
+        showToast("لا توجد طلبات في الفترة المختارة", "warning");
+        return;
+    }
+
+    const periodNames = {
+        all: 'كل الوقت',
+        today: 'اليوم',
+        week: 'آخر 7 أيام',
+        month: 'آخر 30 يوم'
+    };
+
+    const activeOrders = filteredOrders.filter(o => o.status !== 'ملغي');
+    const totalOrders = filteredOrders.length;
+    const totalRevenue = activeOrders.reduce((s, o) => s + (o.totalPrice || 0), 0);
+    const paidRevenue = activeOrders.filter(o => o.paymentStatus === 'paid').reduce((s, o) => s + (o.totalPrice || 0), 0);
+    const pendingRevenue = activeOrders.filter(o => o.paymentStatus === 'pending').reduce((s, o) => s + (o.totalPrice || 0), 0);
+    const codRevenue = activeOrders.filter(o => o.paymentStatus === 'cod_pending').reduce((s, o) => s + (o.totalPrice || 0), 0);
+    const cancelledCount = filteredOrders.filter(o => o.status === 'ملغي').length;
+
+    // الكتب الأكثر مبيعاً
+    const bookSales = {};
+    activeOrders.forEach(order => {
+        (order.items || []).forEach(item => {
+            if (!bookSales[item.title]) {
+                bookSales[item.title] = { qty: 0, revenue: 0 };
+            }
+            bookSales[item.title].qty += item.quantity || 0;
+            bookSales[item.title].revenue += (item.price || 0) * (item.quantity || 0);
+        });
+    });
+    const topBooks = Object.entries(bookSales)
+        .map(([title, data]) => ({ title, ...data }))
+        .sort((a, b) => b.qty - a.qty)
+        .slice(0, 10);
+
+    // المحافظات
+    const govStats = {};
+    activeOrders.forEach(order => {
+        if (order.governorate) {
+            govStats[order.governorate] = (govStats[order.governorate] || 0) + 1;
+        }
+    });
+    const topGovs = Object.entries(govStats)
+        .map(([gov, count]) => ({ gov, count }))
+        .sort((a, b) => b.count - a.count);
+
+    // أفضل العملاء
+    const customerPurchases = {};
+    activeOrders.forEach(order => {
+        if (!customerPurchases[order.userPhone]) {
+            customerPurchases[order.userPhone] = { name: order.fullName, count: 0, total: 0 };
+        }
+        customerPurchases[order.userPhone].count += 1;
+        customerPurchases[order.userPhone].total += (order.totalPrice || 0);
+    });
+    const topCustomers = Object.entries(customerPurchases)
+        .map(([phone, data]) => ({ phone, ...data }))
+        .sort((a, b) => b.total - a.total)
+        .slice(0, 5);
+
+    const now = new Date().toLocaleString('ar-EG', {
+        year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+    });
+
+    const reportHTML = `
+        <!DOCTYPE html>
+        <html lang="ar" dir="rtl">
+        <head>
+            <meta charset="UTF-8">
+            <title>تقرير Koko Store — ${periodNames[period]}</title>
+            <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+            <style>
+                * { box-sizing: border-box; margin: 0; padding: 0; }
+                body {
+                    font-family: 'Cairo', sans-serif;
+                    padding: 40px;
+                    color: #111827;
+                    background: #f9fafb;
+                    direction: rtl;
+                    line-height: 1.7;
+                }
+                .container {
+                    max-width: 900px;
+                    margin: 0 auto;
+                    background: white;
+                    border-radius: 16px;
+                    padding: 40px;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                }
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding-bottom: 24px;
+                    border-bottom: 3px solid #6366F1;
+                    margin-bottom: 32px;
+                }
+                .logo {
+                    display: flex;
+                    align-items: center;
+                    gap: 14px;
+                }
+                .logo-icon {
+                    width: 60px;
+                    height: 60px;
+                    background: linear-gradient(135deg, #6366F1, #4F46E5);
+                    color: white;
+                    border-radius: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 30px;
+                }
+                .logo-text h1 {
+                    font-size: 26px;
+                    font-weight: 900;
+                    color: #111827;
+                }
+                .logo-text p {
+                    font-size: 13px;
+                    color: #6b7280;
+                }
+                .report-info {
+                    text-align: left;
+                }
+                .report-info .period {
+                    background: #eef2ff;
+                    color: #6366F1;
+                    padding: 8px 16px;
+                    border-radius: 10px;
+                    font-weight: 900;
+                    font-size: 14px;
+                    display: inline-block;
+                }
+                .report-info .date {
+                    font-size: 12px;
+                    color: #6b7280;
+                    margin-top: 6px;
+                }
+                .section {
+                    margin-bottom: 32px;
+                }
+                .section h2 {
+                    font-size: 20px;
+                    font-weight: 900;
+                    color: #111827;
+                    margin-bottom: 16px;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding-bottom: 8px;
+                    border-bottom: 2px solid #e5e7eb;
+                }
+                .stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 14px;
+                    margin-bottom: 20px;
+                }
+                .stat-card {
+                    padding: 18px;
+                    border-radius: 14px;
+                    color: white;
+                    text-align: center;
+                }
+                .stat-card.indigo { background: linear-gradient(135deg, #6366F1, #4F46E5); }
+                .stat-card.green { background: linear-gradient(135deg, #10b981, #059669); }
+                .stat-card.amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+                .stat-card.pink { background: linear-gradient(135deg, #ec4899, #db2777); }
+                .stat-card .value {
+                    font-size: 26px;
+                    font-weight: 900;
+                    margin-bottom: 4px;
+                }
+                .stat-card .label {
+                    font-size: 12px;
+                    opacity: 0.95;
+                }
+                .revenue-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 12px;
+                }
+                .revenue-item {
+                    padding: 16px;
+                    border-radius: 12px;
+                    border: 1px solid #e5e7eb;
+                    background: #f9fafb;
+                }
+                .revenue-item .label {
+                    font-size: 12px;
+                    color: #6b7280;
+                    margin-bottom: 6px;
+                }
+                .revenue-item .value {
+                    font-size: 20px;
+                    font-weight: 900;
+                }
+                .revenue-item .value.green { color: #16a34a; }
+                .revenue-item .value.amber { color: #d97706; }
+                .revenue-item .value.blue { color: #2563eb; }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 13px;
+                    border-radius: 12px;
+                    overflow: hidden;
+                }
+                thead {
+                    background: #6366F1;
+                    color: white;
+                }
+                thead th {
+                    padding: 12px 10px;
+                    text-align: right;
+                    font-weight: 900;
+                }
+                tbody tr {
+                    background: white;
+                    border-bottom: 1px solid #f3f4f6;
+                }
+                tbody tr:nth-child(even) {
+                    background: #f9fafb;
+                }
+                tbody td {
+                    padding: 12px 10px;
+                }
+                .rank-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 26px;
+                    height: 26px;
+                    border-radius: 50%;
+                    font-weight: 900;
+                    font-size: 12px;
+                    color: white;
+                    background: #6b7280;
+                }
+                .rank-badge.gold { background: #f59e0b; }
+                .rank-badge.silver { background: #94a3b8; }
+                .rank-badge.bronze { background: #b45309; }
+                .empty {
+                    text-align: center;
+                    padding: 30px;
+                    color: #9ca3af;
+                    font-style: italic;
+                }
+                .footer {
+                    margin-top: 40px;
+                    padding-top: 20px;
+                    border-top: 2px solid #e5e7eb;
+                    text-align: center;
+                    font-size: 12px;
+                    color: #6b7280;
+                    line-height: 1.9;
+                }
+                .footer strong { color: #6366F1; }
+                .print-btn {
+                    position: fixed;
+                    top: 20px;
+                    left: 20px;
+                    background: #6366F1;
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 12px;
+                    font-family: 'Cairo', sans-serif;
+                    font-size: 14px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+                    z-index: 100;
+                }
+                .print-btn:hover { background: #4F46E5; }
+                @media print {
+                    body { background: white; padding: 15px; }
+                    .container { box-shadow: none; padding: 20px; }
+                    .print-btn { display: none; }
+                }
+            </style>
+        </head>
+        <body>
+            <button class="print-btn" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+
+            <div class="container">
+                <div class="header">
+                    <div class="logo">
+                        <div class="logo-icon">📚</div>
+                        <div class="logo-text">
+                            <h1>Koko Store</h1>
+                            <p>ملازم وكتب الثانوية العامة</p>
+                        </div>
+                    </div>
+                    <div class="report-info">
+                        <div class="period">${periodNames[period]}</div>
+                        <div class="date">${now}</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>📊 ملخص عام</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card indigo">
+                            <div class="value">${totalOrders}</div>
+                            <div class="label">إجمالي الطلبات</div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="value">${totalRevenue.toFixed(0)}</div>
+                            <div class="label">إجمالي الإيرادات (ج.م)</div>
+                        </div>
+                        <div class="stat-card amber">
+                            <div class="value">${(activeOrders.length > 0 ? totalRevenue / activeOrders.length : 0).toFixed(0)}</div>
+                            <div class="label">متوسط قيمة الطلب (ج.م)</div>
+                        </div>
+                        <div class="stat-card pink">
+                            <div class="value">${cancelledCount}</div>
+                            <div class="label">طلبات ملغية</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>💰 تفصيل الإيرادات</h2>
+                    <div class="revenue-grid">
+                        <div class="revenue-item">
+                            <div class="label">✅ مدفوع ومؤكد</div>
+                            <div class="value green">${paidRevenue.toFixed(2)} ج.م</div>
+                        </div>
+                        <div class="revenue-item">
+                            <div class="label">⏳ قيد التأكيد</div>
+                            <div class="value amber">${pendingRevenue.toFixed(2)} ج.م</div>
+                        </div>
+                        <div class="revenue-item">
+                            <div class="label">💵 دفع عند الاستلام</div>
+                            <div class="value blue">${codRevenue.toFixed(2)} ج.م</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>📚 الأكثر مبيعاً</h2>
+                    ${topBooks.length > 0 ? `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">#</th>
+                                    <th>اسم الكتاب</th>
+                                    <th style="width: 100px;">الكمية</th>
+                                    <th style="width: 130px;">الإيرادات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${topBooks.map((b, i) => `
+                                    <tr>
+                                        <td><span class="rank-badge ${i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : ''}">${i + 1}</span></td>
+                                        <td style="font-weight: 700;">${b.title}</td>
+                                        <td>${b.qty} نسخة</td>
+                                        <td style="font-weight: 700; color: #6366F1;">${b.revenue.toFixed(2)} ج.م</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    ` : '<div class="empty">لا توجد مبيعات</div>'}
+                </div>
+
+                <div class="section">
+                    <h2>🏙️ توزيع الطلبات حسب المحافظات</h2>
+                    ${topGovs.length > 0 ? `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>المحافظة</th>
+                                    <th style="width: 120px;">عدد الطلبات</th>
+                                    <th style="width: 130px;">النسبة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${topGovs.map(g => `
+                                    <tr>
+                                        <td style="font-weight: 700;">${g.gov}</td>
+                                        <td>${g.count} طلب</td>
+                                        <td>${((g.count / activeOrders.length) * 100).toFixed(1)}%</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    ` : '<div class="empty">لا توجد بيانات</div>'}
+                </div>
+
+                <div class="section">
+                    <h2>🏆 أفضل العملاء</h2>
+                    ${topCustomers.length > 0 ? `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">#</th>
+                                    <th>الاسم</th>
+                                    <th style="width: 130px;">الهاتف</th>
+                                    <th style="width: 100px;">عدد الطلبات</th>
+                                    <th style="width: 130px;">إجمالي الشراء</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${topCustomers.map((c, i) => `
+                                    <tr>
+                                        <td><span class="rank-badge ${i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : ''}">${i + 1}</span></td>
+                                        <td style="font-weight: 700;">${c.name}</td>
+                                        <td style="font-family: monospace;">${c.phone}</td>
+                                        <td>${c.count} طلب</td>
+                                        <td style="font-weight: 700; color: #6366F1;">${c.total.toFixed(2)} ج.م</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    ` : '<div class="empty">لا توجد بيانات</div>'}
+                </div>
+
+                <div class="footer">
+                    <p><strong>Koko Store</strong> — ملازم وكتب الثانوية العامة</p>
+                    <p>📞 01214823170 | ✉️ kokostore.eg@gmail.com</p>
+                    <p style="margin-top: 12px; font-size: 11px;">هذا التقرير أُنشئ تلقائياً بواسطة نظام Koko Store</p>
+                </div>
+            </div>
+
+            <script>
+                // فتح الطباعة تلقائياً بعد تحميل الصفحة (اختياري)
+                // window.onload = () => setTimeout(() => window.print(), 500);
+            <\/script>
+        </body>
+        </html>
+    `;
+
+    const reportWindow = window.open('', '_blank', 'width=1000,height=800');
+    if (!reportWindow) {
+        showToast("المتصفح منع فتح التقرير", "error");
+        return;
+    }
+    reportWindow.document.open();
+    reportWindow.document.write(reportHTML);
+    reportWindow.document.close();
+
+    showToast("✅ تم إنشاء التقرير", "success");
+}
+
     </script>
 <!-- 🎁 Admin Coupon Modal -->
 <div id="couponAdminModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden px-4 overflow-y-auto py-10">
@@ -8332,6 +8921,10 @@ async function saveOrderNotes(orderNumber) {
                     <i class="fa-solid fa-file-excel"></i>
                     <span class="hidden sm:inline">تصدير Excel</span>
                 </button>
+<button onclick="generateReport()" class="bg-blue-600 text-white px-3 py-2 rounded-lg text-xs font-bold hover:bg-blue-700 transition flex items-center gap-1.5">
+    <i class="fa-solid fa-file-lines"></i>
+    <span class="hidden sm:inline">تقرير مفصّل</span>
+</button>
                 <button onclick="closeStatsModal()" class="text-gray-400 hover:text-gray-600 p-1">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
@@ -8547,6 +9140,79 @@ async function saveOrderNotes(orderNumber) {
             <h4 class="text-sm font-bold text-gray-900 mb-3">📋 الصور الحالية</h4>
             <div id="galleryAdminGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
         </div>
+    </div>
+</div>
+<!-- 📢 Broadcast Notification Modal -->
+<div id="broadcastModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden px-4 overflow-y-auto py-10">
+    <div class="absolute inset-0 bg-black bg-opacity-60" onclick="closeBroadcastModal()"></div>
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl z-10 space-y-5 my-auto max-h-[92vh] flex flex-col">
+        <div class="flex items-center justify-between border-b pb-4 flex-shrink-0">
+            <h3 class="text-xl font-black text-gray-900 flex items-center gap-2">
+                <i class="fa-solid fa-tower-broadcast text-red-600"></i>
+                <span>إرسال إشعار جماعي</span>
+            </h3>
+            <button onclick="closeBroadcastModal()" class="text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <div class="bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2 flex-shrink-0">
+            <i class="fa-solid fa-triangle-exclamation text-red-600"></i>
+            <p class="text-xs text-red-800 font-semibold">
+                سيتم إرسال الإشعار لكل العملاء المسجلين (عددهم: <span id="broadcastCustomerCount" class="font-black">...</span>)
+            </p>
+        </div>
+
+        <form onsubmit="handleSendBroadcast(event)" class="flex-1 overflow-y-auto space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1">عنوان الإشعار <span class="text-red-500">*</span></label>
+                <input type="text" id="broadcastTitle" required maxlength="60" placeholder="مثال: 🎉 عرض خاص النهاردة"
+                       class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:bg-white focus:border-red-500 focus:outline-none">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1">نص الإشعار <span class="text-red-500">*</span></label>
+                <textarea id="broadcastMessage" required maxlength="300" rows="4"
+                          placeholder="اكتب نص الإشعار هنا... مثال: خصم 20% على جميع الملازم لمدة 24 ساعة فقط!"
+                          class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:bg-white focus:border-red-500 focus:outline-none resize-none"></textarea>
+                <p class="text-[10px] text-gray-500 mt-1">الحد الأقصى 300 حرف</p>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1">نوع الإشعار</label>
+                <select id="broadcastType" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:bg-white focus:border-red-500 focus:outline-none">
+                    <option value="promo">🎁 عرض ترويجي</option>
+                    <option value="info">ℹ️ معلومة</option>
+                    <option value="message">💬 رسالة</option>
+                    <option value="success">✅ خبر سار</option>
+                </select>
+            </div>
+
+            <div class="bg-gray-50 border border-gray-200 rounded-xl p-3">
+                <p class="text-xs font-bold text-gray-700 mb-2">👁️ معاينة:</p>
+                <div class="bg-white border border-gray-200 rounded-xl p-3">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-tags"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-bold text-gray-900 mb-1" id="previewTitle">عنوان الإشعار</h4>
+                            <p class="text-xs text-gray-600" id="previewMessage">نص الإشعار هيظهر هنا...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t pt-4 flex gap-3">
+                <button type="button" onclick="closeBroadcastModal()" class="bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-gray-300 transition">
+                    إلغاء
+                </button>
+                <button type="submit" id="broadcastSubmitBtn" class="flex-1 bg-red-600 text-white py-2.5 rounded-xl text-sm font-bold shadow hover:bg-red-700 transition">
+                    <i class="fa-solid fa-paper-plane ml-1"></i>
+                    إرسال لكل العملاء
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 </body>
