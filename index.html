@@ -5067,29 +5067,6 @@ function printOrderReceipt(orderNumber) {
                     setTimeout(function() { window.print(); }, 300);
                 };
             <\/script>
-
-<!-- ❓ FAQ Modal -->
-<div id="faqModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden px-4 overflow-y-auto py-10">
-    <div class="absolute inset-0 bg-black bg-opacity-60" onclick="closeFAQModal()"></div>
-    <div class="bg-white rounded-2xl max-w-3xl w-full shadow-2xl z-10 my-auto max-h-[92vh] flex flex-col">
-        <div class="flex items-center justify-between border-b p-6 flex-shrink-0">
-            <h3 class="text-xl font-black text-gray-900 flex items-center gap-2">
-                <i class="fa-solid fa-circle-question text-primary"></i>
-                <span>الأسئلة الشائعة</span>
-            </h3>
-            <button onclick="closeFAQModal()" class="text-gray-400 hover:text-gray-600 p-1">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-        </div>
-        <div class="flex-1 overflow-y-auto p-6 space-y-3" id="faqContent"></div>
-        <div class="border-t p-4 bg-gray-50 flex justify-end flex-shrink-0">
-            <button onclick="closeFAQModal()" class="bg-primary text-white px-6 py-2 rounded-xl text-sm font-bold hover:bg-indigo-700 transition">
-                تمام، فهمت
-            </button>
-        </div>
-    </div>
-</div>
-
         </body>
         </html>
     `;
@@ -7920,6 +7897,30 @@ async function deleteGalleryItem(id) {
         </button>
     </div>
 </div>
+
+<!-- ❓ FAQ Modal -->
+<div id="faqModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden px-4 overflow-y-auto py-10">
+    <div class="absolute inset-0 bg-black bg-opacity-60" onclick="closeFAQModal()"></div>
+    <div class="bg-white rounded-2xl max-w-3xl w-full shadow-2xl z-10 my-auto max-h-[92vh] flex flex-col">
+        <div class="flex items-center justify-between border-b p-6 flex-shrink-0">
+            <h3 class="text-xl font-black text-gray-900 flex items-center gap-2">
+                <i class="fa-solid fa-circle-question text-primary"></i>
+                <span>الأسئلة الشائعة</span>
+            </h3>
+            <button onclick="closeFAQModal()" class="text-gray-400 hover:text-gray-600 p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-6 space-y-3" id="faqContent"></div>
+        <div class="border-t p-4 bg-gray-50 flex justify-end flex-shrink-0">
+            <button onclick="closeFAQModal()" class="bg-primary text-white px-6 py-2 rounded-xl text-sm font-bold hover:bg-indigo-700 transition">
+                تمام، فهمت
+            </button>
+        </div>
+    </div>
+</div>
+
+
 <!-- 📸 Gallery Admin Modal -->
 <div id="galleryAdminModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden px-4 overflow-y-auto py-10">
     <div class="absolute inset-0 bg-black bg-opacity-60" onclick="closeGalleryAdminModal()"></div>
