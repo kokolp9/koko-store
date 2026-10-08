@@ -6,6 +6,29 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Koko Store">
     <link rel="manifest" href="/manifest.json">
+<!-- 🔔 OneSignal Push Notifications -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+            appId: "de7dcc3c-9cb5-4b0f-923d-e1daedeba450",
+            safari_web_id: "",
+            notifyButton: {
+                enable: false
+            },
+            allowLocalhostAsSecureOrigin: true
+        });
+        
+        console.log('✅ OneSignal initialized');
+        
+        // ربط المستخدم الحالي تلقائياً
+        if (window.currentUser) {
+            await OneSignal.login(String(window.currentUser.id));
+            console.log('✅ OneSignal user logged in');
+        }
+    });
+</script>
 <!-- 🏢 Structured Data (SEO) -->
 <script type="application/ld+json">
 {
@@ -689,6 +712,21 @@ body, header, .bg-white, .bg-gray-50, .bg-gray-100 {
         <p class="text-xs text-gray-500 font-semibold">إجمالي الطلبات</p>
         <h4 id="accountTotalOrdersCount" class="text-lg font-black text-primary">0 طلبات</h4>
     </div>
+</div>
+
+<!-- 🔔 تفعيل الإشعارات -->
+<div class="bg-indigo-50 border border-indigo-200 rounded-xl p-3 flex items-center justify-between flex-shrink-0">
+    <div class="flex items-center gap-2">
+        <i class="fa-solid fa-bell text-indigo-600 text-lg"></i>
+        <div>
+            <p class="text-xs font-bold text-gray-800">إشعارات فورية</p>
+            <p class="text-[10px] text-gray-500">استقبل إشعارات على موبايلك</p>
+        </div>
+    </div>
+    <button onclick="requestPushPermission()" id="pushPermissionBtn" class="bg-indigo-600 text-white hover:bg-indigo-700 px-3 py-1.5 rounded-lg text-xs font-bold transition">
+        <i class="fa-solid fa-bell ml-1"></i>
+        تفعيل
+    </button>
 </div>
 
 <!-- 🧹 مسح البيانات المحفوظة -->
@@ -2023,7 +2061,21 @@ setTimeout(updateBellBadge, 100);
             // إعادة تطبيق الفلتر للصفحة الحالية
 filteredBooksCache = books.slice();
 renderCurrentPage();
-        }
+
+// 🔔 ربط OneSignal بالمستخدم
+if (currentUser && window.OneSignalDeferred) {
+    setTimeout(() => {
+        OneSignalDeferred.push(async function(OneSignal) {
+            try {
+                await OneSignal.login(String(currentUser.id));
+                console.log('✅ OneSignal linked to user:', currentUser.id);
+            } catch (err) {
+                console.error('OneSignal login error:', err);
+            }
+        });
+    }, 500);
+}
+}
 
         // ============================================
         // Checkout
@@ -8554,6 +8606,71 @@ function generateReport() {
 
     showToast("✅ تم إنشاء التقرير", "success");
 }
+
+// ============================================
+// 🔔 OneSignal Push Notifications
+// ============================================
+
+async function requestPushPermission() {
+    if (!currentUser) {
+        showToast("سجّل دخول الأول", "warning");
+        return;
+    }
+
+    if (!window.OneSignalDeferred) {
+        showToast("الإشعارات مش متاحة حالياً", "error");
+        return;
+    }
+
+    try {
+        OneSignalDeferred.push(async function(OneSignal) {
+            const permission = await OneSignal.Notifications.requestPermission();
+            
+            if (permission) {
+                await OneSignal.login(String(currentUser.id));
+                showToast("✅ تم تفعيل الإشعارات بنجاح!", "success");
+                
+                const btn = document.getElementById('pushPermissionBtn');
+                if (btn) {
+                    btn.innerHTML = '<i class="fa-solid fa-check ml-1"></i>مفعّل';
+                    btn.className = 'bg-green-100 text-green-700 px-3 py-1.5 rounded-lg text-xs font-bold cursor-default';
+                    btn.onclick = null;
+                }
+            } else {
+                showToast("تم رفض الإشعارات", "warning");
+            }
+        });
+    } catch (err) {
+        console.error('Push permission error:', err);
+        showToast("حدث خطأ", "error");
+    }
+}
+
+async function checkPushStatus() {
+    if (!window.OneSignalDeferred) return;
+
+    OneSignalDeferred.push(async function(OneSignal) {
+        try {
+            const permission = await OneSignal.Notifications.permission;
+            const btn = document.getElementById('pushPermissionBtn');
+            
+            if (permission && btn) {
+                btn.innerHTML = '<i class="fa-solid fa-check ml-1"></i>مفعّل';
+                btn.className = 'bg-green-100 text-green-700 px-3 py-1.5 rounded-lg text-xs font-bold cursor-default';
+                btn.onclick = null;
+            }
+        } catch (err) {
+            console.error('Check push status error:', err);
+        }
+    });
+}
+
+// استدعي الفحص لما يفتح الحساب
+const originalOpenAccountModalForPush = window.openAccountModal;
+window.openAccountModal = function() {
+    originalOpenAccountModalForPush();
+    setTimeout(checkPushStatus, 300);
+};
 
     </script>
 <!-- 🎁 Admin Coupon Modal -->
