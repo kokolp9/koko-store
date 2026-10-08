@@ -1216,37 +1216,67 @@ body, header, footer, button, input, textarea, select {
                 </div>
             </div>
 
-            <!-- 📚 صورة كتب عائمة 3D -->
-            <div class="hidden md:flex justify-center items-center relative h-96">
-                <div class="relative w-64 h-80 transform rotate-6 hover:rotate-3 transition duration-500 animate-float">
-                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-2xl flex items-center justify-center transform translate-x-8 translate-y-4 opacity-30"></div>
-                    <div class="absolute inset-0 bg-gradient-to-br from-pink-500 to-red-500 rounded-2xl shadow-2xl flex items-center justify-center transform -translate-x-4 translate-y-8 opacity-40"></div>
-                    <div class="relative bg-white rounded-2xl shadow-2xl w-full h-full flex flex-col items-center justify-center overflow-hidden border-4 border-white">
-                        <div class="w-full h-48 bg-gradient-to-br from-primary to-indigo-700 flex items-center justify-center">
-                            <i class="fa-solid fa-book-open-reader text-white text-6xl"></i>
-                        </div>
-                        <div class="p-4 text-center">
-                            <p class="font-black text-gray-900 mb-1">ملازم الثانوية</p>
-                            <p class="text-xs text-gray-500">جميع المواد</p>
-                        </div>
-                    </div>
-                </div>
+            <!-- 📚 اللوجو العائم 3D -->
+<div class="hidden md:flex justify-center items-center relative h-96">
+    <div class="relative w-80 h-80 transform rotate-6 hover:rotate-3 transition duration-500 animate-float">
+        <!-- طبقات خلفية -->
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-700 to-blue-900 rounded-3xl shadow-2xl transform translate-x-8 translate-y-4 opacity-40 blur-sm"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-600 rounded-3xl shadow-2xl transform -translate-x-4 translate-y-8 opacity-50 blur-sm"></div>
+        <!-- اللوجو الأساسي -->
+        <div class="relative bg-white rounded-3xl shadow-2xl w-full h-full flex items-center justify-center overflow-hidden border-4 border-white p-6">
+            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-amber-50 rounded-2xl">
+                <img src="https://i.postimg.cc/SNkTwjPF/Gemini-Generated-Image-1ds6c91ds6c91ds6.jpg" alt="Koko Store" class="max-w-full max-h-full object-contain drop-shadow-2xl">
             </div>
+        </div>
+        <!-- إشعاع خلفي -->
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/30 via-amber-500/30 to-blue-500/30 rounded-3xl blur-3xl -z-10 animate-pulse"></div>
+    </div>
+</div>
         </div>
     </div>
 </section>
     <main id="booksSection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow w-full">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-    <div>
-        <h3 class="text-2xl font-black text-gray-900">قائمة الكتب والملازم الدراسية</h3>
-        <p class="text-sm text-gray-500">اختر الصف الدراسي أو المادة الدراسية المطلوبة</p>
+        <div class="books-section-hero">
+    <!-- العنوان -->
+    <div class="books-hero-title-wrap">
+        <div class="books-hero-icon">
+            <i class="fa-solid fa-book-bookmark"></i>
+            <div class="books-hero-icon-ring"></div>
+        </div>
+        <div class="books-hero-text">
+            <div class="books-hero-badge">
+                <i class="fa-solid fa-sparkles"></i>
+                <span>مكتبة شاملة</span>
+            </div>
+            <h3 class="books-hero-title">قائمة الكتب والملازم الدراسية</h3>
+            <p class="books-hero-subtitle">
+                اختر الصف الدراسي أو المادة المطلوبة وابدأ رحلتك التعليمية
+            </p>
+        </div>
     </div>
-    <div class="flex flex-wrap gap-2" id="categoryButtons">
-        <button onclick="filterCategory('الكل')" class="cat-btn active-cat bg-primary text-white text-sm font-semibold px-4 py-2 rounded-xl transition shadow-sm">الكل</button>
-        <button onclick="filterCategory('الصف الثالث الثانوي')" class="cat-btn bg-white text-gray-700 border border-gray-200 text-sm font-semibold px-4 py-2 rounded-xl hover:bg-gray-100 transition">ثالثة ثانوي</button>
-        <button onclick="filterCategory('الصف الثاني الثانوي')" class="cat-btn bg-white text-gray-700 border border-gray-200 text-sm font-semibold px-4 py-2 rounded-xl hover:bg-gray-100 transition">ثانية ثانوي</button>
-        <button onclick="filterCategory('الصف الأول الثانوي')" class="cat-btn bg-white text-gray-700 border border-gray-200 text-sm font-semibold px-4 py-2 rounded-xl hover:bg-gray-100 transition">أولى ثانوي</button>
-        <button onclick="filterCategory('باكدجات المواد')" class="cat-btn bg-white text-gray-700 border border-gray-200 text-sm font-semibold px-4 py-2 rounded-xl hover:bg-gray-100 transition">باكدجات المدرسين</button>
+    
+    <!-- أزرار الفلترة -->
+    <div class="flex flex-wrap gap-2 justify-center" id="categoryButtons">
+        <button onclick="filterCategory('الكل')" class="cat-btn active-cat">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>الكل</span>
+        </button>
+        <button onclick="filterCategory('الصف الثالث الثانوي')" class="cat-btn">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>ثالثة ثانوي</span>
+        </button>
+        <button onclick="filterCategory('الصف الثاني الثانوي')" class="cat-btn">
+            <i class="fa-solid fa-book-open"></i>
+            <span>ثانية ثانوي</span>
+        </button>
+        <button onclick="filterCategory('الصف الأول الثانوي')" class="cat-btn">
+            <i class="fa-solid fa-book"></i>
+            <span>أولى ثانوي</span>
+        </button>
+        <button onclick="filterCategory('باكدجات المواد')" class="cat-btn">
+            <i class="fa-solid fa-boxes-stacked"></i>
+            <span>باكدجات المدرسين</span>
+        </button>
     </div>
 </div>
 
@@ -2088,13 +2118,11 @@ function showToast(message, type = 'success') {
 // ============================================
 
 function phoneToEmail(phone) {
-    // الأدمن بإيميل خاص، باقي المستخدمين بإيميل وهمي
     if (phone === ADMIN_PHONE) {
         return 'shenouda12099@gmail.com';
     }
-    return `${phone}@koko.local`;
-}
-// 🔓 تسجيل الدخول
+    return `${phone}@kokomail.com`;
+}// 🔓 تسجيل الدخول
 async function supabaseLogin(phone, password) {
     if (!supabaseClient) {
         return { error: 'Supabase غير متصل' };
@@ -2838,17 +2866,37 @@ function updateAuthNav() {
     if (currentUser) {
         const isAdmin = currentUser.role === 'admin';
         navArea.innerHTML = `
-            <div class="admin-badge">
-                <div class="admin-crown">
-                    <i class="fa-solid fa-${isAdmin ? 'crown' : 'user'}"></i>
+            <div class="user-dropdown-wrapper">
+                <div class="admin-badge" onclick="toggleUserDropdown(event)">
+                    <div class="admin-crown">
+                        <i class="fa-solid fa-${isAdmin ? 'crown' : 'user'}"></i>
+                    </div>
+                    <div class="admin-info">
+                        <span class="admin-label">${isAdmin ? 'Royal Admin' : 'مرحباً'}</span>
+                        <span class="admin-name">${isAdmin ? 'مدير الموقع' : currentUser.phone}</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down text-xs user-dropdown-arrow"></i>
                 </div>
-                <div class="admin-info">
-                    <span class="admin-label">${isAdmin ? 'Royal Admin' : 'مرحباً'}</span>
-                    <button onclick="openAccountModal()" class="admin-name hover:underline" title="عرض حسابي وطلباتي">${isAdmin ? 'مدير الموقع' : currentUser.phone}</button>
+                <div id="userDropdown" class="user-dropdown hidden">
+                    <button onclick="closeUserDropdown(); openAccountSettingsModal();" class="user-dropdown-item">
+                        <i class="fa-solid fa-user-gear"></i>
+                        <span>إعدادات الحساب</span>
+                    </button>
+                    <button onclick="closeUserDropdown(); openAccountModal();" class="user-dropdown-item">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>سجل الطلبات</span>
+                    </button>
+                    <button onclick="closeUserDropdown(); openActiveOrdersModal();" class="user-dropdown-item">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <span>الطلبات النشطة</span>
+                        <span id="activeOrdersCount" class="user-dropdown-badge"></span>
+                    </button>
+                    <div class="user-dropdown-divider"></div>
+                    <button onclick="closeUserDropdown(); logout();" class="user-dropdown-item danger">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>تسجيل الخروج</span>
+                    </button>
                 </div>
-                <button onclick="logout()" class="admin-logout" title="تسجيل الخروج">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </button>
             </div>
         `;
 
@@ -2861,6 +2909,9 @@ function updateAuthNav() {
             if (adminAreaDesktop) adminAreaDesktop.classList.add('hidden');
             if (cartBtnWrapper) cartBtnWrapper.classList.remove('hidden');
         }
+        
+        // حدّث عدد الطلبات النشطة
+        setTimeout(updateActiveOrdersCount, 200);
     } else {
         navArea.innerHTML = `
             <button onclick="openAuthModal('login')" class="royal-login-btn">
@@ -2876,6 +2927,48 @@ function updateAuthNav() {
     renderCurrentPage();
 }
 
+// 🔽 فتح/إغلاق القائمة المنسدلة
+function toggleUserDropdown(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById('userDropdown');
+    if (!dropdown) return;
+    dropdown.classList.toggle('hidden');
+}
+
+function closeUserDropdown() {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) dropdown.classList.add('hidden');
+}
+
+// 🔢 عدّاد الطلبات النشطة
+function updateActiveOrdersCount() {
+    if (!currentUser) return;
+    const activeOrders = orders.filter(o => 
+        o.userPhone === currentUser.phone && 
+        o.status !== 'تم التوصيل' && 
+        o.status !== 'ملغي'
+    );
+    const badge = document.getElementById('activeOrdersCount');
+    if (badge) {
+        if (activeOrders.length > 0) {
+            badge.textContent = activeOrders.length;
+            badge.style.display = 'inline-flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+}
+
+// 🖱️ إغلاق القائمة عند الضغط خارجها
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('userDropdown');
+    const wrapper = document.querySelector('.user-dropdown-wrapper');
+    if (dropdown && !dropdown.classList.contains('hidden')) {
+        if (wrapper && !wrapper.contains(e.target)) {
+            dropdown.classList.add('hidden');
+        }
+    }
+});
         // ============================================
         // Checkout
         // ============================================
@@ -8057,15 +8150,17 @@ function updateDarkModeIcon(isDark) {
     const icon1 = document.getElementById('darkModeIcon');
     const icon2 = document.getElementById('darkModeIconMobile');
     
-    [icon1, icon2].forEach(icon => {
-        if (!icon) return;
-        icon.className = isDark ? 'fa-solid fa-sun text-lg' : 'fa-solid fa-moon text-lg';
-        if (icon.id === 'darkModeIconMobile') {
-            icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-        }
-    });
+    // الوضع المظلم مفعّل → يظهر شمس (للرجوع للنهاري)
+    // الوضع النهاري → يظهر قمر (للتحويل للمظلم)
+    const iconClass = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    
+    if (icon1) {
+        icon1.className = iconClass;
+    }
+    if (icon2) {
+        icon2.className = iconClass;
+    }
 }
-
 // تهيئة الوضع الليلي عند التحميل
 initDarkMode();
 
@@ -9409,6 +9504,290 @@ function generateReport() {
         font-size: 9px;
     }
 }
+/* 👤 User Dropdown Menu */
+.user-dropdown-wrapper {
+    position: relative;
+}
+.user-dropdown-arrow {
+    color: #92400E;
+    transition: transform 0.2s;
+    margin-right: 2px;
+}
+.user-dropdown-wrapper:has(.user-dropdown:not(.hidden)) .user-dropdown-arrow {
+    transform: rotate(180deg);
+}
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    min-width: 230px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 20px 40px -8px rgba(30, 64, 175, 0.25);
+    border: 1.5px solid rgba(30, 64, 175, 0.1);
+    padding: 6px;
+    z-index: 1000;
+    animation: dropdownIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes dropdownIn {
+    from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.user-dropdown.hidden { display: none; }
+.user-dropdown-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: #1E3A8A;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: right;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Cairo', sans-serif;
+    background: transparent;
+    border: none;
+    position: relative;
+}
+.user-dropdown-item:hover {
+    background: linear-gradient(135deg, #EEF2FF, #DBEAFE);
+    transform: translateX(-3px);
+}
+.user-dropdown-item.danger {
+    color: #DC2626;
+}
+.user-dropdown-item.danger:hover {
+    background: #FEE2E2;
+}
+.user-dropdown-item i {
+    font-size: 14px;
+    width: 20px;
+    text-align: center;
+}
+.user-dropdown-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(30, 64, 175, 0.15), transparent);
+    margin: 4px 8px;
+}
+.user-dropdown-badge {
+    margin-right: auto;
+    background: linear-gradient(135deg, #EF4444, #DC2626);
+    color: white;
+    font-size: 10px;
+    font-weight: 900;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.dark .user-dropdown {
+    background: #1E293B;
+    border-color: rgba(245, 158, 11, 0.2);
+}
+.dark .user-dropdown-item { color: #93C5FD; }
+.dark .user-dropdown-item:hover { background: rgba(30, 64, 175, 0.3); }
+.dark .user-dropdown-item.danger { color: #FCA5A5; }
+.dark .user-dropdown-item.danger:hover { background: rgba(220, 38, 38, 0.2); }
+/* 📚 Books Section Hero */
+.books-section-hero {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 50%, #EEF2FF 100%);
+    border: 2px solid rgba(30, 64, 175, 0.08);
+    border-radius: 24px;
+    padding: 32px 24px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 40px -12px rgba(30, 64, 175, 0.15);
+}
+.books-section-hero::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(30, 64, 175, 0.12), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+.books-section-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: -80px;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.15), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+.books-hero-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+}
+.books-hero-icon {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FCD34D;
+    font-size: 30px;
+    box-shadow: 0 10px 25px -8px rgba(30, 64, 175, 0.5);
+    position: relative;
+}
+.books-hero-icon-ring {
+    position: absolute;
+    inset: -6px;
+    border: 2px dashed rgba(30, 64, 175, 0.3);
+    border-radius: 24px;
+    animation: spinRing 20s linear infinite;
+}
+@keyframes spinRing {
+    to { transform: rotate(360deg); }
+}
+.books-hero-text {
+    flex: 1;
+    text-align: right;
+}
+.books-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    color: #92400E;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+    border: 1px solid #FCD34D;
+}
+.books-hero-badge i {
+    font-size: 9px;
+    color: #F59E0B;
+}
+.books-hero-title {
+    font-size: 26px;
+    font-weight: 900;
+    color: #1E3A8A;
+    margin-bottom: 4px;
+    line-height: 1.2;
+}
+.books-hero-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #F59E0B, #EF4444);
+    border-radius: 2px;
+    margin-top: 8px;
+}
+.books-hero-subtitle {
+    font-size: 13px;
+    color: #64748B;
+    font-weight: 600;
+}
+
+/* 🎯 Category Buttons - New Style */
+.cat-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: white;
+    border: 2px solid rgba(30, 64, 175, 0.1);
+    border-radius: 12px;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Cairo', sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+.cat-btn i {
+    font-size: 12px;
+    transition: transform 0.3s;
+}
+.cat-btn:hover {
+    transform: translateY(-3px);
+    border-color: #1E40AF;
+    color: #1E40AF;
+    box-shadow: 0 8px 20px -8px rgba(30, 64, 175, 0.3);
+}
+.cat-btn:hover i {
+    transform: scale(1.2) rotate(-10deg);
+}
+.cat-btn.active-cat {
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A) !important;
+    border-color: transparent !important;
+    color: white !important;
+    box-shadow: 0 10px 25px -8px rgba(30, 64, 175, 0.6), 0 0 0 3px rgba(245, 158, 11, 0.3) !important;
+    transform: translateY(-3px);
+}
+.cat-btn.active-cat i {
+    color: #FCD34D;
+}
+
+/* Dark Mode */
+.dark .books-section-hero {
+    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+    border-color: rgba(245, 158, 11, 0.15);
+}
+.dark .books-hero-title { color: #93C5FD; }
+.dark .books-hero-subtitle { color: #94A3B8; }
+.dark .cat-btn {
+    background: #1E293B;
+    border-color: rgba(245, 158, 11, 0.15);
+    color: #CBD5E1;
+}
+.dark .cat-btn:hover {
+    border-color: #F59E0B;
+    color: #FCD34D;
+}
+
+/* 📱 Mobile */
+@media (max-width: 640px) {
+    .books-section-hero {
+        padding: 20px 16px;
+        border-radius: 18px;
+    }
+    .books-hero-title-wrap {
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+    .books-hero-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 22px;
+        border-radius: 14px;
+    }
+    .books-hero-title {
+        font-size: 18px;
+    }
+    .books-hero-subtitle {
+        font-size: 11px;
+    }
+    .cat-btn {
+        padding: 8px 14px;
+        font-size: 11px;
+    }
+}
             </style>
         </head>
         <body>
@@ -9740,6 +10119,237 @@ function toggleAdminMenu() {
         panel.classList.add('hidden');
         if (btn) btn.classList.remove('active');
     }
+}
+
+// ============================================
+// 👤 Account Settings
+// ============================================
+function openAccountSettingsModal() {
+    if (!currentUser) return;
+    
+    const modal = document.getElementById('accountSettingsModal');
+    if (modal) modal.classList.remove('hidden');
+    
+    // عرض الرقم
+    const phoneEl = document.getElementById('settingsPhone');
+    if (phoneEl) phoneEl.textContent = currentUser.phone;
+    
+    // عرض بيانات الشحن
+    renderSavedShipping();
+}
+
+function closeAccountSettingsModal() {
+    const modal = document.getElementById('accountSettingsModal');
+    if (modal) modal.classList.add('hidden');
+    
+    // تنظيف الفورم
+    ['oldPassword', 'newPassword', 'confirmPassword'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+}
+
+async function handleChangePassword() {
+    if (!currentUser) return;
+    
+    const oldPass = document.getElementById('oldPassword').value;
+    const newPass = document.getElementById('newPassword').value;
+    const confirmPass = document.getElementById('confirmPassword').value;
+    
+    if (!oldPass || !newPass || !confirmPass) {
+        showToast("املا كل الحقول", "warning");
+        return;
+    }
+    
+    if (newPass.length < 6) {
+        showToast("كلمة السر الجديدة 6 أحرف على الأقل", "warning");
+        return;
+    }
+    
+    if (newPass !== confirmPass) {
+        showToast("كلمتا السر غير متطابقتين", "warning");
+        return;
+    }
+    
+    if (oldPass === newPass) {
+        showToast("كلمة السر الجديدة لازم تختلف عن القديمة", "warning");
+        return;
+    }
+    
+    try {
+        showToast("⏳ جاري التحقق...", "info");
+        
+        // 1) تأكد من كلمة السر القديمة
+        const email = phoneToEmail(currentUser.phone);
+        const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: oldPass
+        });
+        
+        if (signInError) {
+            showToast("كلمة السر الحالية غير صحيحة", "error");
+            return;
+        }
+        
+        // 2) حدّث كلمة السر
+        const { error: updateError } = await supabaseClient.auth.updateUser({
+            password: newPass
+        });
+        
+        if (updateError) {
+            console.error('Update password error:', updateError);
+            showToast("فشل التحديث: " + updateError.message, "error");
+            return;
+        }
+        
+        showToast("✅ تم تغيير كلمة السر بنجاح", "success");
+        
+        // تنظيف الفورم
+        ['oldPassword', 'newPassword', 'confirmPassword'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+        
+    } catch (err) {
+        console.error('Change password exception:', err);
+        showToast("حدث خطأ", "error");
+    }
+}
+
+function renderSavedShipping() {
+    const container = document.getElementById('savedShippingData');
+    const clearBtn = document.getElementById('clearShippingBtn');
+    if (!container) return;
+    
+    const saved = getCustomerData();
+    
+    if (!saved) {
+        container.innerHTML = '<p class="text-center text-gray-400 py-3">لا توجد بيانات محفوظة حالياً</p>';
+        if (clearBtn) clearBtn.classList.add('hidden');
+        return;
+    }
+    
+    container.innerHTML = `
+        <div class="flex justify-between items-start gap-2 bg-gray-50 p-3 rounded-lg">
+            <div class="flex-1 space-y-1">
+                <p><span class="font-bold text-gray-800">الاسم:</span> ${saved.fullName || '-'}</p>
+                <p><span class="font-bold text-gray-800">الهاتف:</span> <span dir="ltr">${saved.phone || '-'}</span></p>
+                ${saved.altPhone ? `<p><span class="font-bold text-gray-800">بديل:</span> <span dir="ltr">${saved.altPhone}</span></p>` : ''}
+                <p><span class="font-bold text-gray-800">المحافظة:</span> ${saved.governorate || '-'}</p>
+                <p><span class="font-bold text-gray-800">المركز:</span> ${saved.center || '-'}</p>
+                <p><span class="font-bold text-gray-800">العنوان:</span> ${saved.detailedAddress || '-'}</p>
+            </div>
+        </div>
+    `;
+    
+    if (clearBtn) clearBtn.classList.remove('hidden');
+}
+
+function clearSavedShipping() {
+    if (!currentUser) return;
+    if (!confirm("هل تريد مسح بيانات الشحن المحفوظة؟")) return;
+    
+    const allData = JSON.parse(localStorage.getItem('kokostore_customer_data')) || {};
+    delete allData[currentUser.phone];
+    localStorage.setItem('kokostore_customer_data', JSON.stringify(allData));
+    
+    renderSavedShipping();
+    showToast("🗑️ تم مسح البيانات", "success");
+}
+
+// ============================================
+// 🚚 Active Orders
+// ============================================
+function openActiveOrdersModal() {
+    if (!currentUser) return;
+    
+    const modal = document.getElementById('activeOrdersModal');
+    if (modal) modal.classList.remove('hidden');
+    
+    renderActiveOrders();
+}
+
+function closeActiveOrdersModal() {
+    const modal = document.getElementById('activeOrdersModal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function renderActiveOrders() {
+    const listEl = document.getElementById('activeOrdersList');
+    if (!listEl) return;
+    
+    const activeOrders = orders.filter(o => 
+        o.userPhone === currentUser.phone && 
+        o.status !== 'تم التوصيل' && 
+        o.status !== 'ملغي'
+    ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+    if (activeOrders.length === 0) {
+        listEl.innerHTML = `
+            <div class="text-center py-12 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                <i class="fa-solid fa-box-open text-4xl text-gray-300 mb-3"></i>
+                <p class="text-sm font-bold text-gray-600 mb-1">لا توجد طلبات نشطة حالياً</p>
+                <p class="text-xs text-gray-500">كل طلباتك تم توصيلها بنجاح ✅</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const statusColors = {
+        'قيد المراجعة والشحن': { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', icon: 'fa-hourglass-half' },
+        'تم الشحن': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200', icon: 'fa-truck-fast' }
+    };
+    
+    listEl.innerHTML = activeOrders.map(order => {
+        const sc = statusColors[order.status] || { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200', icon: 'fa-box' };
+        const items = order.items || [];
+        
+        return `
+            <div class="bg-white border-2 ${sc.border} rounded-xl overflow-hidden hover:shadow-md transition">
+                <div class="${sc.bg} px-4 py-3 flex items-center justify-between border-b ${sc.border}">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid ${sc.icon} ${sc.text}"></i>
+                        <span class="font-black text-sm ${sc.text}">${order.status}</span>
+                    </div>
+                    <span class="bg-white ${sc.text} text-[11px] font-black px-2.5 py-1 rounded-lg font-mono border ${sc.border}">
+                        ${order.orderNumber}
+                    </span>
+                </div>
+                
+                <div class="p-4 space-y-3">
+                    <div class="flex items-center justify-between text-xs text-gray-600">
+                        <span><i class="fa-solid fa-calendar text-gray-400 ml-1"></i>${order.date}</span>
+                        <span class="font-black text-primary text-base">${order.totalPrice.toFixed(2)} ج.م</span>
+                    </div>
+                    
+                    <div class="space-y-1.5">
+                        ${items.slice(0, 3).map(item => `
+                            <div class="flex justify-between items-center text-xs bg-gray-50 p-2 rounded-lg">
+                                <span class="font-bold text-gray-900 truncate">${item.title}</span>
+                                <span class="text-gray-500 text-[10px]">× ${item.quantity}</span>
+                            </div>
+                        `).join('')}
+                        ${items.length > 3 ? `
+                            <p class="text-[10px] text-gray-500 text-center">+ ${items.length - 3} منتجات أخرى</p>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2 pt-2 border-t">
+                        <button onclick="closeActiveOrdersModal(); openTrackOrderModal(); setTimeout(()=>{document.getElementById('trackOrderInput').value='${order.orderNumber}'; trackOrder();}, 300);" 
+                                class="bg-gray-800 text-white py-2 rounded-xl text-xs font-bold hover:bg-gray-900 transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-magnifying-glass-location"></i>
+                            <span>تتبع</span>
+                        </button>
+                        <button onclick="contactSupportAboutOrder('${order.orderNumber}')" 
+                                class="bg-green-500 text-white py-2 rounded-xl text-xs font-bold hover:bg-green-600 transition flex items-center justify-center gap-1.5">
+                            <i class="fa-brands fa-whatsapp"></i>
+                            <span>استفسار</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
     </script>
@@ -10495,6 +11105,99 @@ function toggleAdminMenu() {
                 تمام، الإشعارات شغالة
             </button>
         </div>
+    </div>
+</div>
+<!-- 👤 Account Settings Modal -->
+<div id="accountSettingsModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden px-4 overflow-y-auto py-10">
+    <div class="absolute inset-0 bg-black bg-opacity-60" onclick="closeAccountSettingsModal()"></div>
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl z-10 space-y-5 my-auto max-h-[92vh] flex flex-col">
+        <div class="flex items-center justify-between border-b pb-4 flex-shrink-0">
+            <h3 class="text-xl font-black text-gray-900 flex items-center gap-2">
+                <i class="fa-solid fa-user-gear text-amber-600"></i>
+                <span>إعدادات الحساب</span>
+            </h3>
+            <button onclick="closeAccountSettingsModal()" class="text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto space-y-4">
+            <!-- بيانات الحساب -->
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4">
+                <p class="text-[11px] text-gray-600 font-semibold mb-1">رقم الهاتف المسجل</p>
+                <p id="settingsPhone" class="text-lg font-black text-gray-900" dir="ltr">-</p>
+                <p class="text-[11px] text-gray-500 mt-1">
+                    <i class="fa-solid fa-circle-info ml-1"></i>
+                    لتغيير الرقم تواصل مع خدمة العملاء
+                </p>
+            </div>
+
+            <!-- تغيير كلمة السر -->
+            <div class="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+                <h4 class="text-sm font-black text-gray-900 flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-lock text-blue-600"></i>
+                    <span>تغيير كلمة السر</span>
+                </h4>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">كلمة السر الحالية</label>
+                    <input type="password" id="oldPassword" placeholder="••••••••" 
+                           class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:bg-white focus:border-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">كلمة السر الجديدة</label>
+                    <input type="password" id="newPassword" placeholder="••••••••" 
+                           class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:bg-white focus:border-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">تأكيد كلمة السر الجديدة</label>
+                    <input type="password" id="confirmPassword" placeholder="••••••••" 
+                           class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:bg-white focus:border-blue-500 focus:outline-none">
+                </div>
+                <button onclick="handleChangePassword()" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold hover:bg-blue-700 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-key"></i>
+                    <span>تغيير كلمة السر</span>
+                </button>
+            </div>
+
+            <!-- بيانات الشحن المحفوظة -->
+            <div class="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+                <h4 class="text-sm font-black text-gray-900 flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-location-dot text-green-600"></i>
+                    <span>بيانات الشحن المحفوظة</span>
+                </h4>
+                <div id="savedShippingData" class="text-xs text-gray-700 space-y-2">
+                    <p class="text-center text-gray-400 py-3">لا توجد بيانات محفوظة حالياً</p>
+                </div>
+                <button onclick="clearSavedShipping()" id="clearShippingBtn" class="hidden w-full bg-red-50 text-red-600 py-2 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition">
+                    <i class="fa-solid fa-trash ml-1"></i>
+                    مسح البيانات المحفوظة
+                </button>
+            </div>
+        </div>
+
+        <div class="border-t pt-4 flex-shrink-0">
+            <button onclick="closeAccountSettingsModal()" class="w-full bg-gray-100 text-gray-700 py-2.5 rounded-xl font-bold hover:bg-gray-200 transition">
+                إغلاق
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 🚚 Active Orders Modal -->
+<div id="activeOrdersModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden px-4 overflow-y-auto py-10">
+    <div class="absolute inset-0 bg-black bg-opacity-60" onclick="closeActiveOrdersModal()"></div>
+    <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl z-10 space-y-5 my-auto max-h-[92vh] flex flex-col">
+        <div class="flex items-center justify-between border-b pb-4 flex-shrink-0">
+            <h3 class="text-xl font-black text-gray-900 flex items-center gap-2">
+                <i class="fa-solid fa-truck-fast text-green-600"></i>
+                <span>الطلبات النشطة</span>
+            </h3>
+            <button onclick="closeActiveOrdersModal()" class="text-gray-400 hover:text-gray-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <div id="activeOrdersList" class="flex-1 overflow-y-auto space-y-3"></div>
     </div>
 </div>
 </body>
