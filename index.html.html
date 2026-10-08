@@ -3551,12 +3551,18 @@ function renderNotifications() {
         ${n.orderNumber ? `<span class="bg-gray-200 px-2 py-0.5 rounded font-mono">${n.orderNumber}</span>` : ''}
     </div>
     <button onclick="event.stopPropagation(); shareNotificationWhatsApp('${n.title.replace(/'/g, "&#39;")}', '${n.message.replace(/'/g, "&#39;").replace(/\n/g, ' ')}', '${n.orderNumber || ''}')" 
-            class="text-green-600 hover:text-green-700 font-bold flex items-center gap-1"
-            title="إرسال على واتساب">
-        <i class="fa-brands fa-whatsapp"></i>
-        <span>واتساب</span>
-    </button>
-</div>
+        class="text-green-600 hover:text-green-700 font-bold flex items-center gap-1"
+        title="إرسال على واتساب">
+    <i class="fa-brands fa-whatsapp"></i>
+    <span>واتساب</span>
+</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
 // 📤 مشاركة إشعار على واتساب
 function shareNotificationWhatsApp(title, message, orderNumber) {
     var fullMessage = '* ' + title + '*\n\n' + message;
@@ -3566,12 +3572,6 @@ function shareNotificationWhatsApp(title, message, orderNumber) {
     fullMessage = fullMessage + '\n\n-- من Koko Store --\nhttps://kokostore-sable.vercel.app';
 
     window.open('https://wa.me/?text=' + encodeURIComponent(fullMessage), '_blank');
-}
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
 }
 
 async function markNotificationAsRead(id) {
@@ -8157,7 +8157,17 @@ async function handleSendBroadcast(e) {
 
         if (insertError) throw insertError;
 
-        showToast(`✅ تم إرسال الإشعار لـ ${customers.length} عميل`, "success");
+                // 🔔 إرسال ntfy Push لكل عميل
+        let pushSuccess = 0;
+        let pushFail = 0;
+
+        for (const c of customers) {
+            const success = await notifyCustomerByNtfy(c.id, title, message);
+            if (success) pushSuccess++;
+            else pushFail++;
+        }
+
+        showToast(`✅ تم الإرسال لـ ${customers.length} عميل (Push: ${pushSuccess} ✅ / ${pushFail} ❌)`, "success");
 
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
@@ -8635,19 +8645,6 @@ function generateReport() {
 
     showToast("✅ تم إنشاء التقرير", "success");
 }
-
-// ============================================
-        // 🔔 إرسال ntfy Push Notifications لكل عميل
-        let pushSuccess = 0;
-        let pushFail = 0;
-
-        for (const c of customers) {
-            const success = await notifyCustomerByNtfy(c.id, title, message);
-            if (success) pushSuccess++;
-            else pushFail++;
-        }
-
-        showToast(`✅ تم الإرسال لـ ${customers.length} عميل (Push: ${pushSuccess} ✅ / ${pushFail} ❌)`, "success");
 
 // ============================================
 // 🔔 ntfy.sh Push Notifications
