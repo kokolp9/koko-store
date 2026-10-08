@@ -107,7 +107,7 @@
 </script>
     <style>
 /* ============================================
-   👑 Koko Store — Royal Blue & Gold Theme
+   👑 Koko Store — Royal Blue & Gold Theme v2
    ============================================ */
 
 /* 🎨 Base */
@@ -127,111 +127,433 @@ body {
     border-radius: 10px;
 }
 
-/* 👑 HEADER — Royal Glass */
-header {
-    background: rgba(255, 255, 255, 0.92) !important;
+/* ============================================
+   👑 ROYAL HEADER
+   ============================================ */
+
+.royal-header {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border-bottom: 2px solid transparent;
-    background-clip: padding-box;
-    box-shadow: 0 4px 24px -4px rgba(30, 64, 175, 0.12);
+    box-shadow: 0 8px 32px -8px rgba(30, 64, 175, 0.15);
     position: relative;
+    border-bottom: 1px solid rgba(30, 64, 175, 0.08);
 }
-header::after {
+.royal-header::after {
     content: '';
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #1E40AF, #F59E0B, #1E40AF, transparent);
+    height: 3px;
+    background: linear-gradient(90deg, #1E40AF, #F59E0B, #1E40AF);
     background-size: 200% 100%;
-    animation: royalLine 6s linear infinite;
+    animation: royalLine 5s linear infinite;
 }
 @keyframes royalLine {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
 }
 
-/* 👑 LOGO — Royal Badge */
-.royal-logo {
+/* 👑 Royal Brand */
+.royal-brand {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 6px 14px 6px 6px;
+    text-decoration: none;
+    padding: 6px 8px 6px 6px;
     border-radius: 16px;
-    background: linear-gradient(135deg, #1E40AF 0%, #1E3A8A 100%);
-    box-shadow:
-        0 8px 24px -6px rgba(30, 64, 175, 0.5),
-        inset 0 1px 0 rgba(255,255,255,0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+}
+.royal-brand:hover {
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.05), rgba(245, 158, 11, 0.05));
+    transform: translateY(-1px);
+}
+.royal-brand-logo {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
     overflow: hidden;
-    transition: all 0.3s ease;
-}
-.royal-logo::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.4), transparent);
-    transition: left 0.7s;
-}
-.royal-logo:hover::before { left: 100%; }
-.royal-logo:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px -6px rgba(30, 64, 175, 0.7), 0 0 0 2px rgba(245, 158, 11, 0.5);
-}
-.royal-icon {
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, #F59E0B, #D97706);
-    border-radius: 12px;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #1E3A8A;
-    font-size: 22px;
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5), inset 0 -2px 0 rgba(0,0,0,0.1);
-    flex-shrink: 0;
+    padding: 3px;
+    box-shadow:
+        0 8px 20px -4px rgba(30, 64, 175, 0.4),
+        0 0 0 2px rgba(245, 158, 11, 0.4);
+    transition: all 0.3s ease;
 }
-.royal-text {
+.royal-brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 11px;
+    background: white;
+}
+.royal-brand:hover .royal-brand-logo {
+    transform: scale(1.05) rotate(-3deg);
+    box-shadow:
+        0 12px 28px -4px rgba(30, 64, 175, 0.5),
+        0 0 0 3px rgba(245, 158, 11, 0.6);
+}
+.royal-brand-text {
     display: flex;
     flex-direction: column;
-    line-height: 1.1;
+    gap: 2px;
+    text-align: right;
 }
-.royal-title {
-    font-size: 19px;
+.royal-brand-title {
+    font-size: 22px;
     font-weight: 900;
-    letter-spacing: 0.5px;
-    color: #FFFFFF;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    letter-spacing: -0.5px;
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 0;
 }
-.royal-title span {
-    color: #FCD34D;
-}
-.royal-subtitle {
+.brand-koko { color: #1E3A8A; }
+.brand-store { color: #F59E0B; }
+.royal-brand-subtitle {
     font-size: 10px;
-    color: #BFDBFE;
+    color: #64748B;
     font-weight: 600;
-    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.royal-brand-subtitle i { color: #F59E0B; font-size: 9px; }
+
+/* 🎯 Icon Buttons */
+.royal-icon-btn {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #F8FAFC, #EEF2FF);
+    border: 1.5px solid rgba(30, 64, 175, 0.08);
+    color: #1E40AF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.royal-icon-btn:hover {
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -6px rgba(30, 64, 175, 0.5);
+    border-color: transparent;
+}
+.royal-tooltip {
+    position: absolute;
+    bottom: -32px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    background: #1E3A8A;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s;
+    z-index: 100;
+}
+.royal-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 8px;
+    height: 8px;
+    background: #1E3A8A;
+}
+.royal-icon-btn:hover .royal-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    bottom: -36px;
 }
 
-/* 🌈 Announcement Bar — Royal Gradient */
-#announcementBar {
-    background: linear-gradient(90deg, #1E3A8A, #1E40AF, #F59E0B, #1E40AF, #1E3A8A) !important;
-    background-size: 300% 100% !important;
-    animation: royalShift 10s ease infinite;
-    box-shadow: 0 4px 20px rgba(30, 64, 175, 0.35);
-    border-bottom: 2px solid rgba(245, 158, 11, 0.5);
+/* 📱 Mobile Icon Buttons */
+.royal-icon-btn-mobile {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #F8FAFC, #EEF2FF);
+    border: 1.5px solid rgba(30, 64, 175, 0.08);
+    color: #1E40AF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
 }
-@keyframes royalShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+.royal-icon-btn-mobile:active { transform: scale(0.95); }
+
+/* 🔴 Badges */
+.royal-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    background: linear-gradient(135deg, #EF4444, #DC2626);
+    color: white;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+    animation: badgePulse 2s ease-in-out infinite;
+}
+.royal-badge-mini {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    background: #EF4444;
+    color: white;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
 }
 
-/* 👤 ADMIN BADGE (في الهيدر) */
+/* ➖ Divider */
+.royal-divider {
+    width: 1px;
+    height: 28px;
+    background: linear-gradient(180deg, transparent, rgba(30, 64, 175, 0.2), transparent);
+    margin: 0 6px;
+}
+
+/* 👑 Admin Toggle Button */
+.royal-admin-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    border: 1.5px solid #F59E0B;
+    border-radius: 12px;
+    color: #78350F;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 4px 12px -2px rgba(245, 158, 11, 0.4);
+    font-family: 'Cairo', sans-serif;
+}
+.royal-admin-toggle:hover {
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.6);
+}
+.royal-chevron { transition: transform 0.3s; }
+.royal-admin-toggle.active .royal-chevron { transform: rotate(180deg); }
+
+/* 🛒 Cart Button */
+.royal-cart-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 6px 16px -4px rgba(30, 64, 175, 0.5);
+    position: relative;
+    font-family: 'Cairo', sans-serif;
+}
+.royal-cart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px -4px rgba(30, 64, 175, 0.7), 0 0 0 2px rgba(245, 158, 11, 0.4);
+}
+
+/* 📱 Menu Button */
+.royal-menu-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 4px 12px -2px rgba(30, 64, 175, 0.4);
+}
+.royal-menu-btn:active { transform: scale(0.95); }
+
+/* 🔍 Search Bar */
+.royal-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #F8FAFC, #EEF2FF);
+    border: 1.5px solid rgba(30, 64, 175, 0.1);
+    border-radius: 14px;
+    padding: 0 16px;
+    height: 48px;
+    transition: all 0.3s;
+}
+.royal-search:focus-within {
+    border-color: #1E40AF;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.12), 0 8px 24px -8px rgba(30, 64, 175, 0.2);
+}
+.royal-search-icon {
+    color: #94A3B8;
+    font-size: 16px;
+    transition: color 0.3s;
+    flex-shrink: 0;
+}
+.royal-search:focus-within .royal-search-icon { color: #1E40AF; }
+.royal-search input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0 12px;
+    font-size: 14px;
+    color: #111827;
+    outline: none;
+    font-family: 'Cairo', sans-serif;
+}
+.royal-search input::placeholder { color: #94A3B8; }
+.royal-search-hint {
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    border: 1px solid #FCD34D;
+    border-radius: 8px;
+    color: #92400E;
+    font-size: 10px;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+/* 📱 Mobile Menu */
+.royal-mobile-menu {
+    background: white;
+    border-top: 1px solid rgba(30, 64, 175, 0.08);
+    box-shadow: 0 20px 40px -12px rgba(30, 64, 175, 0.2);
+    animation: slideDown 0.3s ease-out;
+}
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.royal-mobile-search {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #F8FAFC, #EEF2FF);
+    border: 1.5px solid rgba(30, 64, 175, 0.1);
+    border-radius: 12px;
+    padding: 0 14px;
+    height: 44px;
+}
+.royal-mobile-search i { color: #94A3B8; font-size: 14px; }
+.royal-mobile-search input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0 10px;
+    font-size: 14px;
+    outline: none;
+    font-family: 'Cairo', sans-serif;
+}
+.royal-mobile-cart {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 6px 16px -4px rgba(30, 64, 175, 0.5);
+    position: relative;
+    font-family: 'Cairo', sans-serif;
+}
+.royal-login-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #F8FAFC, #EEF2FF);
+    border: 1.5px solid rgba(30, 64, 175, 0.15);
+    border-radius: 12px;
+    color: #1E40AF;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: 'Cairo', sans-serif;
+}
+.royal-login-btn:hover {
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -6px rgba(30, 64, 175, 0.5);
+    border-color: transparent;
+}
+.royal-login-btn-mobile {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px;
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 20px -6px rgba(30, 64, 175, 0.5);
+    font-family: 'Cairo', sans-serif;
+}
+
+/* 👤 ADMIN BADGE (المستخدم) */
 .admin-badge {
     display: flex;
     align-items: center;
@@ -254,6 +576,7 @@ header::after {
     justify-content: center;
     font-size: 14px;
     box-shadow: 0 2px 6px rgba(217, 119, 6, 0.4);
+    flex-shrink: 0;
 }
 .admin-info {
     display: flex;
@@ -285,45 +608,50 @@ header::after {
     transform: scale(1.1);
 }
 
-/* 🎛️ ADMIN NAV — 3 ROWS GRID */
+/* 👑 ADMIN NAV GRID */
 .admin-panel {
     background: linear-gradient(135deg, #F8FAFC, #EEF2FF);
     border: 2px solid rgba(30, 64, 175, 0.15);
     border-radius: 16px;
     padding: 8px;
     box-shadow: 0 8px 24px -8px rgba(30, 64, 175, 0.2);
+    margin-top: 8px;
+    animation: adminPanelIn 0.3s ease-out;
+}
+@keyframes adminPanelIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 .admin-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
 }
 .admin-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
-    padding: 8px 6px;
-    border-radius: 10px;
-    font-size: 10px;
+    gap: 4px;
+    padding: 10px 6px;
+    border-radius: 12px;
+    font-size: 11px;
     font-weight: 800;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1.5px solid transparent;
     background: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     cursor: pointer;
-    min-height: 52px;
+    min-height: 60px;
     position: relative;
     overflow: hidden;
+    font-family: 'Cairo', sans-serif;
+    color: #1E3A8A;
 }
-.admin-btn i {
-    font-size: 14px;
-    margin-bottom: 1px;
-}
+.admin-btn i { font-size: 16px; margin-bottom: 2px; }
 .admin-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px -4px rgba(30, 64, 175, 0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px -6px rgba(30, 64, 175, 0.3);
 }
 .admin-btn.books {
     color: #B45309;
@@ -399,7 +727,7 @@ header::after {
     color: white;
 }
 
-/* 🎴 Book Cards — Royal */
+/* 🎴 Book Cards */
 .book-card {
     position: relative;
     background: white;
@@ -429,12 +757,10 @@ header::after {
 }
 .book-card:hover::before { opacity: 1; }
 
-/* 🎯 Primary Buttons */
+/* 🎯 Buttons */
 .btn-primary {
     background: linear-gradient(135deg, #1E40AF, #1E3A8A);
     box-shadow: 0 8px 24px -8px rgba(30, 64, 175, 0.5);
-    position: relative;
-    overflow: hidden;
 }
 .btn-primary:hover {
     box-shadow: 0 12px 32px -8px rgba(30, 64, 175, 0.7), 0 0 0 2px rgba(245, 158, 11, 0.4);
@@ -451,9 +777,7 @@ header::after {
     0% { opacity: 0; transform: scale(0.95) translateY(10px); }
     100% { opacity: 1; transform: scale(1) translateY(0); }
 }
-.fixed.inset-0 > .absolute.inset-0.bg-black {
-    backdrop-filter: blur(8px);
-}
+.fixed.inset-0 > .absolute.inset-0.bg-black { backdrop-filter: blur(8px); }
 
 /* 🍞 Toast */
 #toastMsg {
@@ -468,7 +792,7 @@ input:focus, textarea:focus, select:focus {
     border-color: #1E40AF !important;
 }
 
-/* 🎨 Hero Section — Royal */
+/* 🎨 Hero Section */
 section.bg-gradient-to-r.from-gray-900 {
     background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #0F172A 100%) !important;
     position: relative;
@@ -504,7 +828,6 @@ section.bg-gradient-to-r.from-gray-900::after {
     66% { transform: translate(-20px, 20px) scale(0.95); }
 }
 
-/* 📚 Hero Book */
 .animate-float {
     animation: float3D 6s ease-in-out infinite;
     filter: drop-shadow(0 30px 40px rgba(30, 64, 175, 0.5));
@@ -556,16 +879,23 @@ section.bg-gradient-to-r.from-gray-900::after {
 }
 .search-suggestions.active { display: block; }
 
-/* 👑 Badge Pulse */
-.badge-pulse { animation: badgePulse 2s ease-in-out infinite; }
-@keyframes badgePulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-
-/* 🌙 Dark Mode — Royal */
+/* 🌙 Dark Mode */
 .dark body { background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%); color: #e2e8f0; }
-.dark header { background: rgba(15, 23, 42, 0.92) !important; }
+.dark .royal-header { background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); border-bottom-color: rgba(245, 158, 11, 0.15); }
+.dark .royal-brand-title .brand-koko { color: #93C5FD; }
+.dark .royal-brand-subtitle { color: #94A3B8; }
+.dark .royal-icon-btn, .dark .royal-icon-btn-mobile {
+    background: linear-gradient(135deg, #1E293B, #0F172A);
+    border-color: rgba(245, 158, 11, 0.15);
+    color: #FCD34D;
+}
+.dark .royal-search, .dark .royal-mobile-search {
+    background: linear-gradient(135deg, #1E293B, #0F172A);
+    border-color: rgba(245, 158, 11, 0.15);
+}
+.dark .royal-search input, .dark .royal-mobile-search input { color: #F1F5F9; }
+.dark .royal-search input::placeholder { color: #64748B; }
+.dark .royal-mobile-menu { background: #1E293B; }
 .dark .bg-white { background-color: #1E293B !important; }
 .dark .bg-gray-50 { background-color: #0F172A !important; }
 .dark .bg-gray-100 { background-color: #334155 !important; }
@@ -612,25 +942,6 @@ footer::before {
     pointer-events: none;
 }
 
-/* 🎯 Nav Icon Buttons */
-header button[onclick*="openTrackOrderModal"]:hover,
-header button[id^="bellBtnWrapper"]:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 8px 20px -6px rgba(30, 64, 175, 0.4);
-}
-
-/* 🔔 Bell Badge */
-#bellBadge, #bellBadgeMobile, #cartCount, #cartCountMobile {
-    animation: badgePulse 2s ease-in-out infinite;
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-}
-
-/* 💎 Cart Button */
-#cartBtnWrapper:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 8px 20px -6px rgba(30, 64, 175, 0.5);
-}
-
 /* 🎁 Offer Badge */
 .offer-badge {
     background: linear-gradient(135deg, #F59E0B, #EF4444);
@@ -665,10 +976,14 @@ body, header, footer, button, input, textarea, select {
     input, select, textarea { font-size: 16px !important; }
     section.bg-gradient-to-r.from-gray-900::before,
     section.bg-gradient-to-r.from-gray-900::after { display: none; }
-    .royal-logo { padding: 4px 10px 4px 4px; gap: 8px; }
-    .royal-icon { width: 36px; height: 36px; font-size: 18px; }
-    .royal-title { font-size: 15px; }
-    .royal-subtitle { font-size: 9px; }
+    .royal-brand-logo { width: 44px; height: 44px; }
+    .royal-brand-title { font-size: 18px; }
+    .royal-brand-subtitle { font-size: 9px; }
+    .royal-brand { padding: 4px 6px 4px 4px; gap: 8px; }
+    .royal-search { height: 44px; }
+    .admin-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+    .admin-btn { font-size: 10px; padding: 8px 4px; min-height: 54px; }
+    .admin-btn i { font-size: 14px; }
 }
 </style>
 </head>
@@ -681,130 +996,165 @@ body, header, footer, button, input, textarea, select {
             <span id="announcementText" style="transition: opacity 0.3s;">🚚 شحن مجاني للطلبات فوق 500 جنيه</span>
         </div>
     </div>
-    <header class="bg-white shadow-sm sticky top-0 z-45">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-0 sm:h-20 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+    <header class="royal-header sticky top-0 z-45">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         
-        <!-- Top row: Logo + Actions -->
-        <div class="flex items-center justify-between w-full sm:w-auto">
-            <div class="royal-logo">
-    <img src="https://i.postimg.cc/SNkTwjPF/Gemini-Generated-Image-1ds6c91ds6c91ds6.jpg" alt="Koko Store" class="royal-logo-img">
-    <div class="royal-text">
-        <h1 class="royal-title">Koko<span>Store</span></h1>
-        <p class="royal-subtitle">ملازم وكتب الثانوية العامة</p>
-    </div>
-</div>
+        <!-- الصف العلوي: لوجو + أدوات -->
+        <div class="flex items-center justify-between py-3 gap-3">
+            
+            <!-- 👑 اللوجو الجديد -->
+            <a href="#" class="royal-brand" onclick="event.preventDefault(); window.scrollTo({top:0,behavior:'smooth'});">
+                <div class="royal-brand-logo">
+                    <img src="https://i.postimg.cc/SNkTwjPF/Gemini-Generated-Image-1ds6c91ds6c91ds6.jpg">
+                </div>
+                <div class="royal-brand-text">
+                    <div class="royal-brand-title">
+                        <span class="brand-koko">Koko</span><span class="brand-store">Store</span>
+                    </div>
+                    <div class="royal-brand-subtitle">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>ملازم وكتب الثانوية العامة</span>
+                    </div>
+                </div>
+            </a>
 
-            <!-- Actions (visible on mobile too) -->
-            <div class="flex items-center space-x-2 space-x-reverse sm:hidden">
-                <button onclick="openTrackOrderModal()" class="bg-blue-50 text-blue-600 p-2.5 rounded-xl hover:bg-blue-600 hover:text-white transition shadow-sm">
-    <i class="fa-solid fa-magnifying-glass-location"></i>
-</button>
-<button onclick="toggleDarkMode()" title="الوضع الليلي" class="bg-gray-100 text-gray-700 p-2.5 rounded-xl hover:bg-gray-800 hover:text-white transition shadow-sm">
-    <i class="fa-solid fa-moon" id="darkModeIconMobile"></i>
-</button>
-<button onclick="openNotificationsModal()" id="bellBtnWrapperMobile" class="relative bg-gray-100 text-gray-700 p-2.5 rounded-xl hover:bg-primary hover:text-white transition shadow-sm hidden">
-                    <i class="fa-solid fa-bell"></i>
-                    <span id="bellBadgeMobile" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow hidden">0</span>
+            <!-- 🎯 أدوات الديسكتوب -->
+            <div class="hidden lg:flex items-center gap-2">
+                <!-- تتبع الطلب -->
+                <button onclick="openTrackOrderModal()" class="royal-icon-btn" title="تتبع طلبك">
+                    <i class="fa-solid fa-magnifying-glass-location"></i>
+                    <span class="royal-tooltip">تتبع الطلب</span>
                 </button>
-                <button onclick="toggleMobileMenu()" class="bg-gray-100 text-gray-800 p-2.5 rounded-xl hover:bg-gray-200 transition shadow-sm">
+                
+                <!-- الوضع الليلي -->
+                <button onclick="toggleDarkMode()" class="royal-icon-btn" title="الوضع الليلي">
+                    <i class="fa-solid fa-moon" id="darkModeIcon"></i>
+                    <span class="royal-tooltip">الوضع الليلي</span>
+                </button>
+
+                <!-- الجرس -->
+                <button onclick="openNotificationsModal()" id="bellBtnWrapper" class="royal-icon-btn royal-bell hidden" title="الإشعارات">
+                    <i class="fa-solid fa-bell"></i>
+                    <span id="bellBadge" class="royal-badge hidden">0</span>
+                    <span class="royal-tooltip">الإشعارات</span>
+                </button>
+
+                <div class="royal-divider"></div>
+
+                <!-- منطقة المستخدم -->
+                <div id="authNavArea"></div>
+
+                <!-- منطقة الأدمن -->
+                <div id="adminNavArea" class="hidden">
+                    <button onclick="toggleAdminMenu()" class="royal-admin-toggle">
+                        <i class="fa-solid fa-crown"></i>
+                        <span>لوحة التحكم</span>
+                        <i class="fa-solid fa-chevron-down text-xs royal-chevron"></i>
+                    </button>
+                </div>
+
+                <!-- السلة -->
+                <button onclick="toggleCartModal()" id="cartBtnWrapper" class="royal-cart-btn">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="royal-cart-text">السلة</span>
+                    <span id="cartCount" class="royal-badge">0</span>
+                </button>
+            </div>
+
+            <!-- 📱 أدوات الموبايل -->
+            <div class="lg:hidden flex items-center gap-2">
+                <button onclick="openTrackOrderModal()" class="royal-icon-btn-mobile">
+                    <i class="fa-solid fa-magnifying-glass-location"></i>
+                </button>
+                <button onclick="toggleDarkMode()" class="royal-icon-btn-mobile">
+                    <i class="fa-solid fa-moon" id="darkModeIconMobile"></i>
+                </button>
+                <button onclick="openNotificationsModal()" id="bellBtnWrapperMobile" class="royal-icon-btn-mobile royal-bell hidden">
+                    <i class="fa-solid fa-bell"></i>
+                    <span id="bellBadgeMobile" class="royal-badge-mini hidden">0</span>
+                </button>
+                <button onclick="toggleMobileMenu()" class="royal-menu-btn">
                     <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Desktop Search -->
-        <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
-            <div class="relative w-full">
-                <input type="text" id="searchInput" oninput="filterBooks()" placeholder="ابحث عن ملزمة، كتاب، أو اسم المدرس..." class="w-full bg-gray-100 border border-transparent rounded-xl py-2.5 pr-4 pl-10 text-sm focus:bg-white focus:border-primary focus:outline-none transition">
-                <div class="absolute left-3 top-3 text-gray-400"><i class="fa-solid fa-search"></i></div>
+        <!-- 🔍 شريط البحث (كامل العرض) -->
+        <div class="pb-3">
+            <div class="royal-search">
+                <i class="fa-solid fa-search royal-search-icon"></i>
+                <input type="text" id="searchInput" oninput="filterBooks()" placeholder="ابحث عن ملزمة، كتاب، أو اسم المدرس...">
+                <input type="text" id="searchInputMobile" oninput="syncMobileSearch(this.value)" placeholder="ابحث..." style="display:none;">
+                <span class="royal-search-hint hidden sm:flex">
+                    <i class="fa-solid fa-bolt"></i>
+                    بحث فوري
+                </span>
             </div>
         </div>
 
-        <!-- Mobile Search (always visible) -->
-        <div class="flex md:hidden items-center w-full">
-            <div class="relative w-full">
-                <input type="text" id="searchInputMobile" oninput="syncMobileSearch(this.value)" placeholder="ابحث عن ملزمة، كتاب، أو مدرس..." class="w-full bg-gray-100 border border-transparent rounded-xl py-2.5 pr-4 pl-10 text-sm focus:bg-white focus:border-primary focus:outline-none transition">
-                <div class="absolute left-3 top-3 text-gray-400"><i class="fa-solid fa-search"></i></div>
-            </div>
-        </div>
-
-        <!-- Desktop Actions -->
-        <div class="hidden sm:flex items-center space-x-3 space-x-reverse">
-            <!-- 🔔 Bell Icon -->
-<button onclick="openTrackOrderModal()" title="تتبع طلبك" class="bg-blue-50 text-blue-600 p-3 rounded-xl hover:bg-blue-600 hover:text-white transition shadow-sm">
-    <i class="fa-solid fa-magnifying-glass-location text-lg"></i>
-</button>
-<button onclick="toggleDarkMode()" id="darkModeBtn" title="الوضع الليلي" class="bg-gray-100 text-gray-700 p-3 rounded-xl hover:bg-gray-800 hover:text-white transition shadow-sm">
-    <i class="fa-solid fa-moon text-lg" id="darkModeIcon"></i>
-</button>
-            <button onclick="openNotificationsModal()" id="bellBtnWrapper" class="relative bg-gray-100 text-gray-700 p-3 rounded-xl hover:bg-primary hover:text-white transition shadow-sm hidden">
-                <i class="fa-solid fa-bell text-lg"></i>
-                <span id="bellBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow hidden">0</span>
-            </button>
-
-            <div id="authNavArea">
-                <button onclick="openAuthModal('login')" class="bg-gray-100 text-gray-800 hover:bg-gray-200 px-4 py-2 rounded-xl text-sm font-bold transition flex items-center space-x-2 space-x-reverse">
-                    <i class="fa-solid fa-user"></i>
-                    <span class="hidden sm:inline">حسابي</span>
-                </button>
-            </div>
-
-            <div id="adminNavArea" class="hidden">
-                <div class="flex items-center gap-2">
-                    <button onclick="openAdminModal()" class="bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white px-3.5 py-2 rounded-xl text-sm font-bold transition flex items-center space-x-2 space-x-reverse shadow-sm">
+        <!-- 🎛️ لوحة تحكم الأدمن (3 صفوف) -->
+        <div id="adminNavAreaDesktop" class="hidden pb-3">
+            <div class="admin-panel">
+                <div class="admin-grid">
+                    <button onclick="openAdminModal()" class="admin-btn books">
                         <i class="fa-solid fa-gauge-high"></i>
-                        <span class="hidden sm:inline">الكتب</span>
+                        <span>الكتب</span>
                     </button>
-                    <button onclick="openCouponAdminModal()" class="bg-purple-50 text-purple-600 hover:bg-purple-600 hover:text-white px-3.5 py-2 rounded-xl text-sm font-bold transition flex items-center space-x-2 space-x-reverse shadow-sm">
+                    <button onclick="openCouponAdminModal()" class="admin-btn coupons">
                         <i class="fa-solid fa-ticket"></i>
-                        <span class="hidden sm:inline">الكوبونات</span>
+                        <span>الكوبونات</span>
                     </button>
-                    <button onclick="openOrdersAdminModal()" class="bg-green-50 text-green-600 hover:bg-green-600 hover:text-white px-3.5 py-2 rounded-xl text-sm font-bold transition flex items-center space-x-2 space-x-reverse shadow-sm">
+                    <button onclick="openOrdersAdminModal()" class="admin-btn orders">
                         <i class="fa-solid fa-box"></i>
-                        <span class="hidden sm:inline">الطلبات</span>
+                        <span>الطلبات</span>
                     </button>
-                               <button onclick="openPaymentSettingsModal()" class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3.5 py-2 rounded-xl text-sm font-bold transition flex items-center space-x-2 space-x-reverse shadow-sm">
-    <i class="fa-solid fa-credit-card"></i>
-    <span class="hidden sm:inline">الدفع</span>
-</button>
-<button onclick="openStatsModal()" class="bg-pink-50 text-pink-600 hover:bg-pink-600 hover:text-white px-3.5 py-2 rounded-xl text-sm font-bold transition flex items-center space-x-2 space-x-reverse shadow-sm">
-    <i class="fa-solid fa-chart-line"></i>
-    <span class="hidden sm:inline">إحصائيات</span>
-</button>
-<button onclick="openAnnouncementsModal()" class="bg-orange-50 text-orange-600 hover:bg-orange-600 hover:text-white px-3.5 py-2 rounded-xl text-sm font-bold transition flex items-center space-x-2 space-x-reverse shadow-sm">
-    <i class="fa-solid fa-bullhorn"></i>
-    <span class="hidden sm:inline">الإعلانات</span>
-</button>
-<button onclick="openGalleryAdminModal()" class="bg-teal-50 text-teal-600 hover:bg-teal-600 hover:text-white px-3.5 py-2 rounded-xl text-sm font-bold transition flex items-center space-x-2 space-x-reverse shadow-sm">
-    <i class="fa-solid fa-images"></i>
-    <span class="hidden sm:inline">المعرض</span>
-</button>
-<button onclick="openBroadcastModal()" class="bg-red-50 text-red-600 hover:bg-red-600 hover:text-white px-3.5 py-2 rounded-xl text-sm font-bold transition flex items-center space-x-2 space-x-reverse shadow-sm">
-    <i class="fa-solid fa-tower-broadcast"></i>
-    <span class="hidden sm:inline">إشعار جماعي</span>
-</button>
+                    <button onclick="openPaymentSettingsModal()" class="admin-btn payment">
+                        <i class="fa-solid fa-credit-card"></i>
+                        <span>الدفع</span>
+                    </button>
+                    <button onclick="openStatsModal()" class="admin-btn stats">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>إحصائيات</span>
+                    </button>
+                    <button onclick="openAnnouncementsModal()" class="admin-btn ads">
+                        <i class="fa-solid fa-bullhorn"></i>
+                        <span>الإعلانات</span>
+                    </button>
+                    <button onclick="openGalleryAdminModal()" class="admin-btn gallery">
+                        <i class="fa-solid fa-images"></i>
+                        <span>المعرض</span>
+                    </button>
+                    <button onclick="openBroadcastModal()" class="admin-btn broadcast">
+                        <i class="fa-solid fa-tower-broadcast"></i>
+                        <span>إشعار جماعي</span>
+                    </button>
                 </div>
             </div>
-
-            <button onclick="toggleCartModal()" id="cartBtnWrapper" class="relative bg-indigo-50 text-primary p-3 rounded-xl hover:bg-primary hover:text-white transition shadow-sm flex items-center space-x-2 space-x-reverse">
-                <i class="fa-solid fa-cart-shopping text-lg"></i>
-                <span class="hidden sm:inline font-semibold text-sm">السلة</span>
-                <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow">0</span>
-            </button>
         </div>
     </div>
 
-    <!-- 📱 Mobile Menu Dropdown -->
-    <div id="mobileMenu" class="hidden sm:hidden bg-white border-t border-gray-200 px-4 py-3 space-y-2">
-        <div id="authNavAreaMobile"></div>
-        <div id="adminNavAreaMobile"></div>
-        
-        <!-- Mobile Cart -->
-        <button onclick="toggleCartModal(); toggleMobileMenu();" id="cartBtnWrapperMobile" class="w-full bg-indigo-50 text-primary hover:bg-primary hover:text-white py-2.5 rounded-xl text-sm font-bold transition flex items-center justify-center space-x-2 space-x-reverse">
-            <i class="fa-solid fa-cart-shopping"></i>
-            <span>السلة</span>
-            <span id="cartCountMobile" class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">0</span>
-        </button>
+    <!-- 📱 قائمة الموبايل المنسدلة -->
+    <div id="mobileMenu" class="royal-mobile-menu hidden lg:hidden">
+        <div class="p-4 space-y-3">
+            <!-- البحث للموبايل -->
+            <div class="royal-mobile-search">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="mobileSearchInput" oninput="syncMobileSearch(this.value)" placeholder="ابحث عن كتاب أو مدرس...">
+            </div>
+
+            <!-- الحساب -->
+            <div id="authNavAreaMobile"></div>
+
+            <!-- السلة -->
+            <button onclick="toggleCartModal(); toggleMobileMenu();" id="cartBtnWrapperMobile" class="royal-mobile-cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span>سلة الطلبات</span>
+                <span id="cartCountMobile" class="royal-badge">0</span>
+            </button>
+
+            <!-- لوحة الأدمن للموبايل -->
+            <div id="adminNavAreaMobile"></div>
+        </div>
     </div>
 </header>
 
@@ -2476,44 +2826,54 @@ function saveCart() {
     showToast("تم تسجيل الخروج", "success");
 }
 
-        function updateAuthNav() {
+function updateAuthNav() {
     const navArea = document.getElementById('authNavArea');
     const adminArea = document.getElementById('adminNavArea');
+    const adminAreaDesktop = document.getElementById('adminNavAreaDesktop');
     const cartBtnWrapper = document.getElementById('cartBtnWrapper');
-    if (!navArea || !adminArea) return;
+    if (!navArea) return;
 
-    // 🔔 تحديث الجرس
     setTimeout(updateBellBadge, 100);
 
-            if (currentUser) {
-                const isAdmin = currentUser.role === 'admin';
-                navArea.innerHTML = `
-                    <div class="flex items-center space-x-2 space-x-reverse bg-indigo-50 text-primary px-3 py-2 rounded-xl text-xs font-bold">
-                        <i class="fa-solid fa-user-check"></i>
-                        <button onclick="openAccountModal()" class="hover:underline hidden sm:inline" title="عرض حسابي وطلباتي">${isAdmin ? 'مدير الموقع (Admin)' : currentUser.phone}</button>
-                        <button onclick="logout()" class="text-red-500 hover:text-red-700 mr-2" title="تسجيل الخروج"><i class="fa-solid fa-right-from-bracket"></i></button>
-                    </div>
-                `;
-                if (isAdmin) {
-    adminArea.classList.remove('hidden');
-    if (cartBtnWrapper) cartBtnWrapper.classList.add('hidden');
-} else {
-    adminArea.classList.add('hidden');
-    if (cartBtnWrapper) cartBtnWrapper.classList.remove('hidden');
-}
-            } else {
-                navArea.innerHTML = `
-                    <button onclick="openAuthModal('login')" class="bg-gray-100 text-gray-800 hover:bg-gray-200 px-4 py-2 rounded-xl text-sm font-bold transition flex items-center space-x-2 space-x-reverse">
-                        <i class="fa-solid fa-user"></i>
-                        <span class="hidden sm:inline">حسابي / تسجيل الدخول</span>
-                    </button>
-                `;
-                adminArea.classList.add('hidden');
-                if (cartBtnWrapper) cartBtnWrapper.classList.remove('hidden');
-            }
-            // إعادة تطبيق الفلتر للصفحة الحالية
-filteredBooksCache = books.slice();
-renderCurrentPage();
+    if (currentUser) {
+        const isAdmin = currentUser.role === 'admin';
+        navArea.innerHTML = `
+            <div class="admin-badge">
+                <div class="admin-crown">
+                    <i class="fa-solid fa-${isAdmin ? 'crown' : 'user'}"></i>
+                </div>
+                <div class="admin-info">
+                    <span class="admin-label">${isAdmin ? 'Royal Admin' : 'مرحباً'}</span>
+                    <button onclick="openAccountModal()" class="admin-name hover:underline" title="عرض حسابي وطلباتي">${isAdmin ? 'مدير الموقع' : currentUser.phone}</button>
+                </div>
+                <button onclick="logout()" class="admin-logout" title="تسجيل الخروج">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        `;
+
+        if (isAdmin) {
+            if (adminArea) adminArea.classList.remove('hidden');
+            if (adminAreaDesktop) adminAreaDesktop.classList.add('hidden');
+            if (cartBtnWrapper) cartBtnWrapper.classList.add('hidden');
+        } else {
+            if (adminArea) adminArea.classList.add('hidden');
+            if (adminAreaDesktop) adminAreaDesktop.classList.add('hidden');
+            if (cartBtnWrapper) cartBtnWrapper.classList.remove('hidden');
+        }
+    } else {
+        navArea.innerHTML = `
+            <button onclick="openAuthModal('login')" class="royal-login-btn">
+                <i class="fa-solid fa-user"></i>
+                <span>حسابي / دخول</span>
+            </button>
+        `;
+        if (adminArea) adminArea.classList.add('hidden');
+        if (adminAreaDesktop) adminAreaDesktop.classList.add('hidden');
+        if (cartBtnWrapper) cartBtnWrapper.classList.remove('hidden');
+    }
+    filteredBooksCache = books.slice();
+    renderCurrentPage();
 }
 
         // ============================================
@@ -4713,50 +5073,60 @@ function updateMobileMenu() {
     if (currentUser) {
         const isAdmin = currentUser.role === 'admin';
         authArea.innerHTML = `
-            <div class="flex items-center justify-between bg-indigo-50 text-primary px-3 py-2.5 rounded-xl text-xs font-bold">
-                <button onclick="openAccountModal(); toggleMobileMenu();" class="flex items-center gap-1.5">
-                    <i class="fa-solid fa-user-check"></i>
-                    <span>${isAdmin ? 'مدير الموقع' : currentUser.phone}</span>
+            <div class="admin-badge">
+                <div class="admin-crown">
+                    <i class="fa-solid fa-${isAdmin ? 'crown' : 'user'}"></i>
+                </div>
+                <div class="admin-info flex-1">
+                    <span class="admin-label">${isAdmin ? 'Royal Admin' : 'مرحباً'}</span>
+                    <button onclick="openAccountModal(); toggleMobileMenu();" class="admin-name hover:underline text-right">
+                        ${isAdmin ? 'مدير الموقع' : currentUser.phone}
+                    </button>
+                </div>
+                <button onclick="logout(); toggleMobileMenu();" class="admin-logout" title="تسجيل الخروج">
+                    <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
-                <button onclick="logout(); toggleMobileMenu();" class="text-red-500 text-sm"><i class="fa-solid fa-right-from-bracket"></i></button>
             </div>
         `;
+
         if (isAdmin) {
             adminArea.innerHTML = `
-               <div class="grid grid-cols-3 gap-2">
-    <button onclick="openAdminModal(); toggleMobileMenu();" class="bg-amber-50 text-amber-600 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
-        <i class="fa-solid fa-gauge-high"></i>
-        <span>الكتب</span>
-    </button>
-    <button onclick="openCouponAdminModal(); toggleMobileMenu();" class="bg-purple-50 text-purple-600 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
-        <i class="fa-solid fa-ticket"></i>
-        <span>الكوبونات</span>
-    </button>
-    <button onclick="openOrdersAdminModal(); toggleMobileMenu();" class="bg-green-50 text-green-600 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
-        <i class="fa-solid fa-box"></i>
-        <span>الطلبات</span>
-    </button>
-    <button onclick="openPaymentSettingsModal(); toggleMobileMenu();" class="bg-blue-50 text-blue-600 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
-        <i class="fa-solid fa-credit-card"></i>
-        <span>الدفع</span>
-    </button>
-    <button onclick="openStatsModal(); toggleMobileMenu();" class="bg-pink-50 text-pink-600 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
-    <i class="fa-solid fa-chart-line"></i>
-    <span>إحصائيات</span>
-</button>
-<button onclick="openAnnouncementsModal(); toggleMobileMenu();" class="bg-orange-50 text-orange-600 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
-    <i class="fa-solid fa-bullhorn"></i>
-    <span>الإعلانات</span>
-</button>
-<button onclick="openGalleryAdminModal(); toggleMobileMenu();" class="bg-teal-50 text-teal-600 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
-    <i class="fa-solid fa-images"></i>
-    <span>المعرض</span>
-</button>
-<button onclick="openBroadcastModal(); toggleMobileMenu();" class="bg-red-50 text-red-600 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1">
-    <i class="fa-solid fa-tower-broadcast"></i>
-    <span>إشعار جماعي</span>
-</button>
-</div>
+                <div class="admin-panel">
+                    <div class="admin-grid">
+                        <button onclick="openAdminModal(); toggleMobileMenu();" class="admin-btn books">
+                            <i class="fa-solid fa-gauge-high"></i>
+                            <span>الكتب</span>
+                        </button>
+                        <button onclick="openCouponAdminModal(); toggleMobileMenu();" class="admin-btn coupons">
+                            <i class="fa-solid fa-ticket"></i>
+                            <span>الكوبونات</span>
+                        </button>
+                        <button onclick="openOrdersAdminModal(); toggleMobileMenu();" class="admin-btn orders">
+                            <i class="fa-solid fa-box"></i>
+                            <span>الطلبات</span>
+                        </button>
+                        <button onclick="openPaymentSettingsModal(); toggleMobileMenu();" class="admin-btn payment">
+                            <i class="fa-solid fa-credit-card"></i>
+                            <span>الدفع</span>
+                        </button>
+                        <button onclick="openStatsModal(); toggleMobileMenu();" class="admin-btn stats">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>إحصائيات</span>
+                        </button>
+                        <button onclick="openAnnouncementsModal(); toggleMobileMenu();" class="admin-btn ads">
+                            <i class="fa-solid fa-bullhorn"></i>
+                            <span>الإعلانات</span>
+                        </button>
+                        <button onclick="openGalleryAdminModal(); toggleMobileMenu();" class="admin-btn gallery">
+                            <i class="fa-solid fa-images"></i>
+                            <span>المعرض</span>
+                        </button>
+                        <button onclick="openBroadcastModal(); toggleMobileMenu();" class="admin-btn broadcast">
+                            <i class="fa-solid fa-tower-broadcast"></i>
+                            <span>إشعار جماعي</span>
+                        </button>
+                    </div>
+                </div>
             `;
             adminArea.classList.remove('hidden');
         } else {
@@ -4765,7 +5135,7 @@ function updateMobileMenu() {
         }
     } else {
         authArea.innerHTML = `
-            <button onclick="openAuthModal('login'); toggleMobileMenu();" class="w-full bg-primary text-white py-2.5 rounded-xl text-sm font-bold transition flex items-center justify-center space-x-2 space-x-reverse">
+            <button onclick="openAuthModal('login'); toggleMobileMenu();" class="royal-login-btn-mobile">
                 <i class="fa-solid fa-user"></i>
                 <span>حسابي / تسجيل الدخول</span>
             </button>
@@ -4774,7 +5144,6 @@ function updateMobileMenu() {
         adminArea.classList.add('hidden');
     }
 }
-
 // مزامنة البحث بين الحقلين
 function syncMobileSearch(value) {
     const desktopInput = document.getElementById('searchInput');
@@ -9355,6 +9724,21 @@ async function notifyCustomerByNtfy(userId, title, message) {
     } catch (err) {
         console.error('notifyCustomer error:', err);
         return false;
+    }
+}
+
+// 🔽 Toggle Admin Menu (Desktop)
+function toggleAdminMenu() {
+    const panel = document.getElementById('adminNavAreaDesktop');
+    const btn = document.querySelector('.royal-admin-toggle');
+    if (!panel) return;
+    
+    if (panel.classList.contains('hidden')) {
+        panel.classList.remove('hidden');
+        if (btn) btn.classList.add('active');
+    } else {
+        panel.classList.add('hidden');
+        if (btn) btn.classList.remove('active');
     }
 }
 
