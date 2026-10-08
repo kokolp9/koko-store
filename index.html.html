@@ -5,6 +5,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Koko Store">
+    <link rel="manifest" href="/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Koko Store - منصة الكتب وملازم الثانوية العامة والدراسة</title>
@@ -6047,50 +6048,14 @@ function registerServiceWorker() {
         return;
     }
 
-    // ملاحظة: Service Worker لا يعمل عبر file:// — لازم يشتغل من سيرفر
     if (window.location.protocol === 'file:') {
-        console.log('⚠️ Service Worker محتاج HTTP/HTTPS — هيشتغل لما ننشر على Vercel');
+        console.log('⚠️ Service Worker محتاج HTTP/HTTPS');
         return;
     }
 
-    const swCode = `
-        const CACHE_NAME = 'koko-store-v1';
-        
-        self.addEventListener('install', event => {
-            self.skipWaiting();
-        });
-        
-        self.addEventListener('activate', event => {
-            event.waitUntil(self.clients.claim());
-        });
-        
-        self.addEventListener('fetch', event => {
-            if (event.request.method !== 'GET') return;
-            
-            event.respondWith(
-                caches.match(event.request).then(response => {
-                    return response || fetch(event.request).then(fetchRes => {
-                        if (fetchRes.ok && event.request.url.startsWith('http')) {
-                            const resClone = fetchRes.clone();
-                            caches.open(CACHE_NAME).then(cache => {
-                                cache.put(event.request, resClone);
-                            });
-                        }
-                        return fetchRes;
-                    }).catch(() => {
-                        return caches.match(event.request);
-                    });
-                })
-            );
-        });
-    `;
-
-    const swBlob = new Blob([swCode], { type: 'application/javascript' });
-    const swURL = URL.createObjectURL(swBlob);
-
-    navigator.serviceWorker.register(swURL)
-        .then(() => console.log('✅ Service Worker registered'))
-        .catch(err => console.log('⚠️ Service Worker registration failed:', err.message));
+    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+        .catch(err => console.log('⚠️ SW registration failed:', err.message));
 }
 
 // 🎯 لما المتصفح يقول إن التطبيق قابل للتثبيت
