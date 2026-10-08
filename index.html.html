@@ -3559,11 +3559,11 @@ function renderNotifications() {
 </div>
 // 📤 مشاركة إشعار على واتساب
 function shareNotificationWhatsApp(title, message, orderNumber) {
-    var fullMessage = '📢 *' + title + '*\n\n' + message;
+    var fullMessage = '* ' + title + '*\n\n' + message;
     if (orderNumber) {
-        fullMessage = fullMessage + '\n\n🔖 رقم الطلب: ' + orderNumber;
+        fullMessage = fullMessage + '\n\n>> رقم الطلب: ' + orderNumber;
     }
-    fullMessage = fullMessage + '\n\n— من *Koko Store* 🌐\nhttps://kokostore-sable.vercel.app';
+    fullMessage = fullMessage + '\n\n-- من Koko Store --\nhttps://kokostore-sable.vercel.app';
 
     window.open('https://wa.me/?text=' + encodeURIComponent(fullMessage), '_blank');
 }
