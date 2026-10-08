@@ -1000,7 +1000,8 @@ body, header, footer, button, input, textarea, select {
 .user-dropdown {
     position: absolute;
     top: calc(100% + 10px);
-    left: 0;
+    right: 0;
+    left: auto;
     min-width: 230px;
     background: white;
     border-radius: 14px;
@@ -8419,18 +8420,18 @@ function updateDarkModeIcon(isDark) {
     const icon1 = document.getElementById('darkModeIcon');
     const icon2 = document.getElementById('darkModeIconMobile');
     
-    // الوضع المظلم مفعّل → يظهر شمس (للرجوع للنهاري)
-    // الوضع النهاري → يظهر قمر (للتحويل للمظلم)
+    // ☀️ الوضع النهاري → يظهر قمر (للتحويل لليلي)
+    // 🌙 الوضع الليلي → يظهر شمس (للرجوع للنهاري)
     const iconClass = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
     
     if (icon1) {
         icon1.className = iconClass;
+        icon1.setAttribute('title', isDark ? 'الرجوع للنهاري' : 'الوضع الليلي');
     }
     if (icon2) {
         icon2.className = iconClass;
     }
-}
-// تهيئة الوضع الليلي عند التحميل
+}// تهيئة الوضع الليلي عند التحميل
 initDarkMode();
 
 // ============================================
