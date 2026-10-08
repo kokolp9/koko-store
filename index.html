@@ -8624,6 +8624,15 @@ async function requestPushPermission() {
 
     try {
         OneSignalDeferred.push(async function(OneSignal) {
+            // 🔍 افحص الحالة الحالية الأول
+            const currentPermission = OneSignal.Notifications.permission;
+            
+            // لو مرفوض قبل كده، اعرض تعليمات
+            if (currentPermission === false) {
+                showPushBlockedInstructions();
+                return;
+            }
+
             const permission = await OneSignal.Notifications.requestPermission();
             
             if (permission) {
@@ -8637,7 +8646,7 @@ async function requestPushPermission() {
                     btn.onclick = null;
                 }
             } else {
-                showToast("تم رفض الإشعارات", "warning");
+                showPushBlockedInstructions();
             }
         });
     } catch (err) {
@@ -8646,6 +8655,97 @@ async function requestPushPermission() {
     }
 }
 
+// 📋 عرض تعليمات فتح الإذن
+function showPushBlockedInstructions() {
+    const existing = document.getElementById('pushInstructionsModal');
+    if (existing) existing.remove();
+
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    const modal = document.createElement('div');
+    modal.id = 'pushInstructionsModal';
+    modal.className = 'fixed inset-0 z-[9998] flex items-center justify-center px-4 bg-black bg-opacity-80';
+    modal.innerHTML = `
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
+            <div class="text-center mb-4">
+                <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl">
+                    <i class="fa-solid fa-bell-slash"></i>
+                </div>
+                <h3 class="text-lg font-black text-gray-900 mb-1">الإشعارات محظورة</h3>
+                <p class="text-xs text-gray-500">لازم تفتح الإذن يدوياً من إعدادات المتصفح</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-4 text-right space-y-3 text-sm text-gray-700">
+                ${isIOS ? `
+                    <p class="font-bold text-gray-900 mb-2">📱 على الآيفون:</p>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
+                        <p>افتح الموقع في <strong>Safari</strong> فقط</p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
+                        <p>اضغط زر المشاركة <i class="fa-solid fa-arrow-up-from-bracket mx-1"></i></p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
+                        <p><strong>"إضافة إلى الشاشة الرئيسية"</strong></p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</span>
+                        <p>افتح التطبيق من الأيقونة → الإشعارات هتشتغل</p>
+                    </div>
+                ` : isMobile ? `
+                    <p class="font-bold text-gray-900 mb-2">📱 على الأندرويد:</p>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
+                        <p>اضغط على أيقونة <strong>🔒 القفل</strong> جنب العنوان فوق</p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
+                        <p>اضغط <strong>"Permissions"</strong> أو <strong>"الأذونات"</strong></p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
+                        <p>اختار <strong>"Notifications"</strong> → <strong>"Allow"</strong></p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</span>
+                        <p>اقفل الصفحة وارجع افتحها</p>
+                    </div>
+                ` : `
+                    <p class="font-bold text-gray-900 mb-2">💻 على الكمبيوتر:</p>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
+                        <p>اضغط على أيقونة <strong>🔒 القفل</strong> جنب العنوان فوق</p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
+                        <p>اضغط <strong>"Site settings"</strong></p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
+                        <p>دوّر على <strong>"Notifications"</strong></p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</span>
+                        <p>غيّرها من <strong>"Block"</strong> لـ <strong>"Allow"</strong></p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">5</span>
+                        <p>ارجع للموقع واعمل <strong>Refresh</strong></p>
+                    </div>
+                `}
+            </div>
+
+            <button onclick="document.getElementById('pushInstructionsModal').remove()" 
+                    class="w-full mt-4 bg-primary text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition">
+                تمام، فهمت
+            </button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
 async function checkPushStatus() {
     if (!window.OneSignalDeferred) return;
 
