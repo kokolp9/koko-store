@@ -1590,11 +1590,6 @@ body, header, footer, button, input, textarea, select {
             <div class="royal-search">
                 <i class="fa-solid fa-search royal-search-icon"></i>
                 <input type="text" id="searchInput" oninput="filterBooks()" placeholder="ابحث عن ملزمة، كتاب، أو اسم المدرس...">
-                <input type="text" id="searchInputMobile" oninput="syncMobileSearch(this.value)" placeholder="ابحث..." style="display:none;">
-                <span class="royal-search-hint hidden sm:flex">
-                    <i class="fa-solid fa-bolt"></i>
-                    بحث فوري
-                </span>
             </div>
         </div>
 
@@ -1643,11 +1638,7 @@ body, header, footer, button, input, textarea, select {
 <div id="mobileMenu" class="royal-mobile-menu hidden lg:hidden">
     <div class="p-4 space-y-3">
         <!-- البحث للموبايل -->
-        <div class="royal-mobile-search">
-            <i class="fa-solid fa-search"></i>
-            <input type="text" id="mobileSearchInput" oninput="syncMobileSearch(this.value)" placeholder="ابحث عن كتاب أو مدرس...">
-        </div>
-
+       
         <!-- الحساب -->
         <div id="authNavAreaMobile"></div>
 
@@ -5759,12 +5750,6 @@ function updateMobileMenu() {
         adminArea.innerHTML = '';
         adminArea.classList.add('hidden');
     }
-}
-// مزامنة البحث بين الحقلين
-function syncMobileSearch(value) {
-    const desktopInput = document.getElementById('searchInput');
-    if (desktopInput) desktopInput.value = value;
-    filterBooks();
 }
 // ============================================
 // 📖 Book Details Modal
