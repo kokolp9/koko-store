@@ -1007,6 +1007,37 @@ body, header, footer, button, input, textarea, select {
     .admin-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
     .admin-btn { font-size: 10px; padding: 8px 4px; min-height: 54px; }
     .admin-btn i { font-size: 14px; }
+    /* 📏 نوافذ الأدمن - مساحة أكبر للسكرول */
+    #adminModal,
+    #couponAdminModal,
+    #ordersAdminModal,
+    #paymentSettingsModal,
+    #statsModal,
+    #announcementsModal,
+    #galleryAdminModal,
+    #broadcastModal,
+    #notificationsModal,
+    #trackOrderModal {
+        max-height: 96vh !important;
+        padding: 8px !important;
+    }
+    
+    #adminModal > div:last-child,
+    #couponAdminModal > div:last-child,
+    #ordersAdminModal > div:last-child,
+    #paymentSettingsModal > div:last-child,
+    #statsModal > div:last-child {
+        padding: 12px !important;
+        max-height: 96vh !important;
+    }
+    
+    /* قلّل المسافات جوه النوافذ */
+    #adminModal .space-y-6,
+    #adminModal .space-y-4,
+    #couponAdminModal .space-y-6,
+    #ordersAdminModal .space-y-5 {
+        gap: 8px !important;
+    }
 }
 /* 👤 User Dropdown Menu */
 .user-dropdown-wrapper {
@@ -2146,65 +2177,72 @@ body, header, footer, button, input, textarea, select {
                 <button onclick="closeAdminModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <form id="bookForm" onsubmit="handleSaveBook(event)" class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4 flex-shrink-0">
-                <input type="hidden" id="editBookId">
-                <h4 id="bookFormTitle" class="text-sm font-bold text-gray-900">إضافة كتاب أو ملزمة جديدة</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">اسم الكتاب أو الملزمة <span class="text-red-500">*</span></label>
-                        <input type="text" id="adminTitle" required placeholder="مثال: ملزمة الفيزياء الشاملة" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">اسم المدرس / المؤلف <span class="text-red-500">*</span></label>
-                        <input type="text" id="adminAuthor" required placeholder="مثال: الأستاذ محمد عبدالمعبود" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">التصنيف الدراسي <span class="text-red-500">*</span></label>
-                        <select id="adminCategory" required class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
-                            <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
-                            <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                            <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                            <option value="باكدجات المواد">باكدجات المواد</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">السعر (ج.م) <span class="text-red-500">*</span></label>
-                        <input type="number" step="0.5" id="adminPrice" required placeholder="150" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1">التقييم (من 5)</label>
-                        <input type="number" step="0.1" min="1" max="5" id="adminRating" value="4.9" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">رابط صورة الغلاف (Image URL) <span class="text-red-500">*</span></label>
-                    <input type="url" id="adminImage" required placeholder="https://placehold.co/400x550/6366F1/FFFFFF?text=اسم+الكتاب" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
-                </div>
-                <div>
-    <label class="block text-xs font-bold text-gray-700 mb-1">وصف الكتاب (اختياري)</label>
-    <textarea id="adminDescription" rows="3" placeholder="اكتب وصف تفصيلي للكتاب: المحتوى، المميزات، لمين مناسب..." class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none resize-none"></textarea>
-    <p class="text-[11px] text-gray-500 mt-1">هذا الوصف سيظهر في نافذة تفاصيل الكتاب</p>
-</div>
-                <div class="flex flex-wrap justify-between gap-2 pt-2">
-    <div class="flex gap-2">
-        <button type="button" onclick="downloadBooksTemplate()" class="bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-            <i class="fa-solid fa-download"></i>
-            <span>قالب Excel</span>
-        </button>
-        <label class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
-            <i class="fa-solid fa-upload"></i>
-            <span>استيراد من Excel</span>
-            <input type="file" id="excelImportInput" accept=".xlsx,.xls,.csv" onchange="handleExcelImport(this)" class="hidden">
-        </label>
+            <!-- 🎛️ زرار فتح/قفل فورم الإضافة -->
+<button type="button" onclick="toggleBookForm()" 
+        class="bg-indigo-50 border border-indigo-200 text-primary font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 hover:bg-indigo-100 transition flex-shrink-0">
+    <i class="fa-solid fa-plus" id="bookFormIcon"></i>
+    <span id="bookFormToggleText">إضافة كتاب جديد</span>
+    <i class="fa-solid fa-chevron-down text-xs"></i>
+</button>
+
+<form id="bookForm" onsubmit="handleSaveBook(event)" class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4 flex-shrink-0 hidden">
+    <input type="hidden" id="editBookId">
+    <h4 id="bookFormTitle" class="text-sm font-bold text-gray-900">إضافة كتاب أو ملزمة جديدة</h4>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">اسم الكتاب أو الملزمة <span class="text-red-500">*</span></label>
+            <input type="text" id="adminTitle" required placeholder="مثال: ملزمة الفيزياء الشاملة" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">اسم المدرس / المؤلف <span class="text-red-500">*</span></label>
+            <input type="text" id="adminAuthor" required placeholder="مثال: الأستاذ محمد عبدالمعبود" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
+        </div>
     </div>
-    <div class="flex gap-2">
-        <button type="button" onclick="resetBookForm()" id="cancelEditBtn" class="hidden bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-xs font-bold">إلغاء التعديل</button>
-        <button type="submit" class="bg-primary text-white px-5 py-2 rounded-xl text-xs font-bold shadow hover:bg-indigo-700 transition">حفظ الكتاب</button>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">التصنيف الدراسي <span class="text-red-500">*</span></label>
+            <select id="adminCategory" required class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
+                <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
+                <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+                <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
+                <option value="باكدجات المواد">باكدجات المواد</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">السعر (ج.م) <span class="text-red-500">*</span></label>
+            <input type="number" step="0.5" id="adminPrice" required placeholder="150" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">التقييم (من 5)</label>
+            <input type="number" step="0.1" min="1" max="5" id="adminRating" value="4.9" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
+        </div>
     </div>
-</div>
-            </form>
+    <div>
+        <label class="block text-xs font-bold text-gray-700 mb-1">رابط صورة الغلاف (Image URL) <span class="text-red-500">*</span></label>
+        <input type="url" id="adminImage" required placeholder="https://placehold.co/400x550/6366F1/FFFFFF?text=اسم+الكتاب" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
+    </div>
+    <div>
+        <label class="block text-xs font-bold text-gray-700 mb-1">وصف الكتاب (اختياري)</label>
+        <textarea id="adminDescription" rows="3" placeholder="اكتب وصف تفصيلي للكتاب: المحتوى، المميزات، لمين مناسب..." class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none resize-none"></textarea>
+    </div>
+    <div class="flex flex-wrap justify-between gap-2 pt-2">
+        <div class="flex gap-2">
+            <button type="button" onclick="downloadBooksTemplate()" class="bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                <i class="fa-solid fa-download"></i>
+                <span>قالب Excel</span>
+            </button>
+            <label class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-upload"></i>
+                <span>استيراد</span>
+                <input type="file" id="excelImportInput" accept=".xlsx,.xls,.csv" onchange="handleExcelImport(this)" class="hidden">
+            </label>
+        </div>
+        <div class="flex gap-2">
+            <button type="button" onclick="resetBookForm()" id="cancelEditBtn" class="hidden bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-xs font-bold">إلغاء</button>
+            <button type="submit" class="bg-primary text-white px-5 py-2 rounded-xl text-xs font-bold shadow hover:bg-indigo-700 transition">حفظ</button>
+        </div>
+    </div>
+</form>
 
             <div class="flex-1 overflow-y-auto">
                 <h4 class="text-sm font-bold text-gray-900 mb-3">قائمة الكتب الحالية في المتجر</h4>
@@ -4129,6 +4167,8 @@ notifyCustomerByNtfy(
             const cancelBtn = document.getElementById('cancelEditBtn');
             if (formTitle) formTitle.textContent = "تعديل كتاب: " + book.title;
             if (cancelBtn) cancelBtn.classList.remove('hidden');
+    // 🎛️ افتح الفورم تلقائي عشان المستخدم يشوفه
+    toggleBookForm(true);
         }
 
         async function deleteBook(id) {
@@ -4162,16 +4202,39 @@ notifyCustomerByNtfy(
     }
 }
 
+// 🎛️ فتح/قفل فورم إضافة/تعديل الكتاب
+function toggleBookForm(forceOpen) {
+    const form = document.getElementById('bookForm');
+    const toggleText = document.getElementById('bookFormToggleText');
+    const toggleIcon = document.getElementById('bookFormIcon');
+    if (!form) return;
+    
+    const shouldOpen = forceOpen === true ? true : form.classList.contains('hidden');
+    
+    if (shouldOpen) {
+        form.classList.remove('hidden');
+        if (toggleText) toggleText.textContent = 'إغلاق الفورم';
+        if (toggleIcon) toggleIcon.className = 'fa-solid fa-xmark';
+    } else {
+        form.classList.add('hidden');
+        if (toggleText) toggleText.textContent = 'إضافة كتاب جديد';
+        if (toggleIcon) toggleIcon.className = 'fa-solid fa-plus';
+    }
+}
+
+
         function resetBookForm() {
-            const form = document.getElementById('bookForm');
-            if (form) form.reset();
-            const editBookId = document.getElementById('editBookId');
-            if (editBookId) editBookId.value = "";
-            const formTitle = document.getElementById('bookFormTitle');
-            if (formTitle) formTitle.textContent = "إضافة كتاب أو ملزمة جديدة";
-            const cancelBtn = document.getElementById('cancelEditBtn');
-            if (cancelBtn) cancelBtn.classList.add('hidden');
-        }
+    const form = document.getElementById('bookForm');
+    if (form) form.reset();
+    const editBookId = document.getElementById('editBookId');
+    if (editBookId) editBookId.value = "";
+    const formTitle = document.getElementById('bookFormTitle');
+    if (formTitle) formTitle.textContent = "إضافة كتاب أو ملزمة جديدة";
+    const cancelBtn = document.getElementById('cancelEditBtn');
+    if (cancelBtn) cancelBtn.classList.add('hidden');
+    // 🎛️ اقفل الفورم
+    toggleBookForm(false);
+}
 // ============================================
 // 🎁 Coupon Management (Admin)
 // ============================================
@@ -10567,9 +10630,15 @@ function renderActiveOrders() {
     function updateHeader() {
         const currentY = window.scrollY;
 
-        // ✅ لو القائمة المنسدلة مفتوحة، متخفيش الهيدر
+               // ✅ لو أي قائمة أو مودال أو لوحة أدمن مفتوح، متخفيش الهيدر
         const openDropdown = document.querySelector('.user-dropdown:not(.hidden)');
-        if (openDropdown) {
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOpen = mobileMenu && !mobileMenu.classList.contains('hidden');
+        const adminPanel = document.getElementById('adminNavAreaDesktop');
+        const adminPanelOpen = adminPanel && !adminPanel.classList.contains('hidden');
+        const anyModalOpen = document.querySelector('.fixed.inset-0:not(.hidden)');
+        
+        if (openDropdown || mobileMenuOpen || adminPanelOpen || anyModalOpen) {
             header.classList.remove('header-hidden');
             if (announcement) announcement.classList.remove('header-hidden');
             ticking = false;
