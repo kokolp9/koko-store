@@ -2066,8 +2066,12 @@ async function loadBooks() {
             return [];
         }
         
-        books = data || [];
-        console.log('📚 Loaded', books.length, 'books from Supabase');
+        books = (data || []).map(b => ({
+    ...b,
+    price: parseFloat(b.price) || 0,
+    rating: parseFloat(b.rating) || 4.9
+}));
+console.log('📚 Loaded', books.length, 'books from Supabase');
         return books;
     } catch (err) {
         console.error('Load books exception:', err);
@@ -2096,7 +2100,6 @@ function mapCouponFromDB(c) {
 }
 
 // 🔄 تحويل من JS إلى شكل Supabase
-function mapCouponToDB(c) {
 function mapCouponToDB(c) {
     return {
         code: c.code,
@@ -6646,12 +6649,9 @@ function getOrdersByPeriod(period) {
     }
 
     return filtered.filter(o => {
-        // order.date مخزن كنص، فلازم نحوّله
-        // بس عندنا paymentConfirmedDate و date (نص عربي)
-        // هنستخدم الـ id كـ timestamp لأنه Date.now()
-        const orderTime = o.id || Date.now();
-        return new Date(orderTime) >= startDate;
-    });
+    const orderTime = o.createdAt ? new Date(o.createdAt).getTime() : Date.now();
+    return orderTime >= startDate.getTime();
+});
 }
 
 function renderStats() {
@@ -11142,3 +11142,4 @@ function closeMobileDropdown() {
 </div>
 </body>
 </html>
+    
