@@ -2097,6 +2097,7 @@ function mapCouponFromDB(c) {
 
 // 🔄 تحويل من JS إلى شكل Supabase
 function mapCouponToDB(c) {
+function mapCouponToDB(c) {
     return {
         code: c.code,
         discount: c.discount,
@@ -8461,7 +8462,6 @@ function updateDarkModeIcon(isDark) {
     // حدّث الـ title
     const btn = document.getElementById('darkModeBtnMobile');
     if (btn) btn.title = isDark ? 'الرجوع للنهاري' : 'الوضع الليلي';
-}
 }
 // تهيئة الوضع الليلي عند التحميل
 initDarkMode();
