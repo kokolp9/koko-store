@@ -1031,7 +1031,7 @@ body, header, footer, button, input, textarea, select {
     box-shadow: 0 20px 40px -8px rgba(30, 64, 175, 0.25);
     border: 1.5px solid rgba(30, 64, 175, 0.1);
     padding: 6px;
-    z-index: 1000;
+    z-index: 9999 !important;
     animation: dropdownIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 @keyframes dropdownIn {
@@ -10553,29 +10553,39 @@ function renderActiveOrders() {
 // ============================================
 // 🎯 Facebook-style Sticky Header
 // ============================================
+// ============================================
+// 🎯 Sticky Header - يختفي مع السحب، يظهر بس في أول الصفحة
+// ============================================
 (function initAutoHideHeader() {
     const header = document.querySelector('.royal-header');
     const announcement = document.getElementById('announcementBar');
     if (!header) return;
 
-    let lastScrollY = window.scrollY;
     let ticking = false;
-    const THRESHOLD = 100;
+    const TOP_THRESHOLD = 150; // يظهر بس لو المستخدم فوق أول 150 بكسل
 
     function updateHeader() {
         const currentY = window.scrollY;
-        const goingDown = currentY > lastScrollY;
-        const isPastThreshold = currentY > THRESHOLD;
 
-        if (goingDown && isPastThreshold) {
-            header.classList.add('header-hidden');
-            if (announcement) announcement.classList.add('header-hidden');
-        } else {
+        // ✅ لو القائمة المنسدلة مفتوحة، متخفيش الهيدر
+        const openDropdown = document.querySelector('.user-dropdown:not(.hidden)');
+        if (openDropdown) {
             header.classList.remove('header-hidden');
             if (announcement) announcement.classList.remove('header-hidden');
+            ticking = false;
+            return;
         }
 
-        lastScrollY = currentY;
+        // ✅ لو المستخدم فوق (في أول الصفحة) → أظهر
+        if (currentY < TOP_THRESHOLD) {
+            header.classList.remove('header-hidden');
+            if (announcement) announcement.classList.remove('header-hidden');
+        } else {
+            // ❌ أي مكان تاني → اخفي
+            header.classList.add('header-hidden');
+            if (announcement) announcement.classList.add('header-hidden');
+        }
+
         ticking = false;
     }
 
@@ -10586,7 +10596,6 @@ function renderActiveOrders() {
         }
     }, { passive: true });
 })();
-
 
 // 📱 Mobile Dropdown Functions
 function toggleMobileDropdown(event) {
