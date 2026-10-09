@@ -769,6 +769,43 @@ body {
 
 /* 🪟 Modals */
 .fixed.inset-0 > div[class*="rounded-"] {
+/* 📏 مساحة أكبر للنوافذ على الكمبيوتر */
+@media (min-width: 641px) {
+    #adminModal,
+    #couponAdminModal,
+    #ordersAdminModal,
+    #paymentSettingsModal,
+    #statsModal,
+    #announcementsModal,
+    #galleryAdminModal,
+    #broadcastModal,
+    #notificationsModal,
+    #trackOrderModal,
+    #bookDetailsModal,
+    #accountModal {
+        padding: 20px !important;
+    }
+    
+    #adminModal > div:last-child,
+    #couponAdminModal > div:last-child,
+    #ordersAdminModal > div:last-child,
+    #paymentSettingsModal > div:last-child,
+    #statsModal > div:last-child,
+    #announcementsModal > div:last-child,
+    #galleryAdminModal > div:last-child,
+    #broadcastModal > div:last-child,
+    #notificationsModal > div:last-child,
+    #trackOrderModal > div:last-child {
+        max-height: 94vh !important;
+    }
+    
+    /* للمودالات اللي فيها جدول أو سكرول، خلي الحاوية قابلة للتمدد */
+    #adminModal .flex-1.overflow-y-auto,
+    #ordersAdminModal .flex-1.overflow-y-auto,
+    #couponAdminModal .flex-1.overflow-y-auto {
+        min-height: 200px;
+    }
+}
     animation: modalIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     box-shadow: 0 25px 60px -15px rgba(30, 64, 175, 0.35);
     border: 2px solid rgba(245, 158, 11, 0.15);
@@ -2185,9 +2222,21 @@ body, header, footer, button, input, textarea, select {
     <i class="fa-solid fa-chevron-down text-xs"></i>
 </button>
 
+<!-- 🎛️ زرار فتح/قفل الفورم -->
+<button type="button" onclick="toggleBookForm()" 
+        class="bg-indigo-50 border-2 border-dashed border-indigo-300 text-primary font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-indigo-100 transition flex-shrink-0 w-full">
+    <i class="fa-solid fa-plus" id="bookFormIcon"></i>
+    <span id="bookFormToggleText">إضافة كتاب جديد</span>
+</button>
+
 <form id="bookForm" onsubmit="handleSaveBook(event)" class="bg-gray-50 p-4 rounded-xl border border-gray-200 space-y-4 flex-shrink-0 hidden">
     <input type="hidden" id="editBookId">
-    <h4 id="bookFormTitle" class="text-sm font-bold text-gray-900">إضافة كتاب أو ملزمة جديدة</h4>
+    <div class="flex items-center justify-between mb-2">
+        <h4 id="bookFormTitle" class="text-sm font-bold text-gray-900">إضافة كتاب أو ملزمة جديدة</h4>
+        <button type="button" onclick="toggleBookForm(false)" class="text-gray-400 hover:text-red-500 text-sm">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
             <label class="block text-xs font-bold text-gray-700 mb-1">اسم الكتاب أو الملزمة <span class="text-red-500">*</span></label>
@@ -2200,7 +2249,7 @@ body, header, footer, button, input, textarea, select {
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">التصنيف الدراسي <span class="text-red-500">*</span></label>
+            <label class="block text-xs font-bold text-gray-700 mb-1">التصنيف <span class="text-red-500">*</span></label>
             <select id="adminCategory" required class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
                 <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
                 <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
@@ -2213,37 +2262,36 @@ body, header, footer, button, input, textarea, select {
             <input type="number" step="0.5" id="adminPrice" required placeholder="150" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
         </div>
         <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">التقييم (من 5)</label>
+            <label class="block text-xs font-bold text-gray-700 mb-1">التقييم</label>
             <input type="number" step="0.1" min="1" max="5" id="adminRating" value="4.9" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
         </div>
     </div>
     <div>
-        <label class="block text-xs font-bold text-gray-700 mb-1">رابط صورة الغلاف (Image URL) <span class="text-red-500">*</span></label>
-        <input type="url" id="adminImage" required placeholder="https://placehold.co/400x550/6366F1/FFFFFF?text=اسم+الكتاب" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
+        <label class="block text-xs font-bold text-gray-700 mb-1">رابط صورة الغلاف <span class="text-red-500">*</span></label>
+        <input type="url" id="adminImage" required placeholder="https://..." class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
     </div>
     <div>
         <label class="block text-xs font-bold text-gray-700 mb-1">وصف الكتاب (اختياري)</label>
-        <textarea id="adminDescription" rows="3" placeholder="اكتب وصف تفصيلي للكتاب: المحتوى، المميزات، لمين مناسب..." class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none resize-none"></textarea>
+        <textarea id="adminDescription" rows="2" placeholder="اكتب وصف تفصيلي للكتاب..." class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none resize-none"></textarea>
     </div>
     <div class="flex flex-wrap justify-between gap-2 pt-2">
         <div class="flex gap-2">
-            <button type="button" onclick="downloadBooksTemplate()" class="bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+            <button type="button" onclick="downloadBooksTemplate()" class="bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
                 <i class="fa-solid fa-download"></i>
                 <span>قالب Excel</span>
             </button>
-            <label class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+            <label class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
                 <i class="fa-solid fa-upload"></i>
                 <span>استيراد</span>
                 <input type="file" id="excelImportInput" accept=".xlsx,.xls,.csv" onchange="handleExcelImport(this)" class="hidden">
             </label>
         </div>
         <div class="flex gap-2">
-            <button type="button" onclick="resetBookForm()" id="cancelEditBtn" class="hidden bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-xs font-bold">إلغاء</button>
-            <button type="submit" class="bg-primary text-white px-5 py-2 rounded-xl text-xs font-bold shadow hover:bg-indigo-700 transition">حفظ</button>
+            <button type="button" onclick="resetBookForm()" id="cancelEditBtn" class="hidden bg-gray-200 text-gray-700 px-3 py-2 rounded-xl text-xs font-bold">إلغاء</button>
+            <button type="submit" class="bg-primary text-white px-5 py-2 rounded-xl text-xs font-bold shadow hover:bg-indigo-700 transition">حفظ الكتاب</button>
         </div>
     </div>
 </form>
-
             <div class="flex-1 overflow-y-auto">
                 <h4 class="text-sm font-bold text-gray-900 mb-3">قائمة الكتب الحالية في المتجر</h4>
                 <div class="overflow-x-auto border border-gray-200 rounded-xl">
@@ -4222,6 +4270,25 @@ function toggleBookForm(forceOpen) {
     }
 }
 
+// 🎛️ فتح/قفل فورم إضافة الكتاب
+function toggleBookForm(forceOpen) {
+    const form = document.getElementById('bookForm');
+    const toggleText = document.getElementById('bookFormToggleText');
+    const toggleIcon = document.getElementById('bookFormIcon');
+    if (!form) return;
+    
+    const shouldOpen = forceOpen === true ? true : form.classList.contains('hidden');
+    
+    if (shouldOpen) {
+        form.classList.remove('hidden');
+        if (toggleText) toggleText.textContent = 'إغلاق الفورم';
+        if (toggleIcon) toggleIcon.className = 'fa-solid fa-xmark';
+    } else {
+        form.classList.add('hidden');
+        if (toggleText) toggleText.textContent = 'إضافة كتاب جديد';
+        if (toggleIcon) toggleIcon.className = 'fa-solid fa-plus';
+    }
+}
 
         function resetBookForm() {
     const form = document.getElementById('bookForm');
@@ -4230,10 +4297,12 @@ function toggleBookForm(forceOpen) {
     if (editBookId) editBookId.value = "";
     const formTitle = document.getElementById('bookFormTitle');
     if (formTitle) formTitle.textContent = "إضافة كتاب أو ملزمة جديدة";
-    const cancelBtn = document.getElementById('cancelEditBtn');
-    if (cancelBtn) cancelBtn.classList.add('hidden');
-    // 🎛️ اقفل الفورم
-    toggleBookForm(false);
+       const cancelBtn = document.getElementById('cancelEditBtn');
+    if (cancelBtn) cancelBtn.classList.remove('hidden');
+    
+    // 🎛️ افتح الفورم تلقائي
+    toggleBookForm(true);
+}
 }
 // ============================================
 // 🎁 Coupon Management (Admin)
