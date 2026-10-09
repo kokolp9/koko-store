@@ -1244,6 +1244,21 @@ body, header, footer, button, input, textarea, select {
     z-index: 5;
     margin-right: 4px;
 }
+
+/* 📱 زر السلة في الموبايل */
+.royal-cart-mobile {
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A) !important;
+    color: white !important;
+    border-color: transparent !important;
+    position: relative;
+}
+.royal-cart-mobile:active {
+    transform: scale(0.95);
+}
+.royal-cart-mobile i {
+    color: white;
+}
+
 </style>
 </head>
 
@@ -1321,21 +1336,34 @@ body, header, footer, button, input, textarea, select {
             </div>
 
             <!-- 📱 أدوات الموبايل -->
-            <div class="lg:hidden flex items-center gap-2">
-                <button onclick="openTrackOrderModal()" class="royal-icon-btn-mobile">
-                    <i class="fa-solid fa-magnifying-glass-location"></i>
-                </button>
-                <button onclick="toggleDarkMode()" class="royal-icon-btn-mobile">
-                    <i class="fa-solid fa-moon" id="darkModeIconMobile"></i>
-                </button>
-                <button onclick="openNotificationsModal()" id="bellBtnWrapperMobile" class="royal-icon-btn-mobile royal-bell hidden">
-                    <i class="fa-solid fa-bell"></i>
-                    <span id="bellBadgeMobile" class="royal-badge-mini hidden">0</span>
-                </button>
-                <button onclick="toggleMobileMenu()" class="royal-menu-btn">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-            </div>
+<div class="lg:hidden flex items-center gap-1.5">
+    <!-- تتبع الطلب -->
+    <button onclick="openTrackOrderModal()" class="royal-icon-btn-mobile" title="تتبع الطلب">
+        <i class="fa-solid fa-magnifying-glass-location"></i>
+    </button>
+    
+    <!-- الوضع الليلي -->
+    <button onclick="toggleDarkMode()" id="darkModeBtnMobile" class="royal-icon-btn-mobile" title="الوضع الليلي">
+        <i class="fa-solid fa-moon" id="darkModeIconMobile"></i>
+    </button>
+    
+    <!-- الجرس -->
+    <button onclick="openNotificationsModal()" id="bellBtnWrapperMobile" class="royal-icon-btn-mobile royal-bell hidden" title="الإشعارات">
+        <i class="fa-solid fa-bell"></i>
+        <span id="bellBadgeMobile" class="royal-badge-mini hidden">0</span>
+    </button>
+    
+    <!-- 🛒 السلة (دلوقتي ظاهرة دايماً!) -->
+    <button onclick="toggleCartModal()" id="cartBtnWrapperMobile" class="royal-icon-btn-mobile royal-cart-mobile" title="السلة">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="cartCountMobile" class="royal-badge-mini">0</span>
+    </button>
+    
+    <!-- ☰ القائمة -->
+    <button onclick="toggleMobileMenu()" class="royal-menu-btn" title="القائمة">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+</div>
         </div>
 
         <!-- 🔍 شريط البحث (كامل العرض) -->
@@ -1393,28 +1421,21 @@ body, header, footer, button, input, textarea, select {
     </div>
 
     <!-- 📱 قائمة الموبايل المنسدلة -->
-    <div id="mobileMenu" class="royal-mobile-menu hidden lg:hidden">
-        <div class="p-4 space-y-3">
-            <!-- البحث للموبايل -->
-            <div class="royal-mobile-search">
-                <i class="fa-solid fa-search"></i>
-                <input type="text" id="mobileSearchInput" oninput="syncMobileSearch(this.value)" placeholder="ابحث عن كتاب أو مدرس...">
-            </div>
-
-            <!-- الحساب -->
-            <div id="authNavAreaMobile"></div>
-
-            <!-- السلة -->
-            <button onclick="toggleCartModal(); toggleMobileMenu();" id="cartBtnWrapperMobile" class="royal-mobile-cart">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span>سلة الطلبات</span>
-                <span id="cartCountMobile" class="royal-badge">0</span>
-            </button>
-
-            <!-- لوحة الأدمن للموبايل -->
-            <div id="adminNavAreaMobile"></div>
+<div id="mobileMenu" class="royal-mobile-menu hidden lg:hidden">
+    <div class="p-4 space-y-3">
+        <!-- البحث للموبايل -->
+        <div class="royal-mobile-search">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="mobileSearchInput" oninput="syncMobileSearch(this.value)" placeholder="ابحث عن كتاب أو مدرس...">
         </div>
+
+        <!-- الحساب -->
+        <div id="authNavAreaMobile"></div>
+
+        <!-- لوحة الأدمن للموبايل -->
+        <div id="adminNavAreaMobile"></div>
     </div>
+</div>
 </header>
 
     <section class="bg-gradient-to-r from-gray-900 via-indigo-950 to-gray-900 text-white py-10 sm:py-16 px-4 overflow-hidden relative">
@@ -8427,21 +8448,22 @@ function toggleDarkMode() {
 }
 
 function updateDarkModeIcon(isDark) {
+    // ☀️ نهاري → يظهر قمر (للتحويل لليلي)
+    // 🌙 ليلي → يظهر شمس (للرجوع للنهاري)
+    const iconClass = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    
     const icon1 = document.getElementById('darkModeIcon');
     const icon2 = document.getElementById('darkModeIconMobile');
     
-    // ☀️ الوضع النهاري → يظهر قمر (للتحويل لليلي)
-    // 🌙 الوضع الليلي → يظهر شمس (للرجوع للنهاري)
-    const iconClass = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    if (icon1) icon1.className = iconClass;
+    if (icon2) icon2.className = iconClass;
     
-    if (icon1) {
-        icon1.className = iconClass;
-        icon1.setAttribute('title', isDark ? 'الرجوع للنهاري' : 'الوضع الليلي');
-    }
-    if (icon2) {
-        icon2.className = iconClass;
-    }
-}// تهيئة الوضع الليلي عند التحميل
+    // حدّث الـ title
+    const btn = document.getElementById('darkModeBtnMobile');
+    if (btn) btn.title = isDark ? 'الرجوع للنهاري' : 'الوضع الليلي';
+}
+}
+// تهيئة الوضع الليلي عند التحميل
 initDarkMode();
 
 // ============================================
