@@ -924,24 +924,6 @@ section.bg-gradient-to-r.from-gray-900::after {
 .dark .admin-panel { background: linear-gradient(135deg, #1E293B, #0F172A); border-color: rgba(245, 158, 11, 0.2); }
 .dark .admin-btn { background: #1E293B; }
 
-/* 🎯 Sticky Header with Hide/Show */
-.royal-header {
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
-    z-index: 50 !important;
-}
-.royal-header.header-hidden {
-    transform: translateY(-100%);
-}
-#announcementBar {
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
-}
-#announcementBar.header-hidden {
-    transform: translateY(-100%);
-    margin-top: -40px;
-}
-
 /* 🎨 Footer */
 footer {
     background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%) !important;
@@ -1277,6 +1259,202 @@ body, header, footer, button, input, textarea, select {
     color: white;
 }
 
+/* ============================================
+   🎨 New Premium Buttons Design
+   ============================================ */
+
+/* 🎯 Category Filter Buttons - New */
+.cat-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    background: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 50px;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-family: 'Cairo', sans-serif;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(30, 64, 175, 0.04);
+}
+.cat-btn i {
+    font-size: 13px;
+    transition: transform 0.3s;
+}
+.cat-btn:hover {
+    transform: translateY(-3px);
+    border-color: #1E40AF;
+    color: #1E40AF;
+    box-shadow: 0 12px 24px -8px rgba(30, 64, 175, 0.25);
+}
+.cat-btn:hover i {
+    transform: scale(1.15) rotate(-8deg);
+}
+.cat-btn.active-cat {
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A) !important;
+    border-color: transparent !important;
+    color: white !important;
+    box-shadow: 0 12px 28px -8px rgba(30, 64, 175, 0.55), 0 0 0 3px rgba(245, 158, 11, 0.25) !important;
+    transform: translateY(-3px);
+}
+.cat-btn.active-cat i {
+    color: #FCD34D;
+}
+
+/* 🎨 Book Card Actions - New */
+.book-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid #F1F5F9;
+}
+
+.book-btn-order {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 6px 14px -4px rgba(16, 185, 129, 0.45);
+    position: relative;
+    overflow: hidden;
+}
+.book-btn-order::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    transition: left 0.6s;
+}
+.book-btn-order:hover::before {
+    left: 100%;
+}
+.book-btn-order:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px -4px rgba(16, 185, 129, 0.65);
+}
+.book-btn-order i {
+    font-size: 15px;
+}
+
+.book-btn-cart {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #EEF2FF, #E0E7FF);
+    color: #1E40AF;
+    border: 1.5px solid #C7D2FE;
+    border-radius: 12px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
+}
+.book-btn-cart:hover {
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A);
+    color: white;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 18px -4px rgba(30, 64, 175, 0.5);
+    border-color: transparent;
+}
+
+.book-btn-share {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: #64748B;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
+}
+.book-btn-share:hover {
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+    color: white;
+    border-color: transparent;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 18px -4px rgba(245, 158, 11, 0.5);
+}
+
+.book-btn-edit {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 11px 14px;
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 6px 14px -4px rgba(245, 158, 11, 0.45);
+}
+.book-btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px -4px rgba(245, 158, 11, 0.65);
+}
+
+/* 🌙 Dark mode */
+.dark .cat-btn {
+    background: #1E293B;
+    border-color: #334155;
+    color: #CBD5E1;
+}
+.dark .cat-btn:hover {
+    border-color: #F59E0B;
+    color: #FCD34D;
+}
+.dark .cat-btn.active-cat {
+    background: linear-gradient(135deg, #1E40AF, #1E3A8A) !important;
+    color: white !important;
+}
+.dark .book-btn-cart {
+    background: #1E293B;
+    border-color: #334155;
+    color: #93C5FD;
+}
+.dark .book-btn-share {
+    background: #1E293B;
+    border-color: #334155;
+    color: #94A3B8;
+}
+.dark .book-actions {
+    border-top-color: #334155;
+}
+
 </style>
 </head>
 
@@ -1288,7 +1466,7 @@ body, header, footer, button, input, textarea, select {
             <span id="announcementText" style="transition: opacity 0.3s;">🚚 شحن مجاني للطلبات فوق 500 جنيه</span>
         </div>
     </div>
-    <header class="royal-header sticky top-0 z-50">
+    <header class="royal-header sticky top-0 z-45">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         
         <!-- الصف العلوي: لوجو + أدوات -->
@@ -2594,32 +2772,31 @@ async function supabaseGetSession() {
             <h4 class="text-base font-black text-gray-900 mb-1 line-clamp-1 hover:text-primary transition">${book.title}</h4>
         </button>
         <p class="text-xs text-gray-500 mb-4">${book.author}</p>
-                       <div class="mt-auto flex items-center justify-between pt-3 border-t border-gray-100 gap-2">
-    <span class="text-lg font-black text-primary">${book.price.toFixed(2)} ج.م</span>
-    <div class="flex items-center gap-1.5">
-        ${isAdmin ? `
-            <button onclick="openAdminModal(); editBook(${book.id})" class="bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white p-2.5 rounded-xl transition font-semibold text-xs flex items-center space-x-1 space-x-reverse shadow-sm">
-                <i class="fa-solid fa-pen"></i>
-                <span>تعديل</span>
-            </button>
-        ` : `
-           <button onclick="orderViaWhatsApp(${book.id})" 
-        class="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold shadow-lg hover:bg-green-600 transition flex items-center justify-center gap-2">
-    <i class="fa-brands fa-whatsapp text-lg"></i>
-    <span>اطلب على واتساب</span>
-</button>
-<button onclick="shareBookOnWhatsApp(${book.id})" 
-        class="bg-teal-500 text-white px-4 py-3 rounded-xl font-bold shadow-lg hover:bg-teal-600 transition flex items-center justify-center gap-2">
-    <i class="fa-solid fa-share-nodes"></i>
-</button>
-            <button onclick="addToCart(${book.id})" class="bg-indigo-50 text-primary hover:bg-primary hover:text-white p-2.5 rounded-xl transition font-semibold text-xs flex items-center space-x-1 space-x-reverse">
-                <i class="fa-solid fa-cart-plus"></i>
-                <span>إضافة</span>
-            </button>
-        `}
-    </div>
-</div>
+                                           </div>
+                <div class="mt-auto pt-3 border-t border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xl font-black text-primary">${book.price.toFixed(2)} <span class="text-xs font-bold">ج.م</span></span>
                     </div>
+                    ${isAdmin ? `
+                        <button onclick="openAdminModal(); editBook(${book.id})" class="book-btn-edit">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            <span>تعديل الكتاب</span>
+                        </button>
+                    ` : `
+                        <div class="book-actions">
+                            <button onclick="orderViaWhatsApp(${book.id})" class="book-btn-order">
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <span>اطلب الآن</span>
+                            </button>
+                            <button onclick="addToCart(${book.id})" class="book-btn-cart" title="أضف للسلة">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                            </button>
+                            <button onclick="shareBookOnWhatsApp(${book.id})" class="book-btn-share" title="شارك الكتاب">
+                                <i class="fa-solid fa-share-nodes"></i>
+                            </button>
+                        </div>
+                    `}
+                </div>
                 </div>
             `;
 }).join('');
@@ -10296,45 +10473,6 @@ function renderActiveOrders() {
         `;
     }).join('');
 }
-
-// ============================================
-// 🎯 Facebook-style Sticky Header
-// ============================================
-(function initAutoHideHeader() {
-    const header = document.querySelector('.royal-header');
-    const announcement = document.getElementById('announcementBar');
-    if (!header) return;
-
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-    const THRESHOLD = 100; // بعد ما ينزل 100 بكسل يبدأ يخفي
-
-    function updateHeader() {
-        const currentY = window.scrollY;
-        const goingDown = currentY > lastScrollY;
-        const isPastThreshold = currentY > THRESHOLD;
-
-        if (goingDown && isPastThreshold) {
-            // 🡇 نازل لتحت → اخفي
-            header.classList.add('header-hidden');
-            if (announcement) announcement.classList.add('header-hidden');
-        } else {
-            // 🡅 طالع لفوق → اظهر
-            header.classList.remove('header-hidden');
-            if (announcement) announcement.classList.remove('header-hidden');
-        }
-
-        lastScrollY = currentY;
-        ticking = false;
-    }
-
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            window.requestAnimationFrame(updateHeader);
-            ticking = true;
-        }
-    }, { passive: true });
-})();
 
 // 📱 Mobile Dropdown Functions
 function toggleMobileDropdown(event) {
