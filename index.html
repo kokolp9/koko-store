@@ -1743,7 +1743,16 @@ body, header, footer, button, input, textarea, select {
         <div class="pb-3">
             <div class="royal-search">
                 <i class="fa-solid fa-search royal-search-icon"></i>
-                <input type="text" id="searchInput" oninput="filterBooks()" placeholder="ابحث عن ملزمة، كتاب، أو اسم المدرس...">
+                <input 
+    type="search" 
+    id="searchInput" 
+    name="search_books"
+    autocomplete="off"
+    autocorrect="off"
+    autocapitalize="off"
+    spellcheck="false"
+    oninput="filterBooks()" 
+    placeholder="ابحث عن ملزمة، كتاب، أو اسم المدرس...">
             </div>
         </div>
 
@@ -2758,6 +2767,12 @@ function showToast(message, type = 'success') {
     renderCurrentPage();
     updateAuthNav();
     updateCartUI();
+
+ const searchEl = document.getElementById('searchInput');
+    if (searchEl && searchEl.value !== '') {
+        console.log('🧹 Autofilled search cleared:', searchEl.value);
+        searchEl.value = '';
+    }
     
     // 🎬 شغّل الإعلانات بعد التحميل
     if (typeof startAnnouncementRotation === 'function') {
