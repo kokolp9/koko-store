@@ -1924,10 +1924,6 @@ body, header, footer, button, input, textarea, select {
     </div>
 </div>
 
-
-    </div>
-</div>
-
        <div id="booksGrid" class="grid gap-6" style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important; gap: 24px !important;"></div>
 <!-- 📸 Gallery Section -->
 <section id="gallerySection" class="hidden mt-16">
@@ -4270,25 +4266,6 @@ notifyCustomerByNtfy(
     }
 }
 
-// 🎛️ فتح/قفل فورم إضافة/تعديل الكتاب
-function toggleBookForm(forceOpen) {
-    const form = document.getElementById('bookForm');
-    const toggleText = document.getElementById('bookFormToggleText');
-    const toggleIcon = document.getElementById('bookFormIcon');
-    if (!form) return;
-    
-    const shouldOpen = forceOpen === true ? true : form.classList.contains('hidden');
-    
-    if (shouldOpen) {
-        form.classList.remove('hidden');
-        if (toggleText) toggleText.textContent = 'إغلاق الفورم';
-        if (toggleIcon) toggleIcon.className = 'fa-solid fa-xmark';
-    } else {
-        form.classList.add('hidden');
-        if (toggleText) toggleText.textContent = 'إضافة كتاب جديد';
-        if (toggleIcon) toggleIcon.className = 'fa-solid fa-plus';
-    }
-}
 // 🎛️ فتح/قفل فورم إضافة الكتاب
 function toggleBookForm(forceOpen) {
     const form = document.getElementById('bookForm');
@@ -4321,36 +4298,6 @@ function toggleBookForm(forceOpen) {
     
     // 🎛️ اقفل الفورم بعد الحفظ أو الإلغاء
     toggleBookForm(false);
-}
-// ============================================
-// 🎁 Coupon Management (Admin)
-// ============================================
-function openCouponAdminModal() {
-    if (!currentUser || currentUser.role !== 'admin') {
-        showAlert("ممنوع الدخول", "هذه الصفحة للمدير فقط.", "warning");
-        return;
-    }
-    const modal = document.getElementById('couponAdminModal');
-    if (modal) modal.classList.remove('hidden');
-    renderCouponsTable();
-}
-
-function closeCouponAdminModal() {
-    const modal = document.getElementById('couponAdminModal');
-    if (modal) modal.classList.add('hidden');
-    resetCouponForm();
-}
-
-function updateCouponLabels() {
-    const type = document.getElementById('couponType').value;
-    const discountInput = document.getElementById('couponDiscount');
-    if (type === 'percent') {
-        discountInput.max = 100;
-        discountInput.placeholder = "10 (من 100)";
-    } else {
-        discountInput.removeAttribute('max');
-        discountInput.placeholder = "50 (جنيه)";
-    }
 }
 
 function renderCouponsTable() {
@@ -5055,23 +5002,6 @@ function closePagesModal() {
     const modal = document.getElementById('pagesModal');
     if (modal) modal.classList.add('hidden');
 }
-// ============================================
-// 🔔 Notifications System
-// ============================================
-function addNotification(userPhone, title, message, type, orderNumber) {
-    notifications.push({
-        id: Date.now() + Math.floor(Math.random() * 1000),
-        userPhone: userPhone,
-        title: title,
-        message: message,
-        type: type || 'info',
-        orderNumber: orderNumber || null,
-        read: false,
-        date: new Date().toISOString()
-    });
-    localStorage.setItem('kokostore_notifications', JSON.stringify(notifications));
-    updateBellBadge();
-}
 
 function getUserNotifications() {
     if (!currentUser) return [];
@@ -5110,12 +5040,6 @@ function updateBellBadge() {
             el.classList.add('hidden');
         }
     });
-}
-function openNotificationsModal() {
-    if (!currentUser) return;
-    const modal = document.getElementById('notificationsModal');
-    if (modal) modal.classList.remove('hidden');
-    renderNotifications();
 }
 
 function closeNotificationsModal() {
@@ -6265,126 +6189,8 @@ async function loadPaymentSettings() {
 let currentAnnouncementIndex = 0;
 let announcementInterval = null;
 
-// عرض الإعلان الحالي
-function showCurrentAnnouncement() {
-    const el = document.getElementById('announcementText');
-    const bar = document.getElementById('announcementBar');
-    if (!el || !bar) return;
-
-    // لو الإعلانات موقوفة أو مفيش إعلانات مفعّلة
-    const activeOnes = announcements.filter(a => a.active);
-    if (!announcementsEnabled || activeOnes.length === 0) {
-        bar.classList.add('hidden');
-        return;
-    }
-    bar.classList.remove('hidden');
-
-    if (currentAnnouncementIndex >= activeOnes.length) currentAnnouncementIndex = 0;
-    
-    el.style.opacity = '0';
-    setTimeout(() => {
-        el.textContent = activeOnes[currentAnnouncementIndex].text;
-        el.style.opacity = '1';
-    }, 200);
-}
-
-// تشغيل الدوران
-function startAnnouncementRotation() {
-    if (announcementInterval) clearInterval(announcementInterval);
-    showCurrentAnnouncement();
-    announcementInterval = setInterval(() => {
-        const activeOnes = announcements.filter(a => a.active);
-        if (activeOnes.length === 0) return;
-        currentAnnouncementIndex = (currentAnnouncementIndex + 1) % activeOnes.length;
-        showCurrentAnnouncement();
-    }, 4500);
-}
-
 startAnnouncementRotation();
-// ============================================
-// 💳 Payment Settings (Admin)
-// ============================================
-function openPaymentSettingsModal() {
-    if (!currentUser || currentUser.role !== 'admin') {
-        showAlert("ممنوع الدخول", "هذه الصفحة للمدير فقط.", "warning");
-        return;
-    }
-    const modal = document.getElementById('paymentSettingsModal');
-    if (modal) modal.classList.remove('hidden');
-    loadPaymentSettingsIntoForm();
-}
 
-function closePaymentSettingsModal() {
-    const modal = document.getElementById('paymentSettingsModal');
-    if (modal) modal.classList.add('hidden');
-}
-
-function loadPaymentSettingsIntoForm() {
-    const s = paymentSettings;
-    document.getElementById('psShippingFee').value = s.shippingFee || 0;
-    document.getElementById('psCodEnabled').checked = s.cod?.enabled !== false;
-    document.getElementById('psVodafoneEnabled').checked = s.vodafoneCash?.enabled !== false;
-    document.getElementById('psVodafoneNumber').value = s.vodafoneCash?.number || '';
-    document.getElementById('psVodafoneName').value = s.vodafoneCash?.name || '';
-    document.getElementById('psInstapayEnabled').checked = s.instapay?.enabled !== false;
-    document.getElementById('psInstapayAddress').value = s.instapay?.address || '';
-    document.getElementById('psInstapayName').value = s.instapay?.name || '';
-}
-
-function handleSavePaymentSettings(e) {
-    if (e) e.preventDefault();
-    if (!currentUser || currentUser.role !== 'admin') return;
-
-    const shippingFee = parseFloat(document.getElementById('psShippingFee').value) || 0;
-    
-    if (shippingFee < 0) {
-        showAlert("تنبيه", "سعر الشحن لا يمكن أن يكون سالباً.", "warning");
-        return;
-    }
-
-    paymentSettings = {
-        shippingFee,
-        cod: {
-            enabled: document.getElementById('psCodEnabled').checked
-        },
-        vodafoneCash: {
-            enabled: document.getElementById('psVodafoneEnabled').checked,
-            number: document.getElementById('psVodafoneNumber').value.trim(),
-            name: document.getElementById('psVodafoneName').value.trim()
-        },
-        instapay: {
-            enabled: document.getElementById('psInstapayEnabled').checked,
-            address: document.getElementById('psInstapayAddress').value.trim(),
-            name: document.getElementById('psInstapayName').value.trim()
-        }
-    };
-
-    // تحقق: لو في طريقة مفعلة، لازم بياناتها
-    if (paymentSettings.vodafoneCash.enabled && !paymentSettings.vodafoneCash.number) {
-        showAlert("تنبيه", "رقم فودافون كاش مطلوب.", "warning");
-        return;
-    }
-    if (paymentSettings.instapay.enabled && !paymentSettings.instapay.address) {
-        showAlert("تنبيه", "عنوان InstaPay مطلوب.", "warning");
-        return;
-    }
-    if (!paymentSettings.cod.enabled && !paymentSettings.vodafoneCash.enabled && !paymentSettings.instapay.enabled) {
-        showAlert("تنبيه", "لازم تفعّل طريقة دفع واحدة على الأقل.", "warning");
-        return;
-    }
-
-    localStorage.setItem('kokostore_payment_settings', JSON.stringify(paymentSettings));
-    showAlert("تم الحفظ", "تم حفظ إعدادات الدفع بنجاح.", "success");
-    closePaymentSettingsModal();
-}
-
-function resetPaymentSettings() {
-    if (!confirm("هل أنت متأكد من استرجاع الإعدادات الافتراضية؟")) return;
-    paymentSettings = JSON.parse(JSON.stringify(DEFAULT_PAYMENT_SETTINGS));
-    localStorage.setItem('kokostore_payment_settings', JSON.stringify(paymentSettings));
-    loadPaymentSettingsIntoForm();
-    showAlert("تم", "تم استرجاع الإعدادات الافتراضية.", "success");
-}
 // ============================================
 // 💳 Payment Method Rendering (Checkout)
 // ============================================
@@ -7601,180 +7407,6 @@ function getPeriodLabel(period) {
     };
     return labels[period] || 'كل الوقت';
 }
-// ============================================
-// 📢 Announcements Admin
-// ============================================
-function openAnnouncementsModal() {
-    if (!currentUser || currentUser.role !== 'admin') {
-        showToast("هذه الصفحة للمدير فقط", "error");
-        return;
-    }
-    const modal = document.getElementById('announcementsModal');
-    if (modal) modal.classList.remove('hidden');
-    
-    const toggle = document.getElementById('announcementsEnabledToggle');
-    if (toggle) toggle.checked = announcementsEnabled;
-    
-    renderAnnouncementsList();
-}
-
-function closeAnnouncementsModal() {
-    const modal = document.getElementById('announcementsModal');
-    if (modal) modal.classList.add('hidden');
-}
-
-function renderAnnouncementsList() {
-    const listEl = document.getElementById('announcementsList');
-    const countEl = document.getElementById('announcementsCount');
-    if (!listEl) return;
-
-    const activeCount = announcements.filter(a => a.active).length;
-    if (countEl) {
-        countEl.textContent = `${announcements.length} إعلان · ${activeCount} مفعّل`;
-    }
-
-    if (announcements.length === 0) {
-        listEl.innerHTML = `
-            <div class="text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-300">
-                <i class="fa-solid fa-bullhorn text-3xl text-gray-300 mb-2"></i>
-                <p class="text-sm text-gray-500 font-semibold">لا توجد إعلانات حالياً</p>
-                <p class="text-xs text-gray-400 mt-1">أضف إعلانك الأول من الفورم فوق</p>
-            </div>
-        `;
-        return;
-    }
-
-    listEl.innerHTML = announcements.map(a => `
-        <div class="flex items-center gap-3 p-3 rounded-xl border transition ${a.active ? 'bg-white border-gray-200' : 'bg-gray-50 border-gray-100 opacity-60'}">
-            <button onclick="toggleAnnouncement(${a.id})" 
-                    title="${a.active ? 'إيقاف' : 'تفعيل'}"
-                    class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 transition ${a.active ? 'bg-green-100 text-green-600 hover:bg-green-500 hover:text-white' : 'bg-gray-200 text-gray-500 hover:bg-green-500 hover:text-white'}">
-                <i class="fa-solid fa-${a.active ? 'eye' : 'eye-slash'} text-sm"></i>
-            </button>
-            
-            <div class="flex-1 min-w-0">
-                <p class="text-sm text-gray-900 leading-relaxed break-words">${escapeHtml(a.text)}</p>
-                <p class="text-[10px] text-gray-400 mt-0.5">
-                    ${a.active ? '✅ ظاهر للزوار' : '⏸️ موقوف'}
-                </p>
-            </div>
-
-            <div class="flex gap-1 flex-shrink-0">
-                <button onclick="editAnnouncement(${a.id})" 
-                        title="تعديل"
-                        class="w-8 h-8 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg flex items-center justify-center transition text-xs">
-                    <i class="fa-solid fa-pen"></i>
-                </button>
-                <button onclick="deleteAnnouncement(${a.id})" 
-                        title="حذف"
-                        class="w-8 h-8 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-lg flex items-center justify-center transition text-xs">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </div>
-        </div>
-    `).join('');
-}
-
-function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-}
-
-function handleAddAnnouncement(e) {
-    e.preventDefault();
-    if (!currentUser || currentUser.role !== 'admin') return;
-
-    const input = document.getElementById('newAnnouncementText');
-    const text = input.value.trim();
-
-    if (!text) {
-        showToast("اكتب نص الإعلان", "warning");
-        return;
-    }
-
-    if (text.length > 150) {
-        showToast("النص طويل جداً (150 حرف كحد أقصى)", "warning");
-        return;
-    }
-
-    announcements.push({
-        id: Date.now(),
-        text: text,
-        active: true
-    });
-
-    localStorage.setItem('kokostore_announcements', JSON.stringify(announcements));
-    input.value = '';
-    
-    renderAnnouncementsList();
-    startAnnouncementRotation();
-    showToast("✅ تم إضافة الإعلان", "success");
-}
-
-function toggleAnnouncement(id) {
-    if (!currentUser || currentUser.role !== 'admin') return;
-    const a = announcements.find(x => x.id === id);
-    if (!a) return;
-    
-    a.active = !a.active;
-    localStorage.setItem('kokostore_announcements', JSON.stringify(announcements));
-    
-    renderAnnouncementsList();
-    startAnnouncementRotation();
-    showToast(a.active ? "✅ تم تفعيل الإعلان" : "⏸️ تم إيقاف الإعلان", "success");
-}
-
-function editAnnouncement(id) {
-    if (!currentUser || currentUser.role !== 'admin') return;
-    const a = announcements.find(x => x.id === id);
-    if (!a) return;
-
-    const newText = prompt("عدّل نص الإعلان:", a.text);
-    if (newText === null) return; // المستخدم ضغط إلغاء
-    
-    const trimmed = newText.trim();
-    if (!trimmed) {
-        showToast("النص ما ينفعش يكون فاضي", "warning");
-        return;
-    }
-    if (trimmed.length > 150) {
-        showToast("النص طويل جداً (150 حرف كحد أقصى)", "warning");
-        return;
-    }
-
-    a.text = trimmed;
-    localStorage.setItem('kokostore_announcements', JSON.stringify(announcements));
-    
-    renderAnnouncementsList();
-    startAnnouncementRotation();
-    showToast("✅ تم التعديل", "success");
-}
-
-function deleteAnnouncement(id) {
-    if (!currentUser || currentUser.role !== 'admin') return;
-    const a = announcements.find(x => x.id === id);
-    if (!a) return;
-
-    if (!confirm(`هل أنت متأكد من حذف الإعلان:\n"${a.text}"؟`)) return;
-
-    announcements = announcements.filter(x => x.id !== id);
-    localStorage.setItem('kokostore_announcements', JSON.stringify(announcements));
-    
-    renderAnnouncementsList();
-    startAnnouncementRotation();
-    showToast("🗑️ تم الحذف", "success");
-}
-
-function toggleAnnouncementsEnabled() {
-    if (!currentUser || currentUser.role !== 'admin') return;
-    const toggle = document.getElementById('announcementsEnabledToggle');
-    announcementsEnabled = toggle.checked;
-    localStorage.setItem('kokostore_announcements_enabled', JSON.stringify(announcementsEnabled));
-    
-    showCurrentAnnouncement();
-    showToast(announcementsEnabled ? "✅ الشريط مفعّل" : "⏸️ الشريط موقوف", "success");
-}
 
 // ============================================
 // 🔍 Order Tracking (Public)
@@ -8341,14 +7973,6 @@ function viewCouponUsers(code) {
 
     alert(`📊 مستخدمو الكوبون (${c.code})\n\n${listText}${usedList.length > 20 ? '\n...و ' + (usedList.length - 20) + ' أكثر' : ''}`);
 }
-
-// 🚪 إغلاق نافذة الكوبونات
-function closeCouponAdminModal() {
-    const modal = document.getElementById('couponAdminModal');
-    if (modal) modal.classList.add('hidden');
-    resetCouponForm();
-}
-
 // 🚪 فتح نافذة الكوبونات
 function openCouponAdminModal() {
     if (!currentUser || currentUser.role !== 'admin') {
@@ -8358,6 +7982,13 @@ function openCouponAdminModal() {
     const modal = document.getElementById('couponAdminModal');
     if (modal) modal.classList.remove('hidden');
     renderCouponsTable();
+}
+
+// 🚪 إغلاق نافذة الكوبونات
+function closeCouponAdminModal() {
+    const modal = document.getElementById('couponAdminModal');
+    if (modal) modal.classList.add('hidden');
+    resetCouponForm();
 }
 
 // ============================================
