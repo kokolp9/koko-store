@@ -774,6 +774,13 @@ body {
     border: 2px solid rgba(245, 158, 11, 0.15);
 }
 
+@keyframes modalIn {
+    0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.fixed.inset-0 > .absolute.inset-0.bg-black { backdrop-filter: blur(8px); }
+
 /* 📏 مساحة أكبر للنوافذ على الكمبيوتر */
 @media (min-width: 641px) {
     #adminModal,
@@ -803,12 +810,7 @@ body {
     #trackOrderModal > div:last-child {
         max-height: 94vh !important;
     }
-}@keyframes modalIn {
-    0% { opacity: 0; transform: scale(0.95) translateY(10px); }
-    100% { opacity: 1; transform: scale(1) translateY(0); }
 }
-.fixed.inset-0 > .absolute.inset-0.bg-black { backdrop-filter: blur(8px); }
-
 /* 🍞 Toast */
 #toastMsg {
     backdrop-filter: blur(20px);
