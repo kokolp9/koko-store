@@ -1753,7 +1753,8 @@ body, header, footer, button, input, textarea, select {
     spellcheck="false"
     oninput="filterBooks()" 
     placeholder="ابحث عن ملزمة، كتاب، أو اسم المدرس...">
-            </div>
+
+                   </div>
         </div>
 
         <!-- 🎛️ لوحة تحكم الأدمن (3 صفوف) -->
@@ -2768,12 +2769,14 @@ function showToast(message, type = 'success') {
     updateAuthNav();
     updateCartUI();
 
- const searchEl = document.getElementById('searchInput');
+  // 🧹 امسح حقل البحث لو المتصفح عبّاه تلقائياً
+    const searchEl = document.getElementById('searchInput');
     if (searchEl && searchEl.value !== '') {
         console.log('🧹 Autofilled search cleared:', searchEl.value);
         searchEl.value = '';
     }
-    
+    };
+
     // 🎬 شغّل الإعلانات بعد التحميل
     if (typeof startAnnouncementRotation === 'function') {
         startAnnouncementRotation();
@@ -10404,6 +10407,39 @@ function closeMobileDropdown() {
     const dropdown = document.getElementById('mobileUserDropdown');
     if (dropdown) dropdown.classList.add('hidden');
 }
+
+// 🛡️ حماية من Autofill في حقل البحث
+(function protectSearchFromAutofill() {
+    const searchEl = document.getElementById('searchInput');
+    if (!searchEl) return;
+    
+    // امسح فوراً
+    const clearIfAutofilled = () => {
+        const val = searchEl.value.trim();
+        // لو القيمة رقم تليفون مصري (11 رقم يبدأ بـ 01)
+        if (/^01[0-9]{9}$/.test(val)) {
+            console.log('🛡️ Blocked phone autofill in search:', val);
+            searchEl.value = '';
+            filterBooks();
+        }
+    };
+    
+    // امسح عند التحميل
+    clearIfAutofilled();
+    
+    // راقب أي تغيير لمدة 3 ثواني بعد التحميل
+    let checkCount = 0;
+    const interval = setInterval(() => {
+        clearIfAutofilled();
+        checkCount++;
+        if (checkCount >= 6) clearInterval(interval);
+    }, 500);
+    
+    // امسح لو المستخدم عمل Focus على الحقل
+    searchEl.addEventListener('focus', () => {
+        setTimeout(clearIfAutofilled, 50);
+    });
+})();
 
     </script>
 <!-- 🎁 Admin Coupon Modal -->
