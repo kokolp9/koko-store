@@ -8600,10 +8600,9 @@ function selectSuggestion(bookId, inputId) {
 
 // ربط البحث بالاقتراحات
 document.addEventListener('DOMContentLoaded', () => {
-    ['searchInput', 'searchInputMobile'].forEach(id => {
+    ['searchInput'].forEach(id => {
         const input = document.getElementById(id);
-        if (!input) return;
-        
+        if (!input) return;        
         input.addEventListener('input', (e) => {
             const query = e.target.value;
             if (query.length >= 2) {
