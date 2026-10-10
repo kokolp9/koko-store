@@ -2738,7 +2738,7 @@ function showToast(message, type = 'success') {
         // ============================================
         // On Load
         // ============================================
-        window.onload = async function() {
+       window.onload = async function() {
     // 🔄 استرجاع الجلسة الأولى
     if (supabaseClient) {
         const sessionUser = await supabaseGetSession();
@@ -2748,8 +2748,8 @@ function showToast(message, type = 'success') {
         }
     }
     
-        // 📥 تحميل كل البيانات من السيرفر
-       await Promise.all([
+    // 📥 تحميل كل البيانات من السيرفر
+    await Promise.all([
         loadBooks(),
         loadCoupons(),
         loadAnnouncements(),
@@ -2758,7 +2758,7 @@ function showToast(message, type = 'success') {
         loadGallery()
     ]);
     
-       // 📦 تحميل الطلبات (لو مسجل دخول)
+    // 📦 تحميل الطلبات (لو مسجل دخول)
     if (currentUser) {
         await loadOrders();
         await loadNotifications();
@@ -2769,14 +2769,13 @@ function showToast(message, type = 'success') {
     updateAuthNav();
     updateCartUI();
 
-  // 🧹 امسح حقل البحث لو المتصفح عبّاه تلقائياً
+    // 🧹 امسح حقل البحث لو المتصفح عبّاه تلقائياً
     const searchEl = document.getElementById('searchInput');
     if (searchEl && searchEl.value !== '') {
         console.log('🧹 Autofilled search cleared:', searchEl.value);
         searchEl.value = '';
     }
-    };
-
+    
     // 🎬 شغّل الإعلانات بعد التحميل
     if (typeof startAnnouncementRotation === 'function') {
         startAnnouncementRotation();
