@@ -2924,7 +2924,6 @@ async function supabaseGetSession() {
             <h4 class="text-base font-black text-gray-900 mb-1 hover:text-primary transition leading-snug">${book.title}</h4>
         </button>
         <p class="text-xs text-gray-500 mb-4">${book.author}</p>
-                                           </div>
                 <div class="mt-auto pt-3 border-t border-gray-100">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xl font-black text-primary">${book.price.toFixed(2)} <span class="text-xs font-bold">ج.م</span></span>
@@ -2949,7 +2948,7 @@ async function supabaseGetSession() {
 </div>
                     `}
                 </div>
-                </div>
+            </div>
             `;
 }).join('');
 }
