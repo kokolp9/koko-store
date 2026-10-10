@@ -727,6 +727,32 @@ body {
     color: white;
 }
 
+/* 📚 Books Grid Layout */
+#booksGrid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 24px !important;
+}
+
+@media (max-width: 1024px) {
+    #booksGrid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+
+@media (max-width: 768px) {
+    #booksGrid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 480px) {
+    #booksGrid { grid-template-columns: 1fr !important; }
+}
+/* 📦 Book Cards - Force Full Width in Grid Cell */
+#booksGrid > .book-card {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+}
+
+
 /* 🎴 Book Cards */
 .book-card {
     position: relative;
@@ -1902,7 +1928,7 @@ body, header, footer, button, input, textarea, select {
     </div>
 </div>
 
-        <div id="booksGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+       <div id="booksGrid" class="grid gap-6" style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important; gap: 24px !important;"></div>
 <!-- 📸 Gallery Section -->
 <section id="gallerySection" class="hidden mt-16">
     <div class="text-center mb-8">
@@ -2947,6 +2973,7 @@ async function supabaseGetSession() {
     </button>
 </div>
                     `}
+                        </div>
                 </div>
             </div>
             `;
