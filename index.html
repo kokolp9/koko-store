@@ -1909,29 +1909,77 @@ body, header, footer, button, input, textarea, select {
         </div>
     </div>
     
-    <!-- أزرار الفلترة -->
-    <div class="flex flex-wrap gap-2 justify-center" id="categoryButtons">
-        <button onclick="filterCategory('الكل')" class="cat-btn active-cat">
-            <i class="fa-solid fa-layer-group"></i>
-            <span>الكل</span>
-        </button>
-        <button onclick="filterCategory('الصف الثالث الثانوي')" class="cat-btn">
-            <i class="fa-solid fa-graduation-cap"></i>
-            <span>ثالثة ثانوي</span>
-        </button>
-        <button onclick="filterCategory('الصف الثاني الثانوي')" class="cat-btn">
-            <i class="fa-solid fa-book-open"></i>
-            <span>ثانية ثانوي</span>
-        </button>
-        <button onclick="filterCategory('الصف الأول الثانوي')" class="cat-btn">
-            <i class="fa-solid fa-book"></i>
-            <span>أولى ثانوي</span>
-        </button>
-        <button onclick="filterCategory('باكدجات المواد')" class="cat-btn">
-            <i class="fa-solid fa-boxes-stacked"></i>
-            <span>باكدجات المدرسين</span>
-        </button>
+   <!-- 🎯 Filter Section - New -->
+<div class="space-y-5">
+
+    <!-- 1. الصف الدراسي -->
+    <div>
+        <div class="flex items-center gap-2 mb-2 justify-center">
+            <i class="fa-solid fa-graduation-cap text-primary"></i>
+            <span class="text-xs font-black text-gray-600">الصف الدراسي</span>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-center" id="gradeFilter">
+            <button onclick="filterCategory('الكل')" data-filter="grade" data-value="الكل" class="cat-btn active-cat">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>الكل</span>
+            </button>
+            <button onclick="filterCategory('الصف الثالث الثانوي')" data-filter="grade" data-value="الصف الثالث الثانوي" class="cat-btn">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>ثالثة ثانوي</span>
+            </button>
+            <button onclick="filterCategory('الصف الثاني الثانوي')" data-filter="grade" data-value="الصف الثاني الثانوي" class="cat-btn">
+                <i class="fa-solid fa-book-open"></i>
+                <span>ثانية ثانوي</span>
+            </button>
+            <button onclick="filterCategory('الصف الأول الثانوي')" data-filter="grade" data-value="الصف الأول الثانوي" class="cat-btn">
+                <i class="fa-solid fa-book"></i>
+                <span>أولى ثانوي</span>
+            </button>
+        </div>
     </div>
+
+    <!-- 2. المادة -->
+    <div>
+        <div class="flex items-center gap-2 mb-2 justify-center">
+            <i class="fa-solid fa-flask text-purple-600"></i>
+            <span class="text-xs font-black text-gray-600">المادة</span>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-center" id="subjectFilter">
+            <button onclick="filterSubject('الكل')" data-filter="subject" data-value="الكل" class="cat-btn active-cat">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>كل المواد</span>
+            </button>
+            <button onclick="filterSubject('فيزياء')" data-filter="subject" data-value="فيزياء" class="cat-btn"><span>فيزياء</span></button>
+            <button onclick="filterSubject('كيمياء')" data-filter="subject" data-value="كيمياء" class="cat-btn"><span>كيمياء</span></button>
+            <button onclick="filterSubject('أحياء')" data-filter="subject" data-value="أحياء" class="cat-btn"><span>أحياء</span></button>
+            <button onclick="filterSubject('رياضيات')" data-filter="subject" data-value="رياضيات" class="cat-btn"><span>رياضيات</span></button>
+            <button onclick="filterSubject('جيولوجيا')" data-filter="subject" data-value="جيولوجيا" class="cat-btn"><span>جيولوجيا</span></button>
+            <button onclick="filterSubject('علوم بيئية')" data-filter="subject" data-value="علوم بيئية" class="cat-btn"><span>علوم بيئية</span></button>
+            <button onclick="filterSubject('لغة عربية')" data-filter="subject" data-value="لغة عربية" class="cat-btn"><span>لغة عربية</span></button>
+            <button onclick="filterSubject('لغة إنجليزية')" data-filter="subject" data-value="لغة إنجليزية" class="cat-btn"><span>لغة إنجليزية</span></button>
+            <button onclick="filterSubject('لغة فرنسية')" data-filter="subject" data-value="لغة فرنسية" class="cat-btn"><span>لغة فرنسية</span></button>
+            <button onclick="filterSubject('لغة ألمانية')" data-filter="subject" data-value="لغة ألمانية" class="cat-btn"><span>لغة ألمانية</span></button>
+            <button onclick="filterSubject('تاريخ')" data-filter="subject" data-value="تاريخ" class="cat-btn"><span>تاريخ</span></button>
+            <button onclick="filterSubject('جغرافيا')" data-filter="subject" data-value="جغرافيا" class="cat-btn"><span>جغرافيا</span></button>
+            <button onclick="filterSubject('فلسفة ومنطق')" data-filter="subject" data-value="فلسفة ومنطق" class="cat-btn"><span>فلسفة ومنطق</span></button>
+            <button onclick="filterSubject('علم نفس واجتماع')" data-filter="subject" data-value="علم نفس واجتماع" class="cat-btn"><span>علم نفس واجتماع</span></button>
+        </div>
+    </div>
+
+    <!-- 3. المدرس -->
+    <div>
+        <div class="flex items-center gap-2 mb-2 justify-center">
+            <i class="fa-solid fa-chalkboard-user text-amber-600"></i>
+            <span class="text-xs font-black text-gray-600">المدرس</span>
+        </div>
+        <div class="max-w-md mx-auto">
+            <select id="teacherFilter" onchange="filterTeacher(this.value)" 
+                    class="w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-amber-500 focus:outline-none cursor-pointer">
+                <option value="الكل">كل المدرسين</option>
+            </select>
+        </div>
+    </div>
+
 </div>
 
        <div id="booksGrid" class="grid gap-6" style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important; gap: 24px !important;"></div>
@@ -2266,26 +2314,47 @@ body, header, footer, button, input, textarea, select {
             <input type="text" id="adminAuthor" required placeholder="مثال: الأستاذ محمد عبدالمعبود" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
         </div>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">التصنيف <span class="text-red-500">*</span></label>
-            <select id="adminCategory" required class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
-                <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
-                <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
-                <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
-                <option value="باكدجات المواد">باكدجات المواد</option>
-            </select>
-        </div>
-        <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">السعر (ج.م) <span class="text-red-500">*</span></label>
-            <input type="number" step="0.5" id="adminPrice" required placeholder="150" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
-        </div>
-        <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">التقييم</label>
-            <input type="number" step="0.1" min="1" max="5" id="adminRating" value="4.9" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
-        </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div>
+        <label class="block text-xs font-bold text-gray-700 mb-1">الصف الدراسي <span class="text-red-500">*</span></label>
+        <select id="adminCategory" required class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
+            <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
+            <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+            <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
+        </select>
     </div>
     <div>
+        <label class="block text-xs font-bold text-gray-700 mb-1">المادة <span class="text-red-500">*</span></label>
+        <select id="adminSubject" required class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-purple-500 focus:outline-none">
+            <option value="">اختر المادة...</option>
+            <option value="فيزياء">فيزياء</option>
+            <option value="كيمياء">كيمياء</option>
+            <option value="أحياء">أحياء</option>
+            <option value="رياضيات">رياضيات</option>
+            <option value="جيولوجيا">جيولوجيا</option>
+            <option value="علوم بيئية">علوم بيئية</option>
+            <option value="لغة عربية">لغة عربية</option>
+            <option value="لغة إنجليزية">لغة إنجليزية</option>
+            <option value="لغة فرنسية">لغة فرنسية</option>
+            <option value="لغة ألمانية">لغة ألمانية</option>
+            <option value="تاريخ">تاريخ</option>
+            <option value="جغرافيا">جغرافيا</option>
+            <option value="فلسفة ومنطق">فلسفة ومنطق</option>
+            <option value="علم نفس واجتماع">علم نفس واجتماع</option>
+        </select>
+    </div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div>
+        <label class="block text-xs font-bold text-gray-700 mb-1">السعر (ج.م) <span class="text-red-500">*</span></label>
+        <input type="number" step="0.5" id="adminPrice" required placeholder="150" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
+    </div>
+    <div>
+        <label class="block text-xs font-bold text-gray-700 mb-1">التقييم</label>
+        <input type="number" step="0.1" min="1" max="5" id="adminRating" value="4.9" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
+    </div>
+</div>
+<div>
         <label class="block text-xs font-bold text-gray-700 mb-1">رابط صورة الغلاف <span class="text-red-500">*</span></label>
         <input type="url" id="adminImage" required placeholder="https://..." class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary focus:outline-none">
     </div>
@@ -2522,7 +2591,9 @@ async function loadCoupons() {
 let appliedCoupon = null;
 
         let cart = JSON.parse(localStorage.getItem('kokostore_cart')) || [];
-        let currentCategory = 'الكل';
+        let currentCategory = 'الكل'; // الصف الدراسي
+        let currentSubject = 'الكل';  // المادة
+        let currentTeacher = 'الكل';  // المدرس
  // 📄 Pagination
 let currentPage = 1;
 const ITEMS_PER_PAGE = 8; // عدد الكتب في كل صفحة
@@ -2757,6 +2828,8 @@ function showToast(message, type = 'success') {
         loadReviews(),
         loadGallery()
     ]);
+
+populateTeacherFilter();
     
     // 📦 تحميل الطلبات (لو مسجل دخول)
     if (currentUser) {
@@ -2959,10 +3032,13 @@ async function supabaseGetSession() {
             <span>${ratingInfo.avg}</span>
             <span class="text-gray-400 font-normal text-[11px]">(${ratingInfo.count} ${ratingInfo.count === 1 ? 'تقييم' : 'تقييمات'})</span>
         </button>
-        <button onclick="openBookDetails(${book.id})" class="text-right">
-            <h4 class="text-base font-black text-gray-900 mb-1 hover:text-primary transition leading-snug">${book.title}</h4>
-        </button>
-        <p class="text-xs text-gray-500 mb-4">${book.author}</p>
+       <button onclick="openBookDetails(${book.id})" class="text-right">
+    <h4 class="text-base font-black text-gray-900 mb-1 hover:text-primary transition leading-snug">${escapeHtml(book.title)}</h4>
+</button>
+<div class="flex items-center flex-wrap gap-1.5 mb-4">
+    <span class="text-xs text-gray-500">${escapeHtml(book.author)}</span>
+    ${book.subject ? `<span class="text-[10px] bg-purple-50 text-purple-700 border border-purple-200 px-2 py-0.5 rounded-full font-bold">${escapeHtml(book.subject)}</span>` : ''}
+</div>
                 <div class="mt-auto pt-3 border-t border-gray-100">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-xl font-black text-primary">${book.price.toFixed(2)} <span class="text-xs font-bold">ج.م</span></span>
@@ -2996,45 +3072,91 @@ async function supabaseGetSession() {
         // ============================================
         // Filters
         // ============================================
-        function filterCategory(category) {
-            currentCategory = category;
-            const buttons = document.querySelectorAll('.cat-btn');
-            buttons.forEach(btn => {
-                if (btn.textContent.trim() === category || (category === 'الصف الثالث الثانوي' && btn.textContent.includes('ثالثة'))) {
-                    btn.className = "cat-btn active-cat bg-primary text-white text-sm font-semibold px-4 py-2 rounded-xl transition shadow-sm";
-                } else if (category === 'الكل' && btn.textContent.trim() === 'الكل') {
-                    btn.className = "cat-btn active-cat bg-primary text-white text-sm font-semibold px-4 py-2 rounded-xl transition shadow-sm";
-                } else {
-                    btn.className = "cat-btn bg-white text-gray-700 border border-gray-200 text-sm font-semibold px-4 py-2 rounded-xl hover:bg-gray-100 transition";
-                }
-            });
-            applyFilters();
+        // ============================================
+// Filters - Grade / Subject / Teacher
+// ============================================
+function filterCategory(category) {
+    currentCategory = category;
+    updateFilterButtons('grade', category);
+    applyFilters();
+}
+
+function filterSubject(subject) {
+    currentSubject = subject;
+    updateFilterButtons('subject', subject);
+    applyFilters();
+}
+
+function filterTeacher(teacher) {
+    currentTeacher = teacher;
+    applyFilters();
+}
+
+// تحديث حالة الأزرار النشطة
+function updateFilterButtons(filterType, activeValue) {
+    document.querySelectorAll(`.cat-btn[data-filter="${filterType}"]`).forEach(btn => {
+        if (btn.dataset.value === activeValue) {
+            btn.classList.add('active-cat');
+        } else {
+            btn.classList.remove('active-cat');
         }
+    });
+}
 
-        function filterBooks() { applyFilters(); }
+function filterBooks() { applyFilters(); }
 
-       function applyFilters() {
+// 🎯 تطبيق كل الفلاتر مع بعض
+function applyFilters() {
     const searchInputEl = document.getElementById('searchInput');
     const query = searchInputEl ? searchInputEl.value.toLowerCase().trim() : '';
     let filtered = books.slice();
-    
-    // فلتر الصف (التصنيف)
+
+    // فلتر الصف
     if (currentCategory !== 'الكل') {
         filtered = filtered.filter(b => b.category === currentCategory);
     }
-    
-    // فلتر البحث (اسم الكتاب + اسم المدرس)
+
+    // فلتر المادة
+    if (currentSubject !== 'الكل') {
+        filtered = filtered.filter(b => (b.subject || '') === currentSubject);
+    }
+
+    // فلتر المدرس
+    if (currentTeacher !== 'الكل') {
+        filtered = filtered.filter(b => b.author === currentTeacher);
+    }
+
+    // فلتر البحث (اسم/مدرس/مادة)
     if (query !== '') {
-        filtered = filtered.filter(b => 
-            b.title.toLowerCase().includes(query) || 
-            b.author.toLowerCase().includes(query)
+        filtered = filtered.filter(b =>
+            (b.title || '').toLowerCase().includes(query) ||
+            (b.author || '').toLowerCase().includes(query) ||
+            (b.subject || '').toLowerCase().includes(query)
         );
     }
-    
-    // 📄 حفظ النتائج للترقيم
+
     filteredBooksCache = filtered;
-    currentPage = 1; // رجوع لأول صفحة عند أي فلترة
+    currentPage = 1;
     renderCurrentPage();
+}
+
+
+// تعبئة قائمة المدرسين ديناميكياً
+function populateTeacherFilter() {
+    const select = document.getElementById('teacherFilter');
+    if (!select) return;
+
+    const currentValue = select.value;
+    const teachers = [...new Set(books.map(b => b.author).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ar'));
+
+    select.innerHTML = '<option value="الكل">كل المدرسين</option>' +
+        teachers.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+
+    if (teachers.includes(currentValue)) {
+        select.value = currentValue;
+    } else {
+        currentTeacher = 'الكل';
+    }
 }
 
 // 📄 عرض الصفحة الحالية
@@ -4152,12 +4274,13 @@ notifyCustomerByNtfy(
     const title = document.getElementById('adminTitle').value.trim();
     const author = document.getElementById('adminAuthor').value.trim();
     const category = document.getElementById('adminCategory').value;
+    const subject = document.getElementById('adminSubject').value;
     const price = parseFloat(document.getElementById('adminPrice').value);
     const rating = parseFloat(document.getElementById('adminRating').value) || 4.9;
     const image = document.getElementById('adminImage').value.trim();
     const description = (document.getElementById('adminDescription')?.value || '').trim();
 
-    if (!title || !author || !category || isNaN(price) || !image) {
+    if (!title || !author || !category || !subject || isNaN(price) || !image) {
         showToast("املا كل الحقول الإجبارية", "warning");
         return;
     }
@@ -4171,14 +4294,15 @@ notifyCustomerByNtfy(
     }
 
     const bookData = {
-        title,
-        author,
-        category,
-        price,
-        rating,
-        image,
-        description
-    };
+    title,
+    author,
+    category,
+    subject,
+    price,
+    rating,
+    image,
+    description
+};
 
     try {
         let result;
@@ -4238,6 +4362,7 @@ notifyCustomerByNtfy(
             document.getElementById('adminTitle').value = book.title;
             document.getElementById('adminAuthor').value = book.author;
             document.getElementById('adminCategory').value = book.category;
+            document.getElementById('adminSubject').value = book.subject || '';
             document.getElementById('adminPrice').value = book.price;
             document.getElementById('adminRating').value = book.rating;
             document.getElementById('adminImage').value = book.image;
@@ -9019,15 +9144,15 @@ function downloadBooksTemplate() {
     }
 
     const templateData = [
-        ['اسم الكتاب', 'المدرس', 'التصنيف', 'السعر', 'التقييم', 'رابط الصورة', 'الوصف'],
-        ['ملزمة الفيزياء الشاملة', 'أ. محمد أحمد', 'الصف الثالث الثانوي', 150, 4.9, 'https://i.imgur.com/xxxxx.jpg', 'شرح كامل لمنهج الفيزياء'],
-        ['كتاب الكيمياء العضوية', 'د. خالد صقر', 'الصف الثالث الثانوي', 180, 4.8, 'https://i.imgur.com/yyyyy.jpg', 'شرح مبسط للكيمياء العضوية'],
-    ];
+    ['اسم الكتاب', 'المدرس', 'الصف الدراسي', 'المادة', 'السعر', 'التقييم', 'رابط الصورة', 'الوصف'],
+    ['ملزمة الفيزياء الشاملة', 'أ. محمد أحمد', 'الصف الثالث الثانوي', 'فيزياء', 150, 4.9, 'https://i.imgur.com/xxxxx.jpg', 'شرح كامل لمنهج الفيزياء'],
+    ['كتاب الكيمياء العضوية', 'د. خالد صقر', 'الصف الثالث الثانوي', 'كيمياء', 180, 4.8, 'https://i.imgur.com/yyyyy.jpg', 'شرح مبسط للكيمياء العضوية'],
+];
 
     const ws = XLSX.utils.aoa_to_sheet(templateData);
     ws['!cols'] = [
-        { wch: 40 }, { wch: 25 }, { wch: 22 }, { wch: 10 }, { wch: 10 }, { wch: 40 }, { wch: 50 }
-    ];
+    { wch: 40 }, { wch: 25 }, { wch: 22 }, { wch: 18 }, { wch: 10 }, { wch: 10 }, { wch: 40 }, { wch: 50 }
+];
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'الكتب');
@@ -9076,32 +9201,33 @@ async function handleExcelImport(input) {
         const errors = [];
 
         dataRows.forEach((row, i) => {
-            const title = String(row[0] || '').trim();
-            const author = String(row[1] || '').trim();
-            const category = String(row[2] || '').trim();
-            const price = parseFloat(row[3]);
-            const rating = parseFloat(row[4]) || 4.9;
-            const image = String(row[5] || '').trim();
-            const description = String(row[6] || '').trim();
+    const title = String(row[0] || '').trim();
+    const author = String(row[1] || '').trim();
+    const category = String(row[2] || '').trim();
+    const subject = String(row[3] || '').trim();
+    const price = parseFloat(row[4]);
+    const rating = parseFloat(row[5]) || 4.9;
+    const image = String(row[6] || '').trim();
+    const description = String(row[7] || '').trim();
 
-            if (!title || !author || !category || isNaN(price) || !image) {
-                errors.push(`سطر ${i + 2}: بيانات ناقصة`);
-                return;
-            }
+               if (!title || !author || !category || !subject || isNaN(price) || !image) {
+        errors.push(`سطر ${i + 2}: بيانات ناقصة`);
+        return;
+    }
 
-            // تأكد من التصنيف
-            const validCategories = ['الصف الثالث الثانوي', 'الصف الثاني الثانوي', 'الصف الأول الثانوي', 'باكدجات المواد'];
-            const finalCategory = validCategories.includes(category) ? category : 'الصف الثالث الثانوي';
+    const validCategories = ['الصف الثالث الثانوي', 'الصف الثاني الثانوي', 'الصف الأول الثانوي'];
+    const finalCategory = validCategories.includes(category) ? category : 'الصف الثالث الثانوي';
 
-            booksToInsert.push({
-                title,
-                author,
-                category: finalCategory,
-                price,
-                rating,
-                image,
-                description
-            });
+    booksToInsert.push({
+        title,
+        author,
+        category: finalCategory,
+        subject,
+        price,
+        rating,
+        image,
+        description
+    });
         });
 
         if (booksToInsert.length === 0) {
@@ -9777,6 +9903,21 @@ function generateReport() {
                     .container { box-shadow: none; padding: 20px; }
                     .print-btn { display: none; }
                 }
+
+/* 🎨 Subject Filter - Purple variant */
+.cat-btn[data-filter="subject"].active-cat {
+    background: linear-gradient(135deg, #7E22CE, #6B21A8) !important;
+    box-shadow: 0 12px 28px -8px rgba(126, 34, 206, 0.55), 0 0 0 3px rgba(168, 85, 247, 0.25) !important;
+    color: white !important;
+}
+.cat-btn[data-filter="subject"]:hover {
+    border-color: #7E22CE !important;
+    color: #7E22CE !important;
+}
+.cat-btn[data-filter="subject"].active-cat:hover {
+    color: white !important;
+}
+
             </style>
         </head>
         <body>
