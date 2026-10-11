@@ -3031,6 +3031,11 @@ const DEFAULT_PAYMENT_SETTINGS = {
         number: "01214823170",
         name: "Koko Store"
     },
+    orangeCash: {
+        enabled: true,
+        number: "01214823170",
+        name: "Koko Store"
+    },
     instapay: {
         enabled: true,
         address: "kokostore@instapay",
@@ -3041,7 +3046,6 @@ const DEFAULT_PAYMENT_SETTINGS = {
     },
     shippingFee: 99
 };
-
 let paymentSettings = JSON.parse(localStorage.getItem('kokostore_payment_settings')) || DEFAULT_PAYMENT_SETTINGS;
         const PASSWORD_SALT = "KOKO_SALT_2026";
 
@@ -4667,10 +4671,11 @@ function updateCheckoutSummary() {
         // 🔔 إشعار للعميل
         try {
             const methodNames = {
-                cod: 'الدفع عند الاستلام',
-                vodafone: 'فودافون كاش',
-                instapay: 'InstaPay'
-            };
+    cod: 'الدفع عند الاستلام',
+    vodafone: 'فودافون كاش',
+    orange: 'أورنج كاش',
+    instapay: 'InstaPay'
+};
             const methodNote = selectedPaymentMethod === 'cod' 
                 ? `سيتم الدفع عند الاستلام بقيمة ${totalPrice.toFixed(2)} ج.م.` 
                 : `في انتظار تأكيد دفعك بمبلغ ${totalPrice.toFixed(2)} ج.م.`;
@@ -4758,10 +4763,11 @@ notifyCustomerByNtfy(
             listEl.innerHTML = userOrders.slice().reverse().map(order => {
     // 💳 معلومات الدفع
     const paymentLabels = {
-        cod: { label: 'الدفع عند الاستلام', icon: 'fa-hand-holding-dollar', color: 'green' },
-        vodafone: { label: 'فودافون كاش', icon: 'fa-mobile-screen-button', color: 'red' },
-        instapay: { label: 'InstaPay', icon: 'fa-bolt', color: 'purple' }
-    };
+    cod: { label: 'الدفع عند الاستلام', icon: 'fa-hand-holding-dollar', color: 'green' },
+    vodafone: { label: 'فودافون كاش', icon: 'fa-mobile-screen-button', color: 'red' },
+    orange: { label: 'أورنج كاش', icon: 'fa-mobile-screen-button', color: 'orange' },
+    instapay: { label: 'InstaPay', icon: 'fa-bolt', color: 'purple' }
+};
     const pm = paymentLabels[order.paymentMethod] || paymentLabels.cod;
     
     const paymentStatusBadges = {
@@ -5574,64 +5580,95 @@ const PAGES_CONTENT = {
         `
     },
         contact: {
-        title: 'تواصل معنا',
-        icon: 'fa-headset',
-        content: `
-            <div class="space-y-4">
-                <p class="text-center text-gray-600 mb-4">فريق خدمة العملاء متاح لخدمتك من <strong>10 صباحاً حتى 10 مساءً</strong></p>
+    title: 'تواصل معنا',
+    icon: 'fa-headset',
+    content: `
+        <div class="space-y-4">
+            <p class="text-center text-gray-600 mb-4">فريق خدمة العملاء متاح لخدمتك من <strong>10 صباحاً حتى 10 مساءً</strong></p>
 
-                <a href="https://wa.me/201214823170" target="_blank" class="flex items-center gap-4 bg-green-50 hover:bg-green-100 border border-green-200 rounded-xl p-4 transition">
-                    <div class="w-12 h-12 bg-green-500 text-white rounded-xl flex items-center justify-center text-xl">
+            <!-- 📱 واتساب -->
+            <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 bg-green-500 text-white rounded-xl flex items-center justify-center text-lg">
                         <i class="fa-brands fa-whatsapp"></i>
                     </div>
                     <div class="flex-1">
                         <p class="font-black text-gray-900">واتساب</p>
                         <p class="text-xs text-gray-600">راسلنا مباشرة على واتساب</p>
                     </div>
-                    <i class="fa-solid fa-arrow-left text-green-600"></i>
-                </a>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <a href="https://wa.me/201214823170" target="_blank" 
+                       class="flex items-center justify-center gap-2 bg-white hover:bg-green-500 hover:text-white border-2 border-green-300 text-green-700 py-2.5 rounded-lg text-xs font-bold transition">
+                        <i class="fa-brands fa-whatsapp text-base"></i>
+                        <span dir="ltr" class="font-mono">01214823170</span>
+                    </a>
+                    <a href="https://wa.me/201221760954" target="_blank" 
+                       class="flex items-center justify-center gap-2 bg-white hover:bg-green-500 hover:text-white border-2 border-green-300 text-green-700 py-2.5 rounded-lg text-xs font-bold transition">
+                        <i class="fa-brands fa-whatsapp text-base"></i>
+                        <span dir="ltr" class="font-mono">01221760954</span>
+                    </a>
+                </div>
+            </div>
 
-                <a href="tel:01214823170" class="flex items-center gap-4 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl p-4 transition">
-                    <div class="w-12 h-12 bg-blue-500 text-white rounded-xl flex items-center justify-center text-xl">
+            <!-- ☎️ اتصال هاتفي -->
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="w-10 h-10 bg-blue-500 text-white rounded-xl flex items-center justify-center text-lg">
                         <i class="fa-solid fa-phone"></i>
                     </div>
                     <div class="flex-1">
                         <p class="font-black text-gray-900">اتصال هاتفي</p>
-                        <p class="text-xs text-gray-600" dir="ltr">01214823170</p>
+                        <p class="text-xs text-gray-600">اتصل بنا مباشرة</p>
                     </div>
-                    <i class="fa-solid fa-arrow-left text-blue-600"></i>
-                </a>
-
-                <a href="https://www.facebook.com/profile.php?id=61594793296689" target="_blank" class="flex items-center gap-4 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl p-4 transition">
-                    <div class="w-12 h-12 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-xl">
-                        <i class="fa-brands fa-facebook"></i>
-                    </div>
-                    <div class="flex-1">
-                        <p class="font-black text-gray-900">فيسبوك</p>
-                        <p class="text-xs text-gray-600">تابعنا للعروض الجديدة</p>
-                    </div>
-                    <i class="fa-solid fa-arrow-left text-indigo-600"></i>
-                </a>
-
-                <a href="https://t.me/kokostore2026" target="_blank" class="flex items-center gap-4 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-xl p-4 transition">
-                    <div class="w-12 h-12 bg-sky-500 text-white rounded-xl flex items-center justify-center text-xl">
-                        <i class="fa-brands fa-telegram"></i>
-                    </div>
-                    <div class="flex-1">
-                        <p class="font-black text-gray-900">تليجرام</p>
-                        <p class="text-xs text-gray-600">انضم لقناتنا الرسمية</p>
-                    </div>
-                    <i class="fa-solid fa-arrow-left text-sky-600"></i>
-                </a>
-
-                <div class="bg-amber-50 border-r-4 border-amber-500 p-4 rounded-lg mt-4">
-                    <p class="font-bold text-gray-900 mb-1"><i class="fa-solid fa-clock ml-1"></i> مواعيد العمل</p>
-                    <p class="text-xs text-gray-700">الأحد - الخميس: 10 ص - 10 م</p>
-                    <p class="text-xs text-red-600 font-bold">الجمعة - السبت: إجازة</p>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <a href="tel:01214823170" 
+                       class="flex items-center justify-center gap-2 bg-white hover:bg-blue-500 hover:text-white border-2 border-blue-300 text-blue-700 py-2.5 rounded-lg text-xs font-bold transition">
+                        <i class="fa-solid fa-phone text-base"></i>
+                        <span dir="ltr" class="font-mono">01214823170</span>
+                    </a>
+                    <a href="tel:01221760954" 
+                       class="flex items-center justify-center gap-2 bg-white hover:bg-blue-500 hover:text-white border-2 border-blue-300 text-blue-700 py-2.5 rounded-lg text-xs font-bold transition">
+                        <i class="fa-solid fa-phone text-base"></i>
+                        <span dir="ltr" class="font-mono">01221760954</span>
+                    </a>
                 </div>
             </div>
-        `
-    },
+
+            <!-- 📘 فيسبوك -->
+            <a href="https://www.facebook.com/profile.php?id=61594793296689" target="_blank" class="flex items-center gap-4 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-xl p-4 transition">
+                <div class="w-12 h-12 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-xl">
+                    <i class="fa-brands fa-facebook"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-black text-gray-900">فيسبوك</p>
+                    <p class="text-xs text-gray-600">تابعنا للعروض الجديدة</p>
+                </div>
+                <i class="fa-solid fa-arrow-left text-indigo-600"></i>
+            </a>
+
+            <!-- ✈️ تليجرام -->
+            <a href="https://t.me/kokostore2026" target="_blank" class="flex items-center gap-4 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-xl p-4 transition">
+                <div class="w-12 h-12 bg-sky-500 text-white rounded-xl flex items-center justify-center text-xl">
+                    <i class="fa-brands fa-telegram"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-black text-gray-900">تليجرام</p>
+                    <p class="text-xs text-gray-600">انضم لقناتنا الرسمية</p>
+                </div>
+                <i class="fa-solid fa-arrow-left text-sky-600"></i>
+            </a>
+
+            <!-- ⏰ مواعيد العمل -->
+            <div class="bg-amber-50 border-r-4 border-amber-500 p-4 rounded-lg mt-4">
+                <p class="font-bold text-gray-900 mb-1"><i class="fa-solid fa-clock ml-1"></i> مواعيد العمل</p>
+                <p class="text-xs text-gray-700">الأحد - الخميس: 10 ص - 10 م</p>
+                <p class="text-xs text-red-600 font-bold">الجمعة - السبت: إجازة</p>
+            </div>
+        </div>
+    `
+},
     terms: {
         title: 'الشروط والأحكام',
         icon: 'fa-file-contract',
@@ -6108,10 +6145,11 @@ function renderAdminOrders() {
     };
 
     const paymentInfo = {
-        cod: { label: 'الدفع عند الاستلام', icon: 'fa-hand-holding-dollar', color: 'green' },
-        vodafone: { label: 'فودافون كاش', icon: 'fa-mobile-screen-button', color: 'red' },
-        instapay: { label: 'InstaPay', icon: 'fa-bolt', color: 'purple' }
-    };
+    cod: { label: 'الدفع عند الاستلام', icon: 'fa-hand-holding-dollar', color: 'green' },
+    vodafone: { label: 'فودافون كاش', icon: 'fa-mobile-screen-button', color: 'red' },
+    orange: { label: 'أورنج كاش', icon: 'fa-mobile-screen-button', color: 'orange' },
+    instapay: { label: 'InstaPay', icon: 'fa-bolt', color: 'purple' }
+};
 
     const paymentStatusInfo = {
         cod_pending: { label: '⏳ دفع عند الاستلام', color: 'bg-gray-100 text-gray-700' },
@@ -6955,6 +6993,11 @@ async function loadPaymentSettings() {
                 number: data.vodafone_number || '',
                 name: data.vodafone_name || ''
             },
+            orangeCash: {
+                enabled: data.orange_enabled !== false,
+                number: data.orange_number || '',
+                name: data.orange_name || ''
+            },
             instapay: {
                 enabled: data.instapay_enabled !== false,
                 address: data.instapay_address || '',
@@ -6969,7 +7012,6 @@ async function loadPaymentSettings() {
         console.error('Load payment settings exception:', err);
     }
 }
-
 let currentAnnouncementIndex = 0;
 let announcementInterval = null;
 
@@ -7005,6 +7047,16 @@ function renderPaymentMethods() {
             desc: `حوّل على ${paymentSettings.vodafoneCash.number}`
         });
     }
+
+    if (paymentSettings.orangeCash?.enabled) {
+        methods.push({
+            id: 'orange',
+            icon: 'fa-mobile-screen-button',
+            color: 'orange',
+            title: 'أورنج كاش',
+            desc: `حوّل على ${paymentSettings.orangeCash.number}`
+        });
+    }
     
     if (paymentSettings.instapay?.enabled) {
         methods.push({
@@ -7021,7 +7073,6 @@ function renderPaymentMethods() {
         return;
     }
 
-    // اختيار أول واحد افتراضياً لو المختار مش موجود
     if (!methods.find(m => m.id === selectedPaymentMethod)) {
         selectedPaymentMethod = methods[0].id;
     }
@@ -7050,7 +7101,6 @@ function renderPaymentMethods() {
         `;
     }).join('');
 }
-
 function selectPaymentMethod(method) {
     selectedPaymentMethod = method;
     renderPaymentMethods();
@@ -7089,6 +7139,30 @@ function renderPaymentDetails() {
             </div>
             <p class="text-[11px] text-gray-700 leading-relaxed mt-2">
                 <i class="fa-solid fa-info-circle text-red-600 ml-1"></i>
+                حوّل <strong>${(cart.reduce((s,i)=>s+i.price*i.quantity,0) - calculateDiscount(cart.reduce((s,i)=>s+i.price*i.quantity,0)) + (paymentSettings.shippingFee||0)).toFixed(2)} ج.م</strong> على الرقم ده، بعدها املأ البيانات تحت وارفع صورة التحويل.
+            </p>
+            ${renderSenderFields()}
+        `;
+    } else if (selectedPaymentMethod === 'orange') {
+        const o = paymentSettings.orangeCash;
+        section.innerHTML = `
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-mobile-screen-button text-orange-600 text-xl"></i>
+                <h4 class="text-sm font-black text-gray-900">بيانات التحويل — أورنج كاش</h4>
+            </div>
+            <div class="bg-white rounded-xl p-3 border border-orange-200 flex items-center justify-between gap-2">
+                <div>
+                    <p class="text-[10px] text-gray-500 font-semibold">رقم المحفظة</p>
+                    <p class="text-base font-black text-gray-900 font-mono" dir="ltr">${o.number}</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5">${o.name}</p>
+                </div>
+                <button type="button" onclick="copyToClipboard('${o.number}')" class="bg-orange-500 text-white px-3 py-2 rounded-lg text-xs font-bold hover:bg-orange-600 transition">
+                    <i class="fa-solid fa-copy ml-1"></i>
+                    نسخ
+                </button>
+            </div>
+            <p class="text-[11px] text-gray-700 leading-relaxed mt-2">
+                <i class="fa-solid fa-info-circle text-orange-600 ml-1"></i>
                 حوّل <strong>${(cart.reduce((s,i)=>s+i.price*i.quantity,0) - calculateDiscount(cart.reduce((s,i)=>s+i.price*i.quantity,0)) + (paymentSettings.shippingFee||0)).toFixed(2)} ج.م</strong> على الرقم ده، بعدها املأ البيانات تحت وارفع صورة التحويل.
             </p>
             ${renderSenderFields()}
@@ -7224,10 +7298,11 @@ function printOrderReceipt(orderNumber) {
     }
 
     const methodNames = {
-        cod: 'الدفع عند الاستلام',
-        vodafone: 'فودافون كاش',
-        instapay: 'InstaPay'
-    };
+    cod: 'الدفع عند الاستلام',
+    vodafone: 'فودافون كاش',
+    orange: 'أورنج كاش',
+    instapay: 'InstaPay'
+};
     const paymentStatusLabels = {
         cod_pending: 'دفع عند الاستلام',
         pending: 'في انتظار التأكيد',
@@ -7563,10 +7638,11 @@ function sendOrderWhatsApp(orderNumber) {
     }
 
     const methodNames = {
-        cod: 'الدفع عند الاستلام',
-        vodafone: 'فودافون كاش',
-        instapay: 'InstaPay'
-    };
+    cod: 'الدفع عند الاستلام',
+    vodafone: 'فودافون كاش',
+    orange: 'أورنج كاش',
+    instapay: 'InstaPay'
+};
     const paymentStatusLabels = {
         cod_pending: '💵 ادفع عند الاستلام',
         pending: '⏳ في انتظار تأكيد الدفع',
@@ -7693,10 +7769,11 @@ function renderStats() {
 
     // 💳 عدد الطلبات حسب طريقة الدفع
     const paymentCounts = {
-        cod: filteredOrders.filter(o => o.paymentMethod === 'cod').length,
-        vodafone: filteredOrders.filter(o => o.paymentMethod === 'vodafone').length,
-        instapay: filteredOrders.filter(o => o.paymentMethod === 'instapay').length
-    };
+    cod: filteredOrders.filter(o => o.paymentMethod === 'cod').length,
+    vodafone: filteredOrders.filter(o => o.paymentMethod === 'vodafone').length,
+    orange: filteredOrders.filter(o => o.paymentMethod === 'orange').length,
+    instapay: filteredOrders.filter(o => o.paymentMethod === 'instapay').length
+};
 
     // 📚 أكثر الكتب مبيعاً
     const bookSales = {};
@@ -7869,20 +7946,24 @@ function renderStats() {
                 <i class="fa-solid fa-credit-card text-purple-600"></i>
                 <span>طرق الدفع</span>
             </h4>
-            <div class="grid grid-cols-3 gap-2">
-                <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
-                    <p class="text-xl font-black text-green-700">${paymentCounts.cod}</p>
-                    <p class="text-[10px] font-bold text-green-600 mt-1">عند الاستلام</p>
-                </div>
-                <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-center">
-                    <p class="text-xl font-black text-red-700">${paymentCounts.vodafone}</p>
-                    <p class="text-[10px] font-bold text-red-600 mt-1">فودافون كاش</p>
-                </div>
-                <div class="bg-purple-50 border border-purple-200 rounded-lg p-3 text-center">
-                    <p class="text-xl font-black text-purple-700">${paymentCounts.instapay}</p>
-                    <p class="text-[10px] font-bold text-purple-600 mt-1">InstaPay</p>
-                </div>
-            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+    <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+        <p class="text-xl font-black text-green-700">${paymentCounts.cod}</p>
+        <p class="text-[10px] font-bold text-green-600 mt-1">عند الاستلام</p>
+    </div>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-center">
+        <p class="text-xl font-black text-red-700">${paymentCounts.vodafone}</p>
+        <p class="text-[10px] font-bold text-red-600 mt-1">فودافون كاش</p>
+    </div>
+    <div class="bg-orange-50 border border-orange-200 rounded-lg p-3 text-center">
+        <p class="text-xl font-black text-orange-700">${paymentCounts.orange}</p>
+        <p class="text-[10px] font-bold text-orange-600 mt-1">أورنج كاش</p>
+    </div>
+    <div class="bg-purple-50 border border-purple-200 rounded-lg p-3 text-center">
+        <p class="text-xl font-black text-purple-700">${paymentCounts.instapay}</p>
+        <p class="text-[10px] font-bold text-purple-600 mt-1">InstaPay</p>
+    </div>
+</div>
         </div>
 
         <!-- 📚 الأكثر مبيعاً -->
@@ -8002,10 +8083,11 @@ function exportOrdersToExcel() {
     }
 
     const methodNames = {
-        cod: 'الدفع عند الاستلام',
-        vodafone: 'فودافون كاش',
-        instapay: 'InstaPay'
-    };
+    cod: 'الدفع عند الاستلام',
+    vodafone: 'فودافون كاش',
+    orange: 'أورنج كاش',
+    instapay: 'InstaPay'
+};
     const paymentStatusLabels = {
         cod_pending: 'دفع عند الاستلام',
         pending: 'في انتظار التأكيد',
@@ -8244,10 +8326,11 @@ function trackOrder() {
 
     // ✅ الطلب موجود
     const methodNames = {
-        cod: 'الدفع عند الاستلام',
-        vodafone: 'فودافون كاش',
-        instapay: 'InstaPay'
-    };
+    cod: 'الدفع عند الاستلام',
+    vodafone: 'فودافون كاش',
+    orange: 'أورنج كاش',
+    instapay: 'InstaPay'
+};
     const paymentStatusLabels = {
         cod_pending: { label: 'دفع عند الاستلام', color: 'blue' },
         pending: { label: 'في انتظار التأكيد', color: 'amber' },
@@ -9093,11 +9176,13 @@ function loadPaymentSettingsIntoForm() {
     if (el('psVodafoneEnabled')) el('psVodafoneEnabled').checked = s.vodafoneCash?.enabled !== false;
     if (el('psVodafoneNumber')) el('psVodafoneNumber').value = s.vodafoneCash?.number || '';
     if (el('psVodafoneName')) el('psVodafoneName').value = s.vodafoneCash?.name || '';
+    if (el('psOrangeEnabled')) el('psOrangeEnabled').checked = s.orangeCash?.enabled !== false;
+    if (el('psOrangeNumber')) el('psOrangeNumber').value = s.orangeCash?.number || '';
+    if (el('psOrangeName')) el('psOrangeName').value = s.orangeCash?.name || '';
     if (el('psInstapayEnabled')) el('psInstapayEnabled').checked = s.instapay?.enabled !== false;
     if (el('psInstapayAddress')) el('psInstapayAddress').value = s.instapay?.address || '';
     if (el('psInstapayName')) el('psInstapayName').value = s.instapay?.name || '';
 }
-
 // 💾 حفظ الإعدادات
 async function handleSavePaymentSettings(e) {
     if (e) e.preventDefault();
@@ -9118,6 +9203,9 @@ async function handleSavePaymentSettings(e) {
         vodafone_enabled: el('psVodafoneEnabled').checked,
         vodafone_number: el('psVodafoneNumber').value.trim(),
         vodafone_name: el('psVodafoneName').value.trim(),
+        orange_enabled: el('psOrangeEnabled').checked,
+        orange_number: el('psOrangeNumber').value.trim(),
+        orange_name: el('psOrangeName').value.trim(),
         instapay_enabled: el('psInstapayEnabled').checked,
         instapay_address: el('psInstapayAddress').value.trim(),
         instapay_name: el('psInstapayName').value.trim()
@@ -9128,11 +9216,16 @@ async function handleSavePaymentSettings(e) {
         showToast("رقم فودافون كاش مطلوب", "warning");
         return;
     }
+    if (newSettings.orange_enabled && !newSettings.orange_number) {
+        showToast("رقم أورنج كاش مطلوب", "warning");
+        return;
+    }
     if (newSettings.instapay_enabled && !newSettings.instapay_address) {
         showToast("عنوان InstaPay مطلوب", "warning");
         return;
     }
-    if (!newSettings.cod_enabled && !newSettings.vodafone_enabled && !newSettings.instapay_enabled) {
+    if (!newSettings.cod_enabled && !newSettings.vodafone_enabled && 
+        !newSettings.orange_enabled && !newSettings.instapay_enabled) {
         showToast("لازم تفعّل طريقة دفع واحدة على الأقل", "warning");
         return;
     }
@@ -9158,7 +9251,6 @@ async function handleSavePaymentSettings(e) {
         showToast("حدث خطأ", "error");
     }
 }
-
 // 🔄 استرجاع الافتراضي
 async function resetPaymentSettings() {
     if (!confirm("هل أنت متأكد من استرجاع الإعدادات الافتراضية؟")) return;
@@ -9172,6 +9264,9 @@ async function resetPaymentSettings() {
                 vodafone_enabled: true,
                 vodafone_number: '01214823170',
                 vodafone_name: 'Koko Store',
+                orange_enabled: true,
+                orange_number: '01214823170',
+                orange_name: 'Koko Store',
                 instapay_enabled: true,
                 instapay_address: 'kokostore@instapay',
                 instapay_name: 'Koko Store'
@@ -9192,7 +9287,6 @@ async function resetPaymentSettings() {
         console.error('Reset exception:', err);
     }
 }
-
 // ============================================
 // 🔔 Notifications (Supabase - Final Override)
 // ============================================
@@ -11529,6 +11623,32 @@ function closeMobileDropdown() {
                     </div>
                 </div>
             </div>
+
+<!-- 🟠 Orange Cash -->
+<div class="bg-orange-50 border border-orange-200 rounded-xl p-4 space-y-3">
+    <div class="flex items-center justify-between">
+        <h4 class="text-sm font-black text-gray-900 flex items-center gap-2">
+            <i class="fa-solid fa-mobile-screen-button text-orange-600"></i>
+            <span>أورنج كاش</span>
+        </h4>
+        <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="psOrangeEnabled" class="w-4 h-4 text-orange-600 rounded focus:ring-orange-500">
+            <span class="text-xs font-bold text-gray-700">مفعّل</span>
+        </label>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">رقم المحفظة</label>
+            <input type="tel" id="psOrangeNumber" 
+                   class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-orange-500 focus:outline-none" dir="ltr">
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">اسم صاحب المحفظة</label>
+            <input type="text" id="psOrangeName" 
+                   class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-orange-500 focus:outline-none">
+        </div>
+    </div>
+</div>
 
             <!-- InstaPay -->
             <div class="bg-purple-50 border border-purple-200 rounded-xl p-4 space-y-3">
