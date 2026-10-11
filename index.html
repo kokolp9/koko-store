@@ -2559,7 +2559,7 @@ body, header, footer, button, input, textarea, select {
 </section>
     </main>
 
-    <div id="cartModal" class="fixed inset-0 z-50 overflow-hidden hidden">
+    <div id="cartModal" class="fixed inset-0 z-[100] overflow-hidden hidden">
     <div class="absolute inset-0 bg-black bg-opacity-50 transition-opacity" onclick="toggleCartModal()"></div>
     <div class="absolute inset-y-0 left-0 sm:max-w-full sm:flex sm:pl-10 w-full">
         <div class="w-full sm:w-screen sm:max-w-md bg-white shadow-2xl flex flex-col h-full">
@@ -2618,7 +2618,7 @@ body, header, footer, button, input, textarea, select {
         </div>
     </div>
 
-    <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center hidden px-4">
+    <div id="authModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden px-4">
         <div class="absolute inset-0 bg-black bg-opacity-50" onclick="closeAuthModal()"></div>
         <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl z-10 space-y-6">
             <div class="flex items-center justify-between border-b pb-4">
@@ -2661,7 +2661,7 @@ body, header, footer, button, input, textarea, select {
         </div>
     </div>
 
-    <div id="checkoutModal" class="fixed inset-0 z-50 flex items-center justify-center hidden px-4 overflow-y-auto py-10">
+    <div id="checkoutModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden px-4 overflow-y-auto py-10">
         <div class="absolute inset-0 bg-black bg-opacity-50" onclick="toggleCheckoutModal()"></div>
         <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-lg w-full shadow-2xl z-10 space-y-6 my-auto">
             <div class="flex items-center justify-between border-b pb-4">
@@ -2781,7 +2781,7 @@ body, header, footer, button, input, textarea, select {
         </div>
     </div>
 
-    <div id="accountModal" class="fixed inset-0 z-50 flex items-center justify-center hidden px-4 overflow-y-auto py-10">
+    <div id="accountModal" class="fixed inset-0 z-[100] flex items-center justify-center hidden px-4 overflow-y-auto py-10">
         <div class="absolute inset-0 bg-black bg-opacity-50" onclick="closeAccountModal()"></div>
         <div class="bg-white rounded-2xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl z-10 space-y-6 my-auto max-h-[90vh] flex flex-col">
             <div class="flex items-center justify-between border-b pb-4 flex-shrink-0">
