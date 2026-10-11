@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kokostore-sable.vercel.app/sitemap.xml
+Sitemap: https://kokostore-tan.vercel.app/sitemap.xml
