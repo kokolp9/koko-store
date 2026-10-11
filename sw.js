@@ -1,5 +1,5 @@
 // Koko Store Service Worker
-const CACHE_NAME = 'koko-store-v1';
+const CACHE_NAME = 'koko-store-v3';  // ✅ v2 → v3
 
 const ASSETS_TO_CACHE = [
     '/',
