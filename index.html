@@ -1632,6 +1632,511 @@ body, header, footer, button, input, textarea, select {
     box-shadow: 0 8px 18px -4px rgba(37, 211, 102, 0.6);
 }
 
+/* ============================================
+   🎯 PREMIUM FILTERS DESIGN
+   ============================================ */
+
+.premium-filters-wrapper {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+    border: 2px solid rgba(30, 64, 175, 0.08);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 12px 40px -16px rgba(30, 64, 175, 0.15);
+}
+
+.premium-filters-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.08), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.premium-filters-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: -100px;
+    left: -100px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.08), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* 🔝 Header */
+.premium-filters-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+    border-bottom: 2px dashed rgba(30, 64, 175, 0.12);
+    position: relative;
+    z-index: 1;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.premium-filters-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.premium-filters-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.5);
+    position: relative;
+}
+
+.premium-filters-icon::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 2px dashed rgba(99, 102, 241, 0.3);
+    border-radius: 20px;
+    animation: spinRing 20s linear infinite;
+}
+
+.premium-filters-title h3 {
+    font-size: 18px;
+    font-weight: 900;
+    color: #1E3A8A;
+    margin-bottom: 2px;
+}
+
+.premium-filters-title p {
+    font-size: 12px;
+    color: #64748B;
+    font-weight: 600;
+}
+
+.premium-filters-title p span {
+    color: #6366F1;
+    font-weight: 900;
+}
+
+/* 🔄 Reset Button */
+.premium-reset-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #FEE2E2;
+    color: #DC2626;
+    border: 1.5px solid #FCA5A5;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: 'Cairo', sans-serif;
+}
+
+.premium-reset-btn:hover {
+    background: #DC2626;
+    color: white;
+    border-color: #DC2626;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px -4px rgba(220, 38, 38, 0.4);
+}
+
+.premium-reset-btn i {
+    transition: transform 0.4s;
+}
+
+.premium-reset-btn:hover i {
+    transform: rotate(180deg);
+}
+
+/* 📋 Filter Groups */
+.premium-filter-group {
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 1;
+}
+
+.premium-filter-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    font-weight: 900;
+    color: #334155;
+}
+
+.premium-filter-label-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: white;
+}
+
+.premium-filter-label-icon.grade-icon {
+    background: linear-gradient(135deg, #3B82F6, #1E40AF);
+    box-shadow: 0 4px 10px -2px rgba(30, 64, 175, 0.4);
+}
+
+.premium-filter-label-icon.subject-icon {
+    background: linear-gradient(135deg, #A855F7, #7E22CE);
+    box-shadow: 0 4px 10px -2px rgba(126, 34, 206, 0.4);
+}
+
+.premium-filter-label-icon.teacher-icon {
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+    box-shadow: 0 4px 10px -2px rgba(217, 119, 6, 0.4);
+}
+
+/* 🎯 Chips Container */
+.premium-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* 🍪 Premium Chip */
+.premium-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 50px;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-family: 'Cairo', sans-serif;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(30, 64, 175, 0.04);
+}
+
+.premium-chip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+}
+
+.premium-chip:hover::before {
+    transform: translateX(100%);
+}
+
+.premium-chip i {
+    font-size: 12px;
+}
+
+.premium-chip:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 22px -8px rgba(30, 64, 175, 0.3);
+}
+
+/* Grade Chips - Blue */
+.premium-chip-grade:hover {
+    border-color: #3B82F6;
+    color: #1E40AF;
+    background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+}
+
+.premium-chip-grade.active-cat {
+    background: linear-gradient(135deg, #3B82F6, #1E40AF) !important;
+    border-color: transparent !important;
+    color: white !important;
+    box-shadow: 0 10px 24px -6px rgba(59, 130, 246, 0.5), 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+    transform: translateY(-3px);
+}
+
+/* Subject Chips - Purple */
+.premium-chip-subject:hover {
+    border-color: #A855F7;
+    color: #7E22CE;
+    background: linear-gradient(135deg, #FAF5FF, #F3E8FF);
+}
+
+.premium-chip-subject.active-cat {
+    background: linear-gradient(135deg, #A855F7, #7E22CE) !important;
+    border-color: transparent !important;
+    color: white !important;
+    box-shadow: 0 10px 24px -6px rgba(168, 85, 247, 0.5), 0 0 0 3px rgba(168, 85, 247, 0.15) !important;
+    transform: translateY(-3px);
+}
+
+/* 👨‍🏫 Teacher Select */
+.premium-teacher-wrapper {
+    position: relative;
+}
+
+.premium-teacher-select-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 0 16px;
+    height: 52px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px -4px rgba(30, 64, 175, 0.08);
+}
+
+.premium-teacher-select-wrap:focus-within {
+    border-color: #F59E0B;
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15), 0 12px 24px -8px rgba(245, 158, 11, 0.2);
+    transform: translateY(-2px);
+}
+
+.premium-teacher-select-wrap > i:first-child {
+    color: #F59E0B;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.premium-teacher-select {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1E3A8A;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0 8px;
+}
+
+.premium-teacher-arrow {
+    color: #94A3B8;
+    font-size: 12px;
+    pointer-events: none;
+    transition: transform 0.3s;
+}
+
+.premium-teacher-select-wrap:focus-within .premium-teacher-arrow {
+    transform: rotate(180deg);
+    color: #F59E0B;
+}
+
+/* 🔖 Active Filters Bar */
+.premium-active-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #F0F9FF, #EFF6FF);
+    border: 1.5px dashed #93C5FD;
+    border-radius: 14px;
+    margin-top: 16px;
+    position: relative;
+    z-index: 1;
+    animation: slideDown 0.3s ease-out;
+}
+
+.premium-active-label {
+    font-size: 12px;
+    font-weight: 800;
+    color: #1E40AF;
+}
+
+.premium-active-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.premium-active-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: white;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 800;
+    box-shadow: 0 4px 10px -3px rgba(99, 102, 241, 0.4);
+    animation: chipIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes chipIn {
+    from { opacity: 0; transform: scale(0.6); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.premium-active-chip button {
+    background: rgba(255,255,255,0.25);
+    border: none;
+    color: white;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    transition: all 0.2s;
+    margin-right: 2px;
+}
+
+.premium-active-chip button:hover {
+    background: rgba(255,255,255,0.5);
+    transform: scale(1.15);
+}
+
+/* 🌙 Dark Mode */
+.dark .premium-filters-wrapper {
+    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+    border-color: rgba(245, 158, 11, 0.15);
+}
+
+.dark .premium-filters-title h3 {
+    color: #93C5FD;
+}
+
+.dark .premium-filters-title p {
+    color: #94A3B8;
+}
+
+.dark .premium-filters-header {
+    border-bottom-color: rgba(245, 158, 11, 0.15);
+}
+
+.dark .premium-chip {
+    background: #1E293B;
+    border-color: #334155;
+    color: #CBD5E1;
+}
+
+.dark .premium-chip-grade:hover {
+    background: rgba(59, 130, 246, 0.2);
+    color: #93C5FD;
+    border-color: #3B82F6;
+}
+
+.dark .premium-chip-subject:hover {
+    background: rgba(168, 85, 247, 0.2);
+    color: #D8B4FE;
+    border-color: #A855F7;
+}
+
+.dark .premium-teacher-select-wrap {
+    background: #1E293B;
+    border-color: #334155;
+}
+
+.dark .premium-teacher-select {
+    color: #F1F5F9;
+}
+
+.dark .premium-active-bar {
+    background: linear-gradient(135deg, rgba(30, 64, 175, 0.15), rgba(99, 102, 241, 0.1));
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.dark .premium-active-label {
+    color: #93C5FD;
+}
+
+.dark .premium-reset-btn {
+    background: rgba(220, 38, 38, 0.15);
+    color: #FCA5A5;
+    border-color: rgba(220, 38, 38, 0.3);
+}
+
+/* 📱 Mobile */
+@media (max-width: 640px) {
+    .premium-filters-wrapper {
+        padding: 16px;
+        border-radius: 18px;
+    }
+    
+    .premium-filters-header {
+        padding-bottom: 14px;
+        margin-bottom: 18px;
+    }
+    
+    .premium-filters-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+        border-radius: 12px;
+    }
+    
+    .premium-filters-title h3 {
+        font-size: 15px;
+    }
+    
+    .premium-filters-title p {
+        font-size: 11px;
+    }
+    
+    .premium-chip {
+        padding: 8px 14px;
+        font-size: 11px;
+    }
+    
+    .premium-chip i {
+        font-size: 10px;
+    }
+    
+    .premium-filter-group {
+        margin-bottom: 18px;
+    }
+    
+    .premium-filter-label {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+    
+    .premium-filter-label-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
+    }
+    
+    .premium-reset-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    .premium-reset-btn span {
+        display: none;
+    }
+    
+    .premium-teacher-select-wrap {
+        height: 46px;
+    }
+}
+
 </style>
 </head>
 
@@ -1909,77 +2414,135 @@ body, header, footer, button, input, textarea, select {
         </div>
     </div>
     
-   <!-- 🎯 Filter Section - New -->
-<div class="space-y-5">
+  <!-- 🎯 Premium Filter Section -->
+<div class="premium-filters-wrapper">
 
-    <!-- 1. الصف الدراسي -->
-    <div>
-        <div class="flex items-center gap-2 mb-2 justify-center">
-            <i class="fa-solid fa-graduation-cap text-primary"></i>
-            <span class="text-xs font-black text-gray-600">الصف الدراسي</span>
+    <!-- 🔝 Header -->
+    <div class="premium-filters-header">
+        <div class="premium-filters-title">
+            <div class="premium-filters-icon">
+                <i class="fa-solid fa-sliders"></i>
+            </div>
+            <div>
+                <h3>فلترة ذكية</h3>
+                <p>اختار اللي يناسبك من <span id="filteredCount">0</span> ملزمة</p>
+            </div>
         </div>
-        <div class="flex flex-wrap gap-2 justify-center" id="gradeFilter">
-            <button onclick="filterCategory('الكل')" data-filter="grade" data-value="الكل" class="cat-btn active-cat">
+        <button onclick="resetAllFilters()" class="premium-reset-btn" title="إعادة تعيين الفلاتر">
+            <i class="fa-solid fa-rotate-right"></i>
+            <span>إعادة تعيين</span>
+        </button>
+    </div>
+
+    <!-- 1️⃣ الصف الدراسي -->
+    <div class="premium-filter-group">
+        <div class="premium-filter-label">
+            <span class="premium-filter-label-icon grade-icon">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </span>
+            <span>الصف الدراسي</span>
+        </div>
+        <div class="premium-chips" id="gradeFilter">
+            <button onclick="filterCategory('الكل')" data-filter="grade" data-value="الكل" class="premium-chip premium-chip-grade active-cat">
                 <i class="fa-solid fa-layer-group"></i>
                 <span>الكل</span>
             </button>
-            <button onclick="filterCategory('الصف الثالث الثانوي')" data-filter="grade" data-value="الصف الثالث الثانوي" class="cat-btn">
-                <i class="fa-solid fa-graduation-cap"></i>
+            <button onclick="filterCategory('الصف الثالث الثانوي')" data-filter="grade" data-value="الصف الثالث الثانوي" class="premium-chip premium-chip-grade">
                 <span>ثالثة ثانوي</span>
             </button>
-            <button onclick="filterCategory('الصف الثاني الثانوي')" data-filter="grade" data-value="الصف الثاني الثانوي" class="cat-btn">
-                <i class="fa-solid fa-book-open"></i>
+            <button onclick="filterCategory('الصف الثاني الثانوي')" data-filter="grade" data-value="الصف الثاني الثانوي" class="premium-chip premium-chip-grade">
                 <span>ثانية ثانوي</span>
             </button>
-            <button onclick="filterCategory('الصف الأول الثانوي')" data-filter="grade" data-value="الصف الأول الثانوي" class="cat-btn">
-                <i class="fa-solid fa-book"></i>
+            <button onclick="filterCategory('الصف الأول الثانوي')" data-filter="grade" data-value="الصف الأول الثانوي" class="premium-chip premium-chip-grade">
                 <span>أولى ثانوي</span>
             </button>
         </div>
     </div>
 
-    <!-- 2. المادة -->
-    <div>
-        <div class="flex items-center gap-2 mb-2 justify-center">
-            <i class="fa-solid fa-flask text-purple-600"></i>
-            <span class="text-xs font-black text-gray-600">المادة</span>
+    <!-- 2️⃣ المادة -->
+    <div class="premium-filter-group">
+        <div class="premium-filter-label">
+            <span class="premium-filter-label-icon subject-icon">
+                <i class="fa-solid fa-flask"></i>
+            </span>
+            <span>المادة</span>
         </div>
-        <div class="flex flex-wrap gap-2 justify-center" id="subjectFilter">
-            <button onclick="filterSubject('الكل')" data-filter="subject" data-value="الكل" class="cat-btn active-cat">
+        <div class="premium-chips" id="subjectFilter">
+            <button onclick="filterSubject('الكل')" data-filter="subject" data-value="الكل" class="premium-chip premium-chip-subject active-cat">
                 <i class="fa-solid fa-layer-group"></i>
                 <span>كل المواد</span>
             </button>
-            <button onclick="filterSubject('فيزياء')" data-filter="subject" data-value="فيزياء" class="cat-btn"><span>فيزياء</span></button>
-            <button onclick="filterSubject('كيمياء')" data-filter="subject" data-value="كيمياء" class="cat-btn"><span>كيمياء</span></button>
-            <button onclick="filterSubject('أحياء')" data-filter="subject" data-value="أحياء" class="cat-btn"><span>أحياء</span></button>
-            <button onclick="filterSubject('رياضيات')" data-filter="subject" data-value="رياضيات" class="cat-btn"><span>رياضيات</span></button>
-            <button onclick="filterSubject('جيولوجيا')" data-filter="subject" data-value="جيولوجيا" class="cat-btn"><span>جيولوجيا</span></button>
-            <button onclick="filterSubject('علوم بيئية')" data-filter="subject" data-value="علوم بيئية" class="cat-btn"><span>علوم بيئية</span></button>
-            <button onclick="filterSubject('لغة عربية')" data-filter="subject" data-value="لغة عربية" class="cat-btn"><span>لغة عربية</span></button>
-            <button onclick="filterSubject('لغة إنجليزية')" data-filter="subject" data-value="لغة إنجليزية" class="cat-btn"><span>لغة إنجليزية</span></button>
-            <button onclick="filterSubject('لغة فرنسية')" data-filter="subject" data-value="لغة فرنسية" class="cat-btn"><span>لغة فرنسية</span></button>
-            <button onclick="filterSubject('لغة ألمانية')" data-filter="subject" data-value="لغة ألمانية" class="cat-btn"><span>لغة ألمانية</span></button>
-            <button onclick="filterSubject('تاريخ')" data-filter="subject" data-value="تاريخ" class="cat-btn"><span>تاريخ</span></button>
-            <button onclick="filterSubject('جغرافيا')" data-filter="subject" data-value="جغرافيا" class="cat-btn"><span>جغرافيا</span></button>
-            <button onclick="filterSubject('فلسفة ومنطق')" data-filter="subject" data-value="فلسفة ومنطق" class="cat-btn"><span>فلسفة ومنطق</span></button>
-            <button onclick="filterSubject('علم نفس واجتماع')" data-filter="subject" data-value="علم نفس واجتماع" class="cat-btn"><span>علم نفس واجتماع</span></button>
+            <button onclick="filterSubject('فيزياء')" data-filter="subject" data-value="فيزياء" class="premium-chip premium-chip-subject">
+                <span>⚛️ فيزياء</span>
+            </button>
+            <button onclick="filterSubject('كيمياء')" data-filter="subject" data-value="كيمياء" class="premium-chip premium-chip-subject">
+                <span>🧪 كيمياء</span>
+            </button>
+            <button onclick="filterSubject('أحياء')" data-filter="subject" data-value="أحياء" class="premium-chip premium-chip-subject">
+                <span>🧬 أحياء</span>
+            </button>
+            <button onclick="filterSubject('رياضيات')" data-filter="subject" data-value="رياضيات" class="premium-chip premium-chip-subject">
+                <span>📐 رياضيات</span>
+            </button>
+            <button onclick="filterSubject('جيولوجيا')" data-filter="subject" data-value="جيولوجيا" class="premium-chip premium-chip-subject">
+                <span>🌍 جيولوجيا</span>
+            </button>
+            <button onclick="filterSubject('علوم بيئية')" data-filter="subject" data-value="علوم بيئية" class="premium-chip premium-chip-subject">
+                <span>🌱 علوم بيئية</span>
+            </button>
+            <button onclick="filterSubject('لغة عربية')" data-filter="subject" data-value="لغة عربية" class="premium-chip premium-chip-subject">
+                <span>📖 لغة عربية</span>
+            </button>
+            <button onclick="filterSubject('لغة إنجليزية')" data-filter="subject" data-value="لغة إنجليزية" class="premium-chip premium-chip-subject">
+                <span>🇬🇧 إنجليزي</span>
+            </button>
+            <button onclick="filterSubject('لغة فرنسية')" data-filter="subject" data-value="لغة فرنسية" class="premium-chip premium-chip-subject">
+                <span>🇫🇷 فرنساوي</span>
+            </button>
+            <button onclick="filterSubject('لغة ألمانية')" data-filter="subject" data-value="لغة ألمانية" class="premium-chip premium-chip-subject">
+                <span>🇩🇪 ألماني</span>
+            </button>
+            <button onclick="filterSubject('تاريخ')" data-filter="subject" data-value="تاريخ" class="premium-chip premium-chip-subject">
+                <span>🏛️ تاريخ</span>
+            </button>
+            <button onclick="filterSubject('جغرافيا')" data-filter="subject" data-value="جغرافيا" class="premium-chip premium-chip-subject">
+                <span>🗺️ جغرافيا</span>
+            </button>
+            <button onclick="filterSubject('فلسفة ومنطق')" data-filter="subject" data-value="فلسفة ومنطق" class="premium-chip premium-chip-subject">
+                <span>🤔 فلسفة ومنطق</span>
+            </button>
+            <button onclick="filterSubject('علم نفس واجتماع')" data-filter="subject" data-value="علم نفس واجتماع" class="premium-chip premium-chip-subject">
+                <span>🧠 علم نفس</span>
+            </button>
         </div>
     </div>
 
-    <!-- 3. المدرس -->
-    <div>
-        <div class="flex items-center gap-2 mb-2 justify-center">
-            <i class="fa-solid fa-chalkboard-user text-amber-600"></i>
-            <span class="text-xs font-black text-gray-600">المدرس</span>
+    <!-- 3️⃣ المدرس -->
+    <div class="premium-filter-group">
+        <div class="premium-filter-label">
+            <span class="premium-filter-label-icon teacher-icon">
+                <i class="fa-solid fa-chalkboard-user"></i>
+            </span>
+            <span>المدرس</span>
         </div>
-        <div class="max-w-md mx-auto">
-            <select id="teacherFilter" onchange="filterTeacher(this.value)" 
-                    class="w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-3 text-sm font-bold focus:border-amber-500 focus:outline-none cursor-pointer">
-                <option value="الكل">كل المدرسين</option>
-            </select>
+        <div class="premium-teacher-wrapper">
+            <div class="premium-teacher-select-wrap">
+                <i class="fa-solid fa-user-tie"></i>
+                <select id="teacherFilter" onchange="filterTeacher(this.value)" class="premium-teacher-select">
+                    <option value="الكل">👨‍🏫 كل المدرسين</option>
+                </select>
+                <i class="fa-solid fa-chevron-down premium-teacher-arrow"></i>
+            </div>
         </div>
     </div>
 
+    <!-- 🔖 Active Filters Display -->
+    <div id="activeFiltersBar" class="premium-active-bar" style="display: none;">
+        <span class="premium-active-label">الفلاتر المفعّلة:</span>
+        <div id="activeFiltersChips" class="premium-active-chips"></div>
+    </div>
+
+</div>
 </div>
 
        <div id="booksGrid" class="grid gap-6" style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important; gap: 24px !important;"></div>
@@ -3081,6 +3644,83 @@ function filterCategory(category) {
     applyFilters();
 }
 
+// 🔄 إعادة تعيين كل الفلاتر
+function resetAllFilters() {
+    currentCategory = 'الكل';
+    currentSubject = 'الكل';
+    currentTeacher = 'الكل';
+    
+    const teacherSelect = document.getElementById('teacherFilter');
+    if (teacherSelect) teacherSelect.value = 'الكل';
+    
+    updateFilterButtons('grade', 'الكل');
+    updateFilterButtons('subject', 'الكل');
+    
+    applyFilters();
+    showToast('✅ تم إعادة تعيين الفلاتر', 'success');
+}
+
+// 🔖 عرض الفلاتر المفعّلة
+function updateActiveFiltersBar() {
+    const bar = document.getElementById('activeFiltersBar');
+    const chips = document.getElementById('activeFiltersChips');
+    if (!bar || !chips) return;
+    
+    const filters = [];
+    
+    if (currentCategory !== 'الكل') {
+        const label = currentCategory.replace('الصف ', '').replace(' الثانوي', '');
+        filters.push({ type: 'grade', label: `🎓 ${label}`, value: currentCategory });
+    }
+    
+    if (currentSubject !== 'الكل') {
+        filters.push({ type: 'subject', label: `📚 ${currentSubject}`, value: currentSubject });
+    }
+    
+    if (currentTeacher !== 'الكل') {
+        filters.push({ type: 'teacher', label: `👨‍🏫 ${currentTeacher}`, value: currentTeacher });
+    }
+    
+    if (filters.length === 0) {
+        bar.style.display = 'none';
+        return;
+    }
+    
+    bar.style.display = 'flex';
+    chips.innerHTML = filters.map(f => `
+        <div class="premium-active-chip">
+            <span>${f.label}</span>
+            <button onclick="removeFilter('${f.type}')" title="إزالة">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    `).join('');
+}
+
+// ❌ إزالة فلتر معين
+function removeFilter(type) {
+    if (type === 'grade') {
+        currentCategory = 'الكل';
+        updateFilterButtons('grade', 'الكل');
+    } else if (type === 'subject') {
+        currentSubject = 'الكل';
+        updateFilterButtons('subject', 'الكل');
+    } else if (type === 'teacher') {
+        currentTeacher = 'الكل';
+        const teacherSelect = document.getElementById('teacherFilter');
+        if (teacherSelect) teacherSelect.value = 'الكل';
+    }
+    applyFilters();
+}
+
+// 🔢 تحديث عدد النتائج
+function updateFilteredCount() {
+    const countEl = document.getElementById('filteredCount');
+    if (countEl) {
+        countEl.textContent = filteredBooksCache.length;
+    }
+}
+
 function filterSubject(subject) {
     currentSubject = subject;
     updateFilterButtons('subject', subject);
@@ -3105,7 +3745,6 @@ function updateFilterButtons(filterType, activeValue) {
 
 function filterBooks() { applyFilters(); }
 
-// 🎯 تطبيق كل الفلاتر مع بعض
 function applyFilters() {
     const searchInputEl = document.getElementById('searchInput');
     const query = searchInputEl ? searchInputEl.value.toLowerCase().trim() : '';
@@ -3126,7 +3765,7 @@ function applyFilters() {
         filtered = filtered.filter(b => b.author === currentTeacher);
     }
 
-    // فلتر البحث (اسم/مدرس/مادة)
+    // فلتر البحث
     if (query !== '') {
         filtered = filtered.filter(b =>
             (b.title || '').toLowerCase().includes(query) ||
@@ -3138,8 +3777,11 @@ function applyFilters() {
     filteredBooksCache = filtered;
     currentPage = 1;
     renderCurrentPage();
+    
+    // 🎯 تحديث الـ UI الجديد
+    updateFilteredCount();
+    updateActiveFiltersBar();
 }
-
 
 // تعبئة قائمة المدرسين ديناميكياً
 function populateTeacherFilter() {
