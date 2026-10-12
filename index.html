@@ -52,6 +52,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Koko Store">
+<meta name="format-detection" content="telephone=no">
 <!-- 🎨 Favicons -->
 <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
@@ -2252,14 +2253,16 @@ body, header, footer, button, input, textarea, select {
         <div class="pb-3">
             <div class="royal-search">
                 <i class="fa-solid fa-search royal-search-icon"></i>
-                <input 
+               <input 
     type="search" 
     id="searchInput" 
-    name="search_books"
-    autocomplete="off"
+    name="koko_search_x7k9_books"
+    autocomplete="new-password"
     autocorrect="off"
     autocapitalize="off"
     spellcheck="false"
+    readonly
+    onfocus="this.removeAttribute('readonly')"
     oninput="filterBooks()" 
     placeholder="ابحث عن ملزمة، كتاب، أو اسم المدرس...">
 
@@ -3414,11 +3417,16 @@ populateTeacherFilter();
     updateCartUI();
 
     // 🧹 امسح حقل البحث لو المتصفح عبّاه تلقائياً
-    const searchEl = document.getElementById('searchInput');
-    if (searchEl && searchEl.value !== '') {
-        console.log('🧹 Autofilled search cleared:', searchEl.value);
+    // 🧹 امسح حقل البحث مهما كان فيه
+const searchEl = document.getElementById('searchInput');
+if (searchEl) {
+    if (searchEl.value) {
+        console.log('🧹 Clearing autofilled search:', searchEl.value);
         searchEl.value = '';
     }
+    // 🎯 إعادة تطبيق الفلتر عشان لو فيه كتب مخفية
+    if (typeof filterBooks === 'function') filterBooks();
+}
     
     // 🎬 شغّل الإعلانات بعد التحميل
     if (typeof startAnnouncementRotation === 'function') {
@@ -11279,6 +11287,86 @@ function closeMobileDropdown() {
     searchEl.addEventListener('focus', () => {
         setTimeout(clearIfAutofilled, 50);
     });
+})();
+
+// ============================================
+// 🛡️ حماية شاملة من Autofill في البحث
+// ============================================
+(function protectSearchInput() {
+    const searchEl = document.getElementById('searchInput');
+    if (!searchEl) return;
+    
+    let isUserTyping = false;
+    
+    // راقب لو المستخدم كتب بنفسه
+    searchEl.addEventListener('keydown', () => {
+        isUserTyping = true;
+    });
+    
+    searchEl.addEventListener('paste', () => {
+        isUserTyping = true;
+    });
+    
+    // 🎯 امسح أي قيمة اتضافت تلقائياً
+    const clearAutofill = () => {
+        if (isUserTyping) return; // لو المستخدم بيكتب، متلمسش
+        
+        const value = searchEl.value.trim();
+        if (!value) return;
+        
+        // 🚨 لو القيمة رقم تليفون مصري (01xxxxxxxxx)
+        if (/^01[0-9]{9}$/.test(value)) {
+            console.log('🛡️ Blocked phone autofill:', value);
+            searchEl.value = '';
+            if (typeof filterBooks === 'function') filterBooks();
+            return;
+        }
+        
+        // 🚨 لو القيمة إيميل أو رقم عشوائي
+        if (/^[0-9]{8,}$/.test(value) || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            console.log('🛡️ Blocked suspicious autofill:', value);
+            searchEl.value = '';
+            if (typeof filterBooks === 'function') filterBooks();
+        }
+    };
+    
+    // امسح فوراً
+    clearAutofill();
+    
+    // 🔁 راقب لمدة 5 ثواني بعد التحميل
+    let ticks = 0;
+    const interval = setInterval(() => {
+        clearAutofill();
+        ticks++;
+        if (ticks >= 20) clearInterval(interval); // 20 × 250ms = 5 ثواني
+    }, 250);
+    
+    // 🎯 امسح لما الحقل يفقد التركيز
+    searchEl.addEventListener('blur', () => {
+        setTimeout(() => {
+            isUserTyping = false;
+            clearAutofill();
+        }, 100);
+    });
+    
+    // 🎯 امسح لما الصفحة بترجع من الخلفية
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            isUserTyping = false;
+            setTimeout(clearAutofill, 100);
+        }
+    });
+    
+    // 🎯 امسح لما الصفحة تتحمّل تاني من الـ cache
+    window.addEventListener('pageshow', (e) => {
+        if (e.persisted) {
+            isUserTyping = false;
+            searchEl.value = '';
+            if (typeof filterBooks === 'function') filterBooks();
+        }
+    });
+    
+    console.log('🛡️ Search input protected from autofill');
 })();
 
     </script>
